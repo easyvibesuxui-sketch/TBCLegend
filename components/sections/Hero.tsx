@@ -43,21 +43,36 @@ export default function Hero() {
       <div className="sticky top-0 h-[100svh] overflow-hidden bg-ink">
         <div data-hero-plate className="absolute inset-0">
           <ArtPlate
+            src="/media/01-hero-night.mp4"
+            srcWebm="/media/01-hero-night.webm"
+            poster="/media/01-hero-night.jpg"
             tone="night"
             scrub={scrub}
             labelAlign="bottom"
-            label="[Video: ღამის ცა, მელნის ღრუბლები — საგანძური ჯერ მთელია]"
+            label="ღამის ცა მელნის ღრუბლებით; ქვემოთ სამეფო და საკურთხეველზე მთელი საგანძური"
           />
         </div>
 
         {/* Title */}
         <div className="relative z-10 flex h-[100svh] flex-col items-center justify-center px-6">
+          <motion.p
+            data-hero-meta
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, ease: EASE, delay: 0.9 }}
+            className="label mb-8 text-paper sm:mb-10"
+            style={{ textShadow: "0 2px 18px rgba(14,14,14,0.9)" }}
+          >
+            TBC · ოთხი სახლის ამბავი
+          </motion.p>
+
           <motion.h1
             data-hero-title
             initial={{ opacity: 0, y: 26 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, ease: EASE, delay: 0.2 }}
             className="text-center font-display text-[clamp(2.9rem,10.5vw,9.5rem)] leading-[0.86] text-paper"
+            style={{ textShadow: "0 4px 40px rgba(14,14,14,0.75)" }}
           >
             <span className="sr-only">საგანძურის მარათონი</span>
             <span aria-hidden className="block">
@@ -67,16 +82,6 @@ export default function Hero() {
               მარათონი
             </span>
           </motion.h1>
-
-          <motion.p
-            data-hero-meta
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, ease: EASE, delay: 1.1 }}
-            className="label mt-10 text-paper/70"
-          >
-            TBC · ოთხი სახლის ამბავი
-          </motion.p>
         </div>
       </div>
     </section>

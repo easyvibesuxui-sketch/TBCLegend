@@ -241,6 +241,40 @@ Still (shot 03):
 Both return a `generation_id`; poll `query_tasks` for the URL. **Result URLs
 expire in 24 hours — download immediately.**
 
+## Post-production — do this to every clip
+
+Kling delivers a ~15 MB, 24 Mb/s clip with an audio track and a KlingAI
+watermark in the bottom-right. None of that belongs on the page. For each shot:
+
+```bash
+FF=ffmpeg   # any recent build
+SRC=kling-download.mp4
+OUT=01-hero-night
+
+# Crop the watermark off the foot of the frame (the plates are full-bleed
+# cover backgrounds, so losing the bottom band costs nothing), drop the audio,
+# and re-encode for the web. 15 MB -> ~1.1 MB.
+$FF -y -i "$SRC" -vf "crop=1280:632:0:0" -an \
+  -c:v libx264 -crf 27 -preset slow -pix_fmt yuv420p -movflags +faststart \
+  public/media/$OUT.mp4
+
+# VP9 twin, offered first where supported.
+$FF -y -i "$SRC" -vf "crop=1280:632:0:0" -an \
+  -c:v libvpx-vp9 -crf 40 -b:v 0 -row-mt 1 -speed 2 public/media/$OUT.webm
+
+# Poster, so the panel is never blank while the video decodes.
+$FF -y -i "$SRC" -vf "crop=1280:632:0:0" -frames:v 1 -q:v 4 public/media/$OUT.jpg
+```
+
+`-movflags +faststart` matters: it moves the index to the front so the first
+frame paints during download instead of after it.
+
+> **The host must serve HTTP Range requests or scrubbing silently fails.** With
+> no Range support the browser reports `seekable.length === 0`, `currentTime`
+> stays pinned at 0, and the clip looks like a still. GitHub Pages and every
+> CDN support Range; `python -m http.server` does not, which makes it useless
+> for testing these plates.
+
 ## Wiring the results in
 
 Drop the files in `public/media/`, then pass `src` on the matching plate:
@@ -248,14 +282,19 @@ Drop the files in `public/media/`, then pass `src` on the matching plate:
 ```tsx
 <ArtPlate
   src="/media/04-shattering.mp4"
+  srcWebm="/media/04-shattering.webm"
+  poster="/media/04-shattering.jpg"
   tone="oxblood"
   scrub={shatter}
-  label="[Video: დამსხვრევა — მონეტები იფანტება]"
+  label="დამსხვრევა — საგანძური მილიონობით მონეტად იფანტება"
 />
 ```
 
-`label` stays as the accessible description. With `src` present the stand-in
-hatching is replaced by the clip, and `scrub` ties playback to scroll.
+With `src` present the stand-in hatching is replaced by the clip, `srcWebm` is
+offered first where supported, and `scrub` ties playback to scroll. `label`
+becomes the plate's accessible description, so once real footage is in it
+should read as a description of the shot rather than a production note — drop
+the `[Video: …]` brackets.
 
 ## If a shot comes back wrong
 

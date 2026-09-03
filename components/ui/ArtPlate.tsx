@@ -28,6 +28,7 @@ export default function ArtPlate({
   label,
   tone = "paper",
   src,
+  srcWebm,
   poster,
   scrub,
   labelAlign = "center",
@@ -35,7 +36,10 @@ export default function ArtPlate({
 }: {
   label: string;
   tone?: Tone;
+  /** H.264 MP4 — the universal fallback, and what Safari needs */
   src?: string;
+  /** Optional VP9 WebM, offered first where it is supported */
+  srcWebm?: string;
   poster?: string;
   /** Live 0 → 1 playback position, written outside React */
   scrub?: React.MutableRefObject<number>;
@@ -60,7 +64,7 @@ export default function ArtPlate({
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [scrub, src]);
+  }, [scrub, src, srcWebm]);
 
   return (
     <div
@@ -72,13 +76,15 @@ export default function ArtPlate({
       {src ? (
         <video
           ref={video}
-          src={src}
           poster={poster}
           muted
           playsInline
           preload="auto"
           className="h-full w-full object-cover"
-        />
+        >
+          {srcWebm && <source src={srcWebm} type="video/webm" />}
+          <source src={src} type="video/mp4" />
+        </video>
       ) : (
         <>
           {/* Engraved hatching — the linework the illustration will replace */}
