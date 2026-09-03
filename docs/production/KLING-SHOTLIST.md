@@ -23,8 +23,21 @@ the set — returned `Insufficient credits` while the web account showed 66. So:
 | **kling.ai web UI** | free, 66 credits/day | a person pastes each prompt below into the site |
 | **This MCP** | paid credits only | the agent runs the calls in *Exact MCP calls* |
 
-The web route rations out at roughly two clips a day, so the full set takes
-about a week including retries. The prompts are identical either way.
+**Real cost, measured on the account: 10 s = 80 credits, so about 8 credits a
+second.** 66 free credits a day therefore cannot buy a single 10 s clip. Every
+shot in this list is consequently specified at **5 s (~40 credits)** — scroll
+scrubbing maps a section's full height onto the clip whatever its length, so
+shorter costs nothing in quality.
+
+That puts the free route at **one clip a day**, plus the still on day one:
+
+| Day | Shots | Credits |
+| --- | --- | --- |
+| 1 | 03 (still) + 01 | ~41 |
+| 2–8 | one clip each | ~40 |
+
+Roughly 8 days for a clean pass, longer with retries. The prompts are identical
+on either route.
 
 ## Models
 
@@ -59,7 +72,7 @@ captions in HTML — so "no text" matters more here than usual.
 ## Shot 01 — Hero
 
 - **Slot:** `components/sections/Hero.tsx` → `ArtPlate tone="night"`
-- **Tool:** `text_to_video` · **Model:** `kling-video-v3_0_turbo` · **Aspect:** `16:9` · **Duration:** `10` s · **Resolution:** `720p`
+- **Tool:** `text_to_video` · **Model:** `kling-video-v3_0_turbo` · **Aspect:** `16:9` · **Duration:** `5` s · **Resolution:** `720p`
 - **Spot colour:** ochre
 - **Beat:** the kingdom before anything breaks. The treasure still whole.
 - **Save as:** `public/media/01-hero-night.mp4`
@@ -73,7 +86,7 @@ No text, no letters, no words, no captions, no watermark, no signature, no logo.
 ## Shot 02 — Chapter I — the treasure
 
 - **Slot:** `sections/Legend.tsx`, chapter I → `ArtPlate tone="paper"`
-- **Tool:** `text_to_video` · **Model:** `kling-video-v3_0_turbo` · **Aspect:** `16:9` · **Duration:** `8` s · **Resolution:** `720p`
+- **Tool:** `text_to_video` · **Model:** `kling-video-v3_0_turbo` · **Aspect:** `16:9` · **Duration:** `5` s · **Resolution:** `720p`
 - **Spot colour:** ochre
 - **Beat:** the treasure that kept the balance.
 - **Save as:** `public/media/02-treasure-altar.mp4`
@@ -101,7 +114,7 @@ No text, no letters, no words, no captions, no watermark, no signature, no logo.
 ## Shot 04 — Chapter II — the shattering
 
 - **Slot:** `sections/Legend.tsx`, flood section → `ArtPlate tone="oxblood"`
-- **Tool:** `text_to_video` · **Model:** `kling-video-v3_0_turbo` · **Aspect:** `16:9` · **Duration:** `10` s · **Resolution:** `720p`
+- **Tool:** `text_to_video` · **Model:** `kling-video-v3_0_turbo` · **Aspect:** `16:9` · **Duration:** `5` s · **Resolution:** `720p`
 - **Spot colour:** oxblood
 - **Beat:** the night it broke. **This is the hero clip of the whole page.**
 - **Save as:** `public/media/04-shattering.mp4`
@@ -112,12 +125,12 @@ The ancient treasure chest cracks apart and detonates into millions of gold coin
 No text, no letters, no words, no captions, no watermark, no signature, no logo. Not photorealistic, no photograph, no 3D render, no CGI, no smooth gradients, no pastel colours, no second accent colour, no colour bleed.
 ```
 
-> Scrubbed by scroll — see `scrub` in `ArtPlate`. Generate at the full 10 s so there is enough footage to scrub across the section's height.
+> Scrubbed by scroll — see `scrub` in `ArtPlate`. 5 s is enough: the scrub maps the section's whole scroll height onto the clip, however long it is.
 
 ## Shot 05 — Chapter III — the four houses set out
 
 - **Slot:** `sections/Legend.tsx`, chapter III → `ArtPlate tone="ochre"`
-- **Tool:** `text_to_video` · **Model:** `kling-video-v3_0_turbo` · **Aspect:** `9:16` · **Duration:** `8` s · **Resolution:** `720p`
+- **Tool:** `text_to_video` · **Model:** `kling-video-v3_0_turbo` · **Aspect:** `9:16` · **Duration:** `5` s · **Resolution:** `720p`
 - **Spot colour:** ochre
 - **Beat:** the marathon begins.
 - **Save as:** `public/media/05-four-banners.mp4`
@@ -204,7 +217,7 @@ With paid credits on the account, each shot is one call instead. Video
   "model": "kling-video-v3_0_turbo",
   "arguments": [
     { "name": "prompt",       "value": "<the full fenced prompt from shot 04>" },
-    { "name": "duration",     "value": "10" },
+    { "name": "duration",     "value": "5" },
     { "name": "aspect_ratio", "value": "16:9" },
     { "name": "resolution",   "value": "720p" }
   ]
