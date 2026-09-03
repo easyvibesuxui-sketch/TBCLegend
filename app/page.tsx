@@ -1,6 +1,7 @@
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import SmoothScroll from "@/components/SmoothScroll";
+import ProgressTicks from "@/components/ui/ProgressTicks";
 import Hero from "@/components/sections/Hero";
 import Legend from "@/components/sections/Legend";
 import Houses from "@/components/sections/Houses";
@@ -10,6 +11,7 @@ export default function Page() {
   return (
     <SmoothScroll>
       <Nav />
+      <ProgressTicks />
       <main className="relative">
         <Hero />
         <Legend />

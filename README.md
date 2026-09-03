@@ -1,80 +1,100 @@
 # საგანძურის მარათონი — Treasure Marathon
 
-A cinematic, scroll-driven one-page experience for the *Treasure Marathon* campaign:
-an ancient treasure shatters into millions of golden coins, and four great houses race
-to collect them.
+A scroll-driven landing page for the *Treasure Marathon* campaign, built in the
+graphic-novel language of [santionispirits.com](https://santionispirits.com):
+inked panels on grained paper, captions hung off panel edges, colour floods,
+and sections that part on a hand-torn contour.
 
-Built with **Next.js (App Router) · TypeScript · Tailwind CSS · GSAP ScrollTrigger ·
-Framer Motion · Lenis**.
+Built with **Next.js (App Router) · TypeScript · Tailwind CSS · GSAP
+ScrollTrigger · Framer Motion · Lenis**.
 
 ```bash
 npm install
 npm run dev      # http://localhost:3000
-npm run build && npm start
+npm run build    # static export to out/
 ```
 
-## The experience
+## Where the design comes from
 
-| Section | What happens |
-| --- | --- |
-| **Hero — The Shattering** | A hoard of coins rests along the horizon on an HTML canvas. Scrolling scrubs one GSAP timeline that launches the coins across the frame under gravity while the headline breaks apart glyph by glyph, each on its own vector, blurring out as three background plates parallax at different speeds. |
-| **Legend — Scrollytelling** | Three chapters reveal on scroll (lift + unblur + stagger). A sticky illustration column crossfades to match whichever chapter owns the middle of the viewport, over a parallaxing, hue-shifting background. |
-| **Houses — Horizontal rail** | On desktop the viewport pins and the four house crests translate sideways, with a progress rail beneath. Each card tilts in 3D toward the cursor, lights a pointer-tracking glow, and unfurls its description and trait bars on hover. On mobile it degrades to a vertical stack with everything visible. |
-| **CTA — The Marathon Continues** | A closing act with a gentle coin drift, a leaderboard teaser, and two magnetic buttons that chase the cursor and sweep a gilded sheen. |
+`santionispirits.com` is unreachable from the build environment (its network
+policy denies the host), so the design was reverse-engineered from 27
+scroll-ordered screenshots supplied by the client. Those frames are kept in
+`docs/design-references/`, and the extracted palette, type, structural devices
+and interactions are written up in
+[`docs/research/santionispirits/DESIGN-SPEC.md`](docs/research/santionispirits/DESIGN-SPEC.md).
+
+Every value in the build traces back to that spec. Nothing was read from
+computed CSS, so colours are sampled by eye and are close, not exact.
+
+## The four structural devices
+
+The whole page is assembled from these, matching the reference:
+
+| Device | Component | What it does |
+| --- | --- | --- |
+| Panel | `ui/Panel` | Bordered rectangle holding artwork; panels overlap and bleed off the viewport |
+| Caption box | `ui/Caption` | Off-white box with a hairline border, hung off a panel edge, never centred |
+| Colour flood | section-level | A section abandons the paper ground and fills the viewport with one accent |
+| Torn edge | `ui/TornEdge` | Sections part on a ragged contour. The tear paints the section it *introduces*, so it sits over the outgoing one and that band must stay transparent |
+
+Plus `ui/HoldPuck` — the reference's signature press-and-drag affordance, which
+reports 0 → 1 so a section can scrub artwork from the gesture.
+
+## The artwork is video
+
+The reference is frame-by-frame illustrated animation played back as video, not
+CSS or SVG animation. `ui/ArtPlate` is the slot that holds it:
+
+```tsx
+<ArtPlate label="[Video: ...]" tone="oxblood" scrub={progressRef} />
+<ArtPlate src="/media/shatter.mp4" tone="oxblood" scrub={progressRef} />
+```
+
+Pass `src` and it renders a `<video>`; pass `scrub` and playback follows that
+0 → 1 ref instead of its own clock, easing toward the target so a fast scroll
+does not stutter the decode. With no `src` it draws an inked stand-in captioned
+with the shot it stands for.
+
+**This is the one thing that cannot be built from screenshots.** Every
+`[Video: …]` and `[Inset: …]` caption in `lib/houses.ts` and the sections names
+a clip that needs to be produced.
 
 ## Structure
 
 ```
 app/
-  layout.tsx          Fonts (Noto Serif/Sans Georgian), metadata, grain overlay
-  page.tsx            Composes the four sections inside <SmoothScroll>
-  globals.css         Tokens, gilded text, glass surfaces, film grain
+  layout.tsx          Fonts, metadata
+  page.tsx            Nav · Hero · Legend · Houses · CTA · Footer
+  globals.css         Paper grain, panel, caption and tear primitives
+  fonts/              DM Themestia (decorative majuscule Georgian)
 components/
-  SmoothScroll.tsx    Lenis wired into GSAP's ticker (one RAF loop, no pin jitter)
-  Nav.tsx / Footer.tsx
+  Nav.tsx             Mark + bordered pill, both in mix-blend-difference so
+                      they invert themselves over dark and flooded sections
   sections/           Hero · Legend · Houses · CTA
-  ui/                 CoinField · HouseCard · MagneticButton · Placeholder ·
-                      Starfield · ScrollCue · SectionLabel
-lib/
-  gsap.ts             Single ScrollTrigger registration point
-  motion.ts           Shared easing + Framer variants
-  houses.ts           All copy: the four houses and the three legend chapters
-hooks/                useIsomorphicLayoutEffect · usePrefersReducedMotion
+  ui/                 Panel · Caption · TornEdge · ArtPlate · HoldPuck ·
+                      InkButton · Medallion · ProgressTicks
+lib/houses.ts         All copy: four houses, three chapters as caption blocks
 ```
 
-## Editing content
+## Typography
 
-All Georgian copy lives in `lib/houses.ts` — `HOUSES` (name, motto, description,
-traits, accent colour, sigil) and `LEGEND_CHAPTERS` (kicker, title, body). The hero
-headline and CTA paragraph sit in their own section components.
+- **Display:** DM Themestia, a decorative majuscule Georgian face — the
+  structural analogue to the reference's condensed display serif. It carries
+  Mkhedruli, digits and the Roman numerals I V X C M but **no Latin
+  alphabet**, so Latin strings stay on the body sans and the serif behind it
+  picks up anything it is missing.
+- **Captions and labels:** Noto Sans Georgian, small, uppercase, tracked.
 
-## Swapping in the real artwork
+## Known gaps
 
-Illustrations are stylized placeholders — a gilded frame, an ambient glow tinted by
-the section's accent colour, and the descriptive caption. To use final art, replace
-the body of `components/ui/Placeholder.tsx` with a `next/image` `<Image />` (keeping
-the wrapper's aspect ratio), or drop an `<Image />` in place of the `<Placeholder />`
-call sites in `Legend.tsx` and the crest plate in `HouseCard.tsx`. Each placeholder's
-caption names the shot it stands in for.
+- Colours are eyeballed from screenshots. If exact brand values matter, pull
+  them from the live site's computed styles.
+- The leaderboard bars in the CTA use illustrative numbers (`STANDINGS` in
+  `sections/CTA.tsx`), labelled as placeholder data on the page.
+- Both CTA buttons point at in-page anchors (`#leaderboard`, `#quiz-start`).
 
-The CTA leaderboard bars use illustrative numbers (`STANDINGS` in `CTA.tsx`), labelled
-as placeholder data on the page — wire them to the real leaderboard before launch.
-Both CTA buttons currently point at in-page anchors (`#leaderboard`, `#quiz-start`).
+## Deployment
 
-## Notes on the animation layer
-
-- **One scroll driver.** Lenis emits scroll, GSAP's ticker drives Lenis, and
-  `ScrollTrigger.update` runs off the same tick — pinned sections stay rock steady.
-- **Canvas outside React.** `CoinField` reads progress from a ref that GSAP and
-  Framer write to directly, so scrubbing never re-renders the tree.
-- **Cleanup.** Every effect runs inside `gsap.context(...)` and reverts on unmount, so
-  Strict Mode's double-invoke and route changes don't leave triggers behind.
-- **Reduced motion is honoured throughout:** Lenis is not started, the coin canvas
-  paints a single composed frame, and CSS transitions collapse — all content still
-  renders in its final state.
-
-## Responsive behaviour
-
-Verified from 390px to 1440px with no horizontal overflow. The houses rail switches
-from pinned-horizontal to stacked at the `lg` breakpoint, hover-only reveals become
-always-visible on touch, and the hoard thins out on small screens.
+`next.config.mjs` sets `output: "export"`; `.github/workflows/deploy.yml`
+publishes `out/` to GitHub Pages on every push. `basePath` is applied only when
+`GITHUB_PAGES=true`, so local dev still serves from the root.

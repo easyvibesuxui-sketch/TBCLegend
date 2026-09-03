@@ -1,202 +1,166 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { useRef } from "react";
+import { gsap } from "@/lib/gsap";
 import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
 import { LEGEND_CHAPTERS } from "@/lib/houses";
-import { EASE } from "@/lib/motion";
-import Placeholder from "@/components/ui/Placeholder";
-import SectionLabel from "@/components/ui/SectionLabel";
-import Starfield from "@/components/ui/Starfield";
+import ArtPlate from "@/components/ui/ArtPlate";
+import Caption from "@/components/ui/Caption";
+import HoldPuck from "@/components/ui/HoldPuck";
+import Panel from "@/components/ui/Panel";
+import TornEdge from "@/components/ui/TornEdge";
 
+/**
+ * The story, told as comic pages. Each chapter picks one of three
+ * compositions from the reference: a panel with insets on paper, a full
+ * colour flood carrying the gesture, or a split page.
+ */
 export default function Legend() {
   const sectionRef = useRef<HTMLElement>(null);
-  const [active, setActive] = useState(0);
+  const shatter = useRef(0);
 
   useIsomorphicLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      // Background drifts slower than the page — the parallax bed.
-      gsap.to("[data-legend-bg]", {
-        yPercent: 18,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
-
-      const chapters = gsap.utils.toArray<HTMLElement>("[data-chapter]");
-
-      chapters.forEach((chapter, i) => {
-        const lines = chapter.querySelectorAll("[data-reveal]");
-
-        // Reveal: lift, unblur, settle — staggered down the block.
+      // Panels drift against the page at slightly different rates, the way
+      // overlapping artboards do when the reader scrolls past them.
+      gsap.utils.toArray<HTMLElement>("[data-drift]").forEach((el) => {
+        const depth = Number(el.dataset.drift) || 1;
         gsap.fromTo(
-          lines,
-          { y: 46, opacity: 0, filter: "blur(8px)" },
+          el,
+          { yPercent: 6 * depth },
           {
-            y: 0,
-            opacity: 1,
-            filter: "blur(0px)",
-            duration: 1.15,
-            ease: "power3.out",
-            stagger: 0.12,
+            yPercent: -6 * depth,
+            ease: "none",
             scrollTrigger: {
-              trigger: chapter,
-              start: "top 78%",
-              toggleActions: "play none none reverse",
+              trigger: el,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
             },
           },
         );
-
-        // Whichever chapter owns the middle of the viewport drives the art.
-        ScrollTrigger.create({
-          trigger: chapter,
-          start: "top 60%",
-          end: "bottom 40%",
-          onToggle: (self) => self.isActive && setActive(i),
-        });
       });
+
+      // The shattering plate scrubs with the flood section that holds it.
+      gsap.to(
+        {},
+        {
+          scrollTrigger: {
+            trigger: "[data-flood]",
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+            onUpdate: (self) => {
+              shatter.current = self.progress;
+            },
+          },
+        },
+      );
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
-  const activeChapter = LEGEND_CHAPTERS[active];
+  const [one, two, three] = LEGEND_CHAPTERS;
 
   return (
-    <section
-      ref={sectionRef}
-      id="legend"
-      className="relative bg-abyss-950 py-28 sm:py-40"
-    >
-      {/*
-        Parallax bed. The clipping lives here rather than on <section>, because
-        an `overflow: hidden` ancestor would disable the sticky art column.
-      */}
-      <div aria-hidden className="absolute inset-0 overflow-hidden">
-        <div data-legend-bg className="absolute inset-x-0 -top-1/4 h-[150%]">
-          <div
-            className="absolute inset-0 transition-[background] duration-1000"
-            style={{
-              background: `radial-gradient(90% 55% at 22% 30%, ${activeChapter.hue}1F 0%, transparent 62%), radial-gradient(70% 50% at 82% 78%, rgba(110,139,255,0.10) 0%, transparent 60%)`,
-            }}
-          />
-          <Starfield count={70} seed={23} />
+    <section ref={sectionRef} id="legend" className="relative">
+      {/* ─────────── I — on paper, panel with insets ─────────── */}
+      <div className="grain-paper relative bg-paper px-4 pb-24 pt-32 sm:px-8 sm:pb-36 sm:pt-44">
+        {/* The paper tears in over the cover above it */}
+        <div className="absolute inset-x-0 -top-14 z-20 h-16 sm:-top-20 sm:h-24">
+          <TornEdge color="#F2F1EF" side="top" seed={5} />
+        </div>
+        <div className="relative z-10 mx-auto w-full max-w-6xl">
+          <span className="label mb-10 block text-ink/45">
+            {one.index} — პროლოგი
+          </span>
+
+          <div className="relative">
+            <Panel
+              data-drift="1"
+              className="ml-auto aspect-[16/10] w-full sm:w-[86%]"
+            >
+              <ArtPlate label={one.plate} tone="paper" />
+            </Panel>
+
+            {/* Inset panel, hung off the opposite corner */}
+            <Panel className="absolute -left-1 top-[14%] hidden aspect-[4/3] w-[26%] sm:block">
+              <ArtPlate label="[Inset: სამეფოს ხედი]" tone="ochre" />
+            </Panel>
+
+            <Caption className="relative -mt-10 ml-0 sm:absolute sm:-bottom-8 sm:left-[6%] sm:mt-0">
+              {one.captions[0]}
+            </Caption>
+          </div>
+
+          <Caption
+            delay={0.1}
+            className="ml-auto mt-10 sm:mt-24 sm:w-[46%]"
+          >
+            {one.captions[1]}
+          </Caption>
+        </div>
+
+        {/* The night bites up into the paper */}
+        <div className="absolute inset-x-0 bottom-0 z-20 h-16 sm:h-24">
+          <TornEdge color="#6E2020" side="bottom" seed={9} />
         </div>
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-6 lg:px-10">
-        <SectionLabel>ლეგენდა</SectionLabel>
+      {/* ─────────── II — oxblood flood, the gesture ─────────── */}
+      <div
+        data-flood
+        className="grain-paper grain-flood relative overflow-hidden bg-oxblood"
+      >
 
-        <motion.h2
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.6 }}
-          transition={{ duration: 1.1, ease: EASE }}
-          className="mx-auto mt-7 max-w-[22ch] text-center font-display text-[clamp(2rem,5.5vw,4.5rem)] font-medium leading-[1.05] text-gold-50"
-        >
-          როგორ დაიმსხვრა{" "}
-          <span className="text-gilded">უძველესი საგანძური</span>
-        </motion.h2>
+        <div className="relative z-10 flex min-h-[100svh] flex-col px-4 py-28 sm:px-8 sm:py-40">
+          <div className="absolute inset-0">
+            <ArtPlate label={two.plate} tone="oxblood" scrub={shatter} labelAlign="bottom" />
+          </div>
 
-        <div className="mt-20 grid gap-14 lg:mt-32 lg:grid-cols-12 lg:gap-16">
-          {/* ── Sticky art column ───────────────────────────── */}
-          <div className="lg:col-span-5">
-            <div className="lg:sticky lg:top-[18vh]">
-              <div className="relative">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeChapter.id}
-                    initial={{ opacity: 0, scale: 1.06, filter: "blur(10px)" }}
-                    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, scale: 0.97, filter: "blur(10px)" }}
-                    transition={{ duration: 0.85, ease: EASE }}
-                  >
-                    <Placeholder
-                      label={activeChapter.placeholder}
-                      hue={activeChapter.hue}
-                      ratio="aspect-[4/5]"
-                    />
-                  </motion.div>
-                </AnimatePresence>
+          {/* flex-1 so the two caption blocks push to the top and foot of the plate */}
+          <div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col justify-between gap-24">
+            <div>
+              <span className="label mb-8 block text-paper/75">
+                {two.index} — მისტიკური ღამე
+              </span>
+              <Caption className="sm:w-[52%]">{two.captions[0]}</Caption>
+            </div>
 
-                {/* Chapter rail */}
-                <div className="mt-8 flex items-center gap-5">
-                  {LEGEND_CHAPTERS.map((c, i) => (
-                    <div key={c.id} className="flex items-center gap-3">
-                      <span
-                        className={`font-display text-sm transition-colors duration-500 ${
-                          i === active ? "text-gold-200" : "text-gold-100/25"
-                        }`}
-                      >
-                        {c.index}
-                      </span>
-                      <span className="relative block h-px w-10 bg-gold-100/15 sm:w-14">
-                        <motion.span
-                          className="absolute inset-y-0 left-0 bg-gold-300"
-                          initial={false}
-                          animate={{ width: i <= active ? "100%" : "0%" }}
-                          transition={{ duration: 0.7, ease: EASE }}
-                        />
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+            <div className="flex flex-col items-start gap-10 sm:flex-row sm:items-end sm:justify-between">
+              <Caption delay={0.1} className="sm:w-[46%]">
+                {two.captions[1]}
+              </Caption>
+              <HoldPuck lines={["დაიჭირე", "და გასწიე"]} />
             </div>
           </div>
+        </div>
 
-          {/* ── Story column ────────────────────────────────── */}
-          <div className="lg:col-span-7">
-            {LEGEND_CHAPTERS.map((chapter) => (
-              <article
-                key={chapter.id}
-                data-chapter
-                className="flex min-h-[68vh] flex-col justify-center border-t border-gold-300/10 py-14 first:border-t-0 lg:min-h-[86vh] lg:py-20"
-              >
-                <div
-                  data-reveal
-                  className="flex items-center gap-4 will-change-transform"
-                >
-                  <span
-                    className="font-display text-xs tracking-[0.3em]"
-                    style={{ color: chapter.hue }}
-                  >
-                    {chapter.index}
-                  </span>
-                  <span className="font-display text-[11px] tracking-[0.18em] text-gold-100/55 sm:text-xs">
-                    {chapter.kicker}
-                  </span>
-                </div>
+        <div className="absolute inset-x-0 bottom-0 z-20 h-16 sm:h-20">
+          <TornEdge color="#F2F1EF" side="bottom" seed={14} />
+        </div>
+      </div>
 
-                <h3
-                  data-reveal
-                  className="mt-6 font-display text-[clamp(1.75rem,4vw,3.25rem)] font-medium leading-[1.1] text-gold-50 will-change-transform"
-                >
-                  {chapter.title}
-                </h3>
-
-                <p
-                  data-reveal
-                  className="mt-6 max-w-[58ch] font-body text-[15px] leading-[1.9] text-gold-50/60 will-change-transform sm:text-[17px]"
-                >
-                  {chapter.body}
-                </p>
-
-                <span
-                  data-reveal
-                  className="mt-9 block h-px w-24 will-change-transform"
-                  style={{
-                    background: `linear-gradient(90deg, ${chapter.hue}, transparent)`,
-                  }}
-                />
-              </article>
-            ))}
+      {/* ─────────── III — split page on paper ─────────── */}
+      <div className="grain-paper relative bg-paper px-4 py-24 sm:px-8 sm:py-36">
+        <div className="relative z-10 mx-auto grid w-full max-w-6xl gap-10 sm:grid-cols-12 sm:gap-8">
+          <div className="sm:col-span-5 sm:pt-16">
+            <span className="label mb-8 block text-ink/45">
+              {three.index} — მარათონი
+            </span>
+            <Caption>{three.captions[0]}</Caption>
+            <Caption delay={0.1} className="mt-8 sm:ml-10">
+              {three.captions[1]}
+            </Caption>
           </div>
+
+          <Panel
+            data-drift="0.6"
+            className="aspect-[3/4] sm:col-span-7 sm:-mr-8"
+          >
+            <ArtPlate label={three.plate} tone="ochre" />
+          </Panel>
         </div>
       </div>
     </section>

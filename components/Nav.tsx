@@ -1,70 +1,56 @@
 "use client";
 
-import { useState } from "react";
-import { motion, useMotionValueEvent, useScroll, useSpring } from "framer-motion";
-import { EASE } from "@/lib/motion";
+import Medallion from "@/components/ui/Medallion";
 
 const LINKS = [
   { href: "#legend", label: "ლეგენდა" },
-  { href: "#houses", label: "საგვარეულოები" },
-  { href: "#quiz", label: "ქვიზი" },
+  { href: "#houses", label: "სახლები" },
 ];
 
+/**
+ * Chrome, exactly as the reference sets it: the mark alone at top left, and a
+ * bordered white pill at top right. Both sit in `mix-blend-difference` so they
+ * invert themselves over the dark and flooded sections instead of needing a
+ * scroll listener to swap colours.
+ */
 export default function Nav() {
-  const { scrollYProgress, scrollY } = useScroll();
-  const [solid, setSolid] = useState(false);
-
-  const bar = useSpring(scrollYProgress, {
-    stiffness: 120,
-    damping: 28,
-    restDelta: 0.001,
-  });
-
-  useMotionValueEvent(scrollY, "change", (v) => setSolid(v > 80));
-
   return (
-    <>
-      {/* Gilded reading-progress thread */}
-      <motion.div
-        style={{ scaleX: bar }}
-        className="fixed inset-x-0 top-0 z-[70] h-px origin-left bg-gradient-to-r from-gold-600 via-gold-200 to-gold-600"
-      />
+    <header className="pointer-events-none fixed inset-x-0 top-0 z-50">
+      <div className="flex items-start justify-between p-4 sm:p-6">
+        <a
+          href="#hero"
+          className="pointer-events-auto flex items-center gap-2 mix-blend-difference"
+          aria-label="საგანძურის მარათონი"
+        >
+          <Medallion className="h-9 w-9 text-paper sm:h-11 sm:w-11" />
+          {/* The wordmark does not fit beside the pill on narrow screens */}
+          <span className="hidden font-display text-sm leading-[0.95] text-paper sm:block sm:text-base">
+            საგანძურის
+            <br />
+            მარათონი
+          </span>
+        </a>
 
-      <motion.header
-        initial={{ opacity: 0, y: -16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, ease: EASE, delay: 0.6 }}
-        className={`fixed inset-x-0 top-0 z-[65] transition-all duration-500 ${
-          solid
-            ? "border-b border-gold-300/10 bg-abyss-950/95 backdrop-blur-xl"
-            : "border-b border-transparent"
-        }`}
-      >
-        <nav className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4 lg:px-10 lg:py-5">
-          <a href="#hero" className="group flex items-center gap-3">
-            <span className="relative flex h-8 w-8 items-center justify-center rounded-full border border-gold-300/40 text-gold-200 transition-colors duration-500 group-hover:border-gold-200">
-              <span className="text-[13px] leading-none">◈</span>
-              <span className="absolute inset-0 rounded-full opacity-0 shadow-glow transition-opacity duration-500 group-hover:opacity-100" />
-            </span>
-            <span className="hidden font-display text-sm tracking-wide text-gold-50/90 sm:block">
-              საგანძურის მარათონი
-            </span>
+        <nav className="pointer-events-auto flex items-stretch border border-ink bg-paper-bright">
+          {LINKS.map((link, i) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className={`label px-3 py-2.5 text-ink transition-colors duration-300 hover:bg-ink hover:text-paper sm:px-6 sm:py-3 ${
+                i > 0 ? "border-l border-ink" : ""
+              }`}
+            >
+              {link.label}
+            </a>
+          ))}
+          <a
+            href="#quiz"
+            className="label border-l border-ink bg-signal px-3 py-2.5 text-paper transition-colors duration-300 hover:bg-ink sm:px-6 sm:py-3"
+          >
+            ქვიზი
           </a>
-
-          <div className="flex items-center gap-6 sm:gap-9">
-            {LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="group relative font-display text-xs tracking-[0.14em] text-gold-50/60 transition-colors duration-300 hover:text-gold-100 sm:text-[13px]"
-              >
-                {link.label}
-                <span className="absolute -bottom-1 left-0 h-px w-0 bg-gold-300 transition-all duration-500 group-hover:w-full" />
-              </a>
-            ))}
-          </div>
         </nav>
-      </motion.header>
-    </>
+      </div>
+    </header>
   );
 }

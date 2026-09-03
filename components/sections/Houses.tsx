@@ -5,61 +5,38 @@ import { motion } from "framer-motion";
 import { gsap } from "@/lib/gsap";
 import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
 import { HOUSES } from "@/lib/houses";
+import ArtPlate from "@/components/ui/ArtPlate";
+import Panel from "@/components/ui/Panel";
+import TornEdge from "@/components/ui/TornEdge";
 import { EASE } from "@/lib/motion";
-import HouseCard from "@/components/ui/HouseCard";
-import SectionLabel from "@/components/ui/SectionLabel";
 
+/**
+ * The four houses as a plate spread: one tall panel each, flooded in its own
+ * spot colour, with the name struck across the bottom. Hovering lifts the
+ * plate and pulls its description up from behind the name.
+ */
 export default function Houses() {
   const sectionRef = useRef<HTMLElement>(null);
-  const pinRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
 
   useIsomorphicLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      const mm = gsap.matchMedia();
-
-      // Desktop: pin the viewport and translate the rail sideways.
-      mm.add("(min-width: 1024px)", () => {
-        const track = trackRef.current;
-        if (!track) return;
-
-        const distance = () =>
-          Math.max(0, track.scrollWidth - window.innerWidth);
-
-        gsap.to(track, {
-          x: () => -distance(),
-          ease: "none",
-          scrollTrigger: {
-            trigger: pinRef.current,
-            start: "top top",
-            end: () => `+=${distance() + window.innerHeight * 0.4}`,
-            pin: true,
-            scrub: 1,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-          },
-        });
-
-        // Progress rail under the cards.
+      // Alternate columns rise at different rates so the row never reads as a
+      // flat grid of cards.
+      gsap.utils.toArray<HTMLElement>("[data-house]").forEach((el, i) => {
         gsap.fromTo(
-          "[data-houses-progress]",
-          { scaleX: 0 },
+          el,
+          { yPercent: i % 2 === 0 ? 5 : -3 },
           {
-            scaleX: 1,
+            yPercent: i % 2 === 0 ? -5 : 3,
             ease: "none",
             scrollTrigger: {
-              trigger: pinRef.current,
-              start: "top top",
-              end: () => `+=${distance() + window.innerHeight * 0.4}`,
+              trigger: sectionRef.current,
+              start: "top bottom",
+              end: "bottom top",
               scrub: true,
             },
           },
         );
-      });
-
-      // Mobile keeps a plain vertical stack — cards reveal themselves.
-      mm.add("(max-width: 1023px)", () => {
-        gsap.set(trackRef.current, { clearProps: "transform" });
       });
     }, sectionRef);
 
@@ -70,82 +47,72 @@ export default function Houses() {
     <section
       ref={sectionRef}
       id="houses"
-      className="relative overflow-hidden bg-abyss-900 py-24 sm:py-32"
+      className="grain-paper relative bg-paper px-4 py-28 sm:px-8 sm:py-40"
     >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(80% 45% at 50% 0%, rgba(217,172,70,0.14) 0%, transparent 60%), linear-gradient(#03040A, #05070F 40%, #080B18 100%)",
-        }}
-      />
-
-      <div className="relative z-10">
-        <div className="mx-auto w-full max-w-7xl px-6 lg:px-10">
-          <SectionLabel>ოთხი საგვარეულო</SectionLabel>
-
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.6 }}
-            transition={{ duration: 1.1, ease: EASE }}
-            className="mx-auto mt-7 max-w-[18ch] text-center font-display text-[clamp(2rem,5.5vw,4.5rem)] font-medium leading-[1.05] text-gold-50"
-          >
-            თითოეულ სახლს აქვს <span className="text-gilded">თავისი სიმართლე</span>
-          </motion.h2>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.6 }}
-            transition={{ duration: 1.1, ease: EASE, delay: 0.1 }}
-            className="mx-auto mt-6 max-w-[46ch] text-center font-body text-sm leading-relaxed text-gold-50/55 sm:text-base"
-          >
-            აირჩიე საგვარეულო და გაეცანი მათ ხასიათს, დევიზსა და სამეფოს
-            მომავლის ხედვას.
-          </motion.p>
-        </div>
-
-        {/* ── Rail: pinned + horizontal on desktop, stacked on mobile ── */}
-        <div
-          ref={pinRef}
-          className="mt-16 lg:mt-0 lg:flex lg:h-[100svh] lg:flex-col lg:justify-center lg:overflow-hidden"
+      <div className="relative z-10 mx-auto w-full max-w-7xl">
+        <motion.h2
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{ duration: 1, ease: EASE }}
+          className="text-center font-display text-[clamp(2.2rem,7.5vw,6.5rem)] leading-[0.88] text-ink"
         >
-          <div
-            ref={trackRef}
-            className="flex flex-col gap-8 px-6 will-change-transform lg:flex-row lg:gap-10 lg:px-[max(2.5rem,8vw)]"
-          >
-            {HOUSES.map((house, i) => (
-              <HouseCard key={house.id} house={house} index={i} />
-            ))}
+          <span className="block">ოთხი სახლი</span>
+          <span className="block">ერთი საგანძური</span>
+        </motion.h2>
 
-            {/* Tail card: closes the rail and points to the quiz */}
-            <div className="hidden w-[clamp(280px,20vw,340px)] shrink-0 flex-col justify-center lg:flex">
-              <span className="rule-gold mb-6 block h-px w-16" />
-              <p className="font-display text-2xl leading-snug text-gold-100/80">
-                შენ რომელ
-                <br />
-                სახლს ეკუთვნი?
-              </p>
-              <a
-                href="#quiz"
-                className="mt-6 inline-flex w-fit items-center gap-2 font-display text-xs tracking-[0.14em] text-gold-300 transition-colors hover:text-gold-100 sm:text-[13px]"
-              >
-                გაიგე ქვიზით
-                <span aria-hidden>→</span>
-              </a>
-            </div>
-          </div>
-
-          {/* Horizontal-scroll progress rail, pinned alongside the cards */}
-          <div className="mx-auto mt-12 hidden h-px w-[min(38rem,60vw)] bg-gold-100/10 lg:block">
-            <span
-              data-houses-progress
-              className="block h-full origin-left scale-x-0 bg-gradient-to-r from-gold-500 via-gold-200 to-gold-500"
-            />
-          </div>
+        <div className="mt-6 flex items-center justify-center gap-6">
+          <span className="label text-signal">თითოეულს თავისი სიმართლე</span>
         </div>
+
+        <div className="mt-16 grid gap-5 sm:mt-24 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4">
+          {HOUSES.map((house, i) => (
+            <motion.div
+              key={house.id}
+              data-house
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: 0.9, ease: EASE, delay: (i % 4) * 0.08 }}
+              className="group"
+            >
+              <Panel className="aspect-[3/4.6] w-full transition-transform duration-500 group-hover:-translate-y-2">
+                <ArtPlate label={house.plate} tone={house.tone} />
+
+                {/* Name plate, struck across the foot of the panel */}
+                <div className="absolute inset-x-0 bottom-0 z-10 border-t border-ink bg-paper-bright">
+                  <div className="px-4 py-4">
+                    <h3 className="font-display text-[clamp(1.3rem,2.2vw,1.9rem)] leading-none text-ink">
+                      {house.name}
+                    </h3>
+                    <p className="label mt-2 text-ink/45">{house.latin}</p>
+                  </div>
+
+                  {/*
+                    Description unfurls on hover on pointer devices and is
+                    simply always open on touch, where hover never fires.
+                  */}
+                  <div className="grid grid-rows-[1fr] transition-[grid-template-rows] duration-500 ease-out lg:grid-rows-[0fr] lg:group-hover:grid-rows-[1fr]">
+                    <div className="overflow-hidden">
+                      <div className="border-t border-ink/15 px-4 py-4">
+                        <p className="font-display text-[13px] text-signal">
+                          „{house.motto}“
+                        </p>
+                        <p className="mt-3 font-body text-[12.5px] leading-[1.75] text-ink/70">
+                          {house.description}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Panel>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      <div className="absolute inset-x-0 bottom-0 z-20 h-16 sm:h-20">
+        <TornEdge color="#CF2A20" side="bottom" seed={21} />
       </div>
     </section>
   );

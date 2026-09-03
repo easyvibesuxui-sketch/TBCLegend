@@ -46,8 +46,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#03040A",
-  colorScheme: "dark",
+  themeColor: "#F2F1EF",
+  colorScheme: "light",
 };
 
 export default function RootLayout({
@@ -60,7 +60,7 @@ export default function RootLayout({
       lang="ka"
       className={`${display.variable} ${serif.variable} ${body.variable}`}
     >
-      <body className="grain">{children}</body>
+      <body>{children}</body>
     </html>
   );
 }

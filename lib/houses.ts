@@ -1,117 +1,103 @@
 export type House = {
   id: string;
-  /** Georgian house name as shown on the crest */
   name: string;
   latin: string;
-  sigil: string;
   motto: string;
   description: string;
-  /** Trait bars — purely illustrative of each house's temperament */
-  traits: { label: string; value: number }[];
-  /** Tailwind-free raw colours, fed straight into gradients and glows */
-  accent: string;
-  accentSoft: string;
-  placeholder: string;
+  /** Spot colour this house's panel commits to */
+  tone: "paper" | "ochre" | "oxblood" | "red" | "night";
+  plate: string;
 };
 
 export const HOUSES: House[] = [
   {
     id: "kharjiani",
     name: "ხარჯიანი",
-    latin: "House Kharjiani",
-    sigil: "✦",
+    latin: "HOUSE KHARJIANI",
     motto: "ცხოვრება ერთხელ გვეძლევა",
     description:
       "საგვარეულო, რომელსაც უყვარს მოქმედება, ცხოვრებით ტკბობა და ენერგიული აქტივობა. ისინი არ ერიდებიან რესურსების გაცემას მიზნების მისაღწევად.",
-    traits: [
-      { label: "მოქმედება", value: 95 },
-      { label: "ენერგია", value: 88 },
-      { label: "დაზოგვა", value: 34 },
-    ],
-    accent: "#E0653A",
-    accentSoft: "rgba(224,101,58,0.4)",
-    placeholder: "[Illustration: House Kharjiani — Ember Coin Crest]",
+    tone: "red",
+    plate: "[Video: ხარჯიანის დროშა — ცეცხლი და მოძრაობა]",
   },
   {
     id: "anabaridze",
     name: "ანაბარიძე",
-    latin: "House Anabaridze",
-    sigil: "◈",
+    latin: "HOUSE ANABARIDZE",
     motto: "მომავალი იგება დღეს",
     description:
       "წინდახედული, სტრატეგიული და დამზოგველი სახლი. მათი დევიზია რესურსების სწორად გადანაწილება და მომავლის დაზღვევა.",
-    traits: [
-      { label: "სტრატეგია", value: 93 },
-      { label: "დაზოგვა", value: 97 },
-      { label: "რისკი", value: 22 },
-    ],
-    accent: "#6E8BFF",
-    accentSoft: "rgba(110,139,255,0.4)",
-    placeholder: "[Illustration: House Anabaridze — Vault Sigil]",
+    tone: "night",
+    plate: "[Video: ანაბარიძის საცავი — დალუქული კარი]",
   },
   {
     id: "dovlatia",
     name: "დოვლათია",
-    latin: "House Dovlatia",
-    sigil: "❖",
+    latin: "HOUSE DOVLATIA",
     motto: "იღბალი მამაცებს ერგებათ",
     description:
       "საგვარეულო, რომელიც ორიენტირებულია სიმდიდრის მოზიდვაზე, იღბალსა და დიდებაზე.",
-    traits: [
-      { label: "იღბალი", value: 91 },
-      { label: "სიმდიდრე", value: 89 },
-      { label: "სიფრთხილე", value: 41 },
-    ],
-    accent: "#EAC46B",
-    accentSoft: "rgba(234,196,107,0.42)",
-    placeholder: "[Illustration: House Dovlatia — Fortune Wheel Crest]",
+    tone: "ochre",
+    plate: "[Video: დოვლათიას იღბლის ბორბალი]",
   },
   {
     id: "baratishvili",
     name: "ბარათიშვილი",
-    latin: "House Baratishvili",
-    sigil: "✵",
+    latin: "HOUSE BARATISHVILI",
     motto: "წესრიგი ძველი დიდებიდან",
     description:
       "ტრადიციული, მტკიცე და გავლენიანი საგვარეულო, რომელიც სამეფოს ძველ დიდებასა და წესრიგს იცავს.",
-    traits: [
-      { label: "ტრადიცია", value: 96 },
-      { label: "გავლენა", value: 87 },
-      { label: "სიახლე", value: 30 },
-    ],
-    accent: "#9F7BE0",
-    accentSoft: "rgba(159,123,224,0.4)",
-    placeholder: "[Illustration: House Baratishvili — Ancient Seal]",
+    tone: "oxblood",
+    plate: "[Video: ბარათიშვილის ძველი ბეჭედი]",
   },
 ];
 
-/** Narrative beats of the legend, revealed one by one on scroll. */
-export const LEGEND_CHAPTERS = [
+export type Chapter = {
+  id: string;
+  index: string;
+  /**
+   * The story runs as caption boxes hung off panel edges — two or three short
+   * blocks per chapter, never one long paragraph.
+   */
+  captions: string[];
+  plate: string;
+  tone: "paper" | "ochre" | "oxblood" | "red" | "night";
+  /** "flood" fills the viewport with the tone; "panel" sits on paper. */
+  layout: "panel" | "flood" | "split";
+};
+
+export const LEGEND_CHAPTERS: Chapter[] = [
   {
     id: "chapter-1",
     index: "I",
-    kicker: "პროლოგი",
-    title: "უძველესი საგანძური",
-    body: "საუკუნეების განმავლობაში, ზღაპრულ სამეფოს ოთხი დიდი და დიდებული საგვარეულო (სახლი) ერთობლივად მართავდა. სამეფოში სიმშვიდეს, ბალანსსა და კეთილდღეობას იცავდა ერთი უძველესი, საიდუმლო საგანძური, რომელსაც ჯადოსნური ძალა ჰქონდა.",
-    placeholder: "[Illustration: The Ancient Treasure Vault, Glowing]",
-    hue: "#EAC46B",
+    captions: [
+      "საუკუნეების განმავლობაში, ზღაპრულ სამეფოს ოთხი დიდი და დიდებული საგვარეულო (სახლი) ერთობლივად მართავდა.",
+      "სამეფოში სიმშვიდეს, ბალანსსა და კეთილდღეობას იცავდა ერთი უძველესი, საიდუმლო საგანძური, რომელსაც ჯადოსნური ძალა ჰქონდა.",
+    ],
+    plate: "[Video: უძველესი საგანძური საკურთხეველზე]",
+    tone: "paper",
+    layout: "panel",
   },
   {
     id: "chapter-2",
     index: "II",
-    kicker: "მისტიკური ღამე",
-    title: "დამსხვრევა",
-    body: "ერთ მისტიკურ ღამეს, მოულოდნელად, ეს მთავარი საგანძური ნაწილებად დაიმსხვრა, მილიონობით ოქროს მონეტად იქცა და სამეფოს სხვადასხვა შორეულ კუთხეში მიმოიფანტა. არავინ იცის, ეს უბედური შემთხვევა იყო, მტრის ღალატი, თუ ძველი წინასწარმეტყველების აღსრულება.",
-    placeholder: "[Illustration: Golden Coins Shattering Across the Sky]",
-    hue: "#E0653A",
+    captions: [
+      "ერთ მისტიკურ ღამეს, მოულოდნელად, ეს მთავარი საგანძური ნაწილებად დაიმსხვრა, მილიონობით ოქროს მონეტად იქცა და სამეფოს სხვადასხვა შორეულ კუთხეში მიმოიფანტა.",
+      "არავინ იცის, ეს უბედური შემთხვევა იყო, მტრის ღალატი, თუ ძველი წინასწარმეტყველების აღსრულება.",
+    ],
+    plate: "[Video: დამსხვრევა — მონეტები იფანტება]",
+    tone: "oxblood",
+    layout: "flood",
   },
   {
     id: "chapter-3",
     index: "III",
-    kicker: "მარათონი",
-    title: "ოთხი სახლის გზა",
-    body: "სამეფოში ბალანსის აღსადგენად და საკუთარი ძალაუფლების დასამტკიცებლად, ოთხივე საგვარეულო ოქროს მონეტების საძიებლად გაემართა. თითოეულ სახლს აქვს თავისი სიმართლე, თავისი ეჭვები და სამეფოს მომავლის საკუთარი ხედვა.",
-    placeholder: "[Illustration: Four Banners Marching Across the Kingdom]",
-    hue: "#6E8BFF",
+    captions: [
+      "სამეფოში ბალანსის აღსადგენად და საკუთარი ძალაუფლების დასამტკიცებლად, ოთხივე საგვარეულო ოქროს მონეტების საძიებლად გაემართა.",
+      "თითოეულ სახლს აქვს თავისი სიმართლე, თავისი ეჭვები და სამეფოს მომავლის საკუთარი ხედვა.",
+    ],
+    plate: "[Video: ოთხი დროშა გზაზე]",
+    tone: "ochre",
+    layout: "split",
   },
 ];
