@@ -89,7 +89,7 @@ export default function MagneticButton({
       )}
       <motion.span
         style={{ x: labelX, y: labelY }}
-        className="relative z-10 whitespace-nowrap font-body text-[13px] font-medium tracking-[0.14em] sm:text-sm"
+        className="relative z-10 whitespace-nowrap font-display text-[15px] tracking-[0.08em] sm:text-base"
       >
         {children}
       </motion.span>

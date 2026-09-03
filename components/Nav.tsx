@@ -56,7 +56,7 @@ export default function Nav() {
               <a
                 key={link.href}
                 href={link.href}
-                className="group relative font-body text-[11px] uppercase tracking-[0.18em] text-gold-50/55 transition-colors duration-300 hover:text-gold-100 sm:text-xs"
+                className="group relative font-display text-xs tracking-[0.14em] text-gold-50/60 transition-colors duration-300 hover:text-gold-100 sm:text-[13px]"
               >
                 {link.label}
                 <span className="absolute -bottom-1 left-0 h-px w-0 bg-gold-300 transition-all duration-500 group-hover:w-full" />

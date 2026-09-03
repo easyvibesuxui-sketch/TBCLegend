@@ -15,7 +15,7 @@ export default function ScrollCue({ label }: { label: string }) {
       transition={{ duration: 1.2, ease: EASE, delay: 1.9 }}
       className="flex items-center gap-4"
     >
-      <span className="font-body text-[9px] uppercase tracking-widest2 text-gold-100/50 sm:text-[10px]">
+      <span className="font-display text-[11px] tracking-[0.18em] text-gold-100/60 sm:text-xs">
         {label}
       </span>
       <span className="relative block h-px w-14 overflow-hidden bg-gold-300/20 sm:w-20">

@@ -168,7 +168,7 @@ export default function Legend() {
                   >
                     {chapter.index}
                   </span>
-                  <span className="font-body text-[10px] uppercase tracking-widest2 text-gold-100/45">
+                  <span className="font-display text-[11px] tracking-[0.18em] text-gold-100/55 sm:text-xs">
                     {chapter.kicker}
                   </span>
                 </div>

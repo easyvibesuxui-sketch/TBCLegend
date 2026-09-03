@@ -35,7 +35,15 @@ const config: Config = {
         arcane: "#6E8BFF",
       },
       fontFamily: {
-        display: ["var(--font-display)", "Georgia", "serif"],
+        // The display face has no Latin alphabet, so the serif behind it picks
+        // up Latin, symbols and anything else it is missing.
+        display: [
+          "var(--font-display)",
+          "var(--font-serif)",
+          "Georgia",
+          "serif",
+        ],
+        serif: ["var(--font-serif)", "Georgia", "serif"],
         body: ["var(--font-body)", "system-ui", "sans-serif"],
       },
       letterSpacing: {

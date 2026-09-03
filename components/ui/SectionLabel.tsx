@@ -22,7 +22,7 @@ export default function SectionLabel({
       }`}
     >
       {align === "center" && <span className="rule-gold h-px w-10 sm:w-16" />}
-      <span className="font-body text-[10px] uppercase tracking-widest2 text-gold-300/80 sm:text-[11px]">
+      <span className="font-display text-xs tracking-[0.2em] text-gold-300/85 sm:text-[13px]">
         {children}
       </span>
       <span className="rule-gold h-px w-10 sm:w-16" />

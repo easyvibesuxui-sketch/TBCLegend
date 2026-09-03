@@ -208,8 +208,15 @@ export default function Hero() {
               className="mb-6 flex items-center gap-4 sm:mb-9"
             >
               <span className="rule-gold h-px w-8 sm:w-14" />
-              <span className="font-body text-[9px] uppercase tracking-widest2 text-gold-300/85 sm:text-[11px]">
-                TBC · ლეგენდა იწყება
+              {/* Split: the display face carries no Latin, so TBC stays sans */}
+              <span className="flex items-baseline gap-2 text-gold-300/85">
+                <span className="font-body text-[9px] uppercase tracking-widest2 sm:text-[10px]">
+                  TBC
+                </span>
+                <span className="text-gold-300/45">·</span>
+                <span className="font-display text-[11px] tracking-[0.18em] sm:text-xs">
+                  ლეგენდა იწყება
+                </span>
               </span>
               <span className="rule-gold h-px w-8 sm:w-14" />
             </motion.div>

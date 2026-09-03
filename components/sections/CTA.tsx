@@ -94,7 +94,7 @@ export default function CTA() {
               }}
               className="text-left"
             >
-              <p className="font-body text-[11px] tracking-[0.12em] text-gold-50/70">
+              <p className="font-display text-[13px] tracking-[0.06em] text-gold-50/75">
                 {house.name}
               </p>
               <div className="mt-3 h-[2px] w-full rounded-full bg-gold-100/10">

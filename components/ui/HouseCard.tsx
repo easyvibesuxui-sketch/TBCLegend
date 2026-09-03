@@ -137,7 +137,7 @@ export default function HouseCard({
             {house.latin}
           </p>
           <p
-            className="mt-4 font-display text-sm italic"
+            className="mt-4 font-display text-[15px] tracking-[0.04em]"
             style={{ color: house.accent }}
           >
             „{house.motto}“
@@ -156,7 +156,7 @@ export default function HouseCard({
               <dl className="mt-6 space-y-3">
                 {house.traits.map((trait) => (
                   <div key={trait.label} className="flex items-center gap-3">
-                    <dt className="w-24 shrink-0 font-body text-[10px] uppercase tracking-[0.16em] text-gold-100/45">
+                    <dt className="w-28 shrink-0 font-display text-[11px] tracking-[0.1em] text-gold-100/55">
                       {trait.label}
                     </dt>
                     <dd className="relative h-px flex-1 bg-gold-100/10">

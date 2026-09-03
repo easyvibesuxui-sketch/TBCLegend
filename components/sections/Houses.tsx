@@ -130,7 +130,7 @@ export default function Houses() {
               </p>
               <a
                 href="#quiz"
-                className="mt-6 inline-flex w-fit items-center gap-2 font-body text-[11px] uppercase tracking-widest2 text-gold-300 transition-colors hover:text-gold-100"
+                className="mt-6 inline-flex w-fit items-center gap-2 font-display text-xs tracking-[0.14em] text-gold-300 transition-colors hover:text-gold-100 sm:text-[13px]"
               >
                 გაიგე ქვიზით
                 <span aria-hidden>→</span>
