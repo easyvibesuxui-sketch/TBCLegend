@@ -5,9 +5,22 @@ from [`STORY.md`](STORY.md); the look comes from
 [`../research/santionispirits/DESIGN-SPEC.md`](../research/santionispirits/DESIGN-SPEC.md).
 
 **Connection status.** The Kling MCP server is installed and authorised
-(`authMode: oauth`, user `104206163`). The account is on the Free tier with
-**0 credits**, so nothing can be submitted yet — every job is charged. Top up,
-then run the calls below as written.
+(`authMode: oauth`, user `104206163`).
+
+**The free daily credits cannot drive this MCP.** Kling grants free accounts 66
+credits a day, but those are bonus credits: MCP and CLI accept only *paid*
+credits from the Personal workspace, and a submission with bonus credits alone
+fails with `Insufficient credits` (confirmed by submitting shot 03). So there
+are two ways to produce these shots:
+
+| Route | Cost | Who runs it |
+| --- | --- | --- |
+| **kling.ai web UI** | free, 66 credits/day | a person pastes each prompt below into the site |
+| **This MCP** | paid credits only | the agent runs the calls in *Exact MCP calls* |
+
+The web route is free but rations out at roughly two clips a day, so the full
+set takes about a week including retries. The prompts are identical either
+way — only the delivery differs.
 
 **Models chosen**
 
@@ -195,9 +208,23 @@ seal. Slow, deliberate, single motion. Traditional, immovable, authoritative.
 
 ---
 
+## Running these on the web UI
+
+The site takes no negative-prompt field, which is why the negative list is
+folded into the prompt text above rather than kept separate. For each shot:
+
+1. Pick the model — **Video 3.0 Turbo** for clips, **Image 3.0** for the still.
+2. Paste the style block and the shot text together as one prompt.
+3. Set aspect ratio and duration from the shot's header line.
+4. Download the result. Bonus-credit renders still expire — save immediately.
+
+Name the files as in *Wiring the results in* below and the wiring step is a
+one-line change per shot.
+
 ## Exact MCP calls
 
-Once credits are topped up, each shot is one call. Video example (shot 04):
+With paid credits on the account, each shot is one call instead. Video example
+(shot 04):
 
 ```json
 {
