@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Tone = "paper" | "night" | "ochre" | "oxblood" | "red";
 
@@ -50,6 +50,41 @@ export default function ArtPlate({
   const video = useRef<HTMLVideoElement>(null);
   const t = TONES[tone];
 
+  /*
+   * Shots land one at a time, so a plate is routinely pointed at footage that
+   * is not in the repo yet. Rather than leaving a dead black rectangle, fall
+   * back to the inked stand-in whenever the video cannot load or decode.
+   */
+  const [failed, setFailed] = useState(false);
+  const showVideo = Boolean(src) && !failed;
+
+  // A new source deserves a fresh attempt.
+  useEffect(() => setFailed(false), [src, srcWebm]);
+
+  /*
+   * Deciding a plate has no footage is subtler than listening for an error.
+   * A <source> fires error simply because the browser cannot play that type
+   * and is moving to the next one, so acting on that would hide a perfectly
+   * good MP4 from any browser without WebM. The signal that every candidate
+   * has been exhausted is networkState NETWORK_NO_SOURCE; poll for it rather
+   * than checking once, since the list is walked asynchronously.
+   */
+  useEffect(() => {
+    if (!src || failed) return;
+    const el = video.current;
+    if (!el) return;
+    let tries = 0;
+    const id = window.setInterval(() => {
+      if (el.networkState === el.NETWORK_NO_SOURCE || el.error) {
+        setFailed(true);
+        window.clearInterval(id);
+      } else if (el.readyState >= 1 || ++tries > 12) {
+        window.clearInterval(id);
+      }
+    }, 500);
+    return () => window.clearInterval(id);
+  }, [src, srcWebm, failed]);
+
   useEffect(() => {
     const el = video.current;
     if (!el || !scrub) return;
@@ -64,7 +99,7 @@ export default function ArtPlate({
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [scrub, src, srcWebm]);
+  }, [scrub, src, srcWebm, showVideo]);
 
   return (
     <div
@@ -73,13 +108,14 @@ export default function ArtPlate({
       role="img"
       aria-label={label}
     >
-      {src ? (
+      {showVideo ? (
         <video
           ref={video}
           poster={poster}
           muted
           playsInline
           preload="auto"
+          onError={() => setFailed(true)}
           className="h-full w-full object-cover"
         >
           {srcWebm && <source src={srcWebm} type="video/webm" />}

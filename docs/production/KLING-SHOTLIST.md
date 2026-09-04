@@ -241,7 +241,19 @@ Still (shot 03):
 Both return a `generation_id`; poll `query_tasks` for the URL. **Result URLs
 expire in 24 hours — download immediately.**
 
-## Post-production — do this to every clip
+## Post-production — one command per clip
+
+```bash
+./scripts/prepare-clip.sh ~/Downloads/kling_xyz.mp4 04-shattering
+```
+
+That writes the `.mp4`, `.webm` and `.jpg` into `public/media/` and prints the
+props to paste onto the plate. Pass a third argument (`720`) to keep the full
+frame once a watermark-free download is available. `FFMPEG=/path/to/ffmpeg`
+overrides the binary.
+
+<details>
+<summary>What it runs, and why</summary>
 
 Kling delivers a ~15 MB, 24 Mb/s clip with an audio track and a KlingAI
 watermark in the bottom-right. None of that belongs on the page. For each shot:
@@ -269,11 +281,22 @@ $FF -y -i "$SRC" -vf "crop=1280:632:0:0" -frames:v 1 -q:v 4 public/media/$OUT.jp
 `-movflags +faststart` matters: it moves the index to the front so the first
 frame paints during download instead of after it.
 
+</details>
+
+### Two traps worth knowing
+
 > **The host must serve HTTP Range requests or scrubbing silently fails.** With
 > no Range support the browser reports `seekable.length === 0`, `currentTime`
 > stays pinned at 0, and the clip looks like a still. GitHub Pages and every
 > CDN support Range; `python -m http.server` does not, which makes it useless
 > for testing these plates.
+
+> **A plate whose footage is missing falls back to the inked stand-in.** Shots
+> land one at a time, so pointing a plate at a file that does not exist yet is
+> safe: `ArtPlate` watches for `networkState === NETWORK_NO_SOURCE` and swaps
+> back to the hatched placeholder. It deliberately does *not* react to a
+> `<source>` error, because a browser fires those simply for skipping a format
+> it cannot play — acting on that would hide a working MP4 from Safari.
 
 ## Wiring the results in
 

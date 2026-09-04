@@ -53,6 +53,21 @@ export default function Hero() {
           />
         </div>
 
+        {/*
+          The plate's luminance swings from black sky to near-white cloud, and
+          on a narrow crop the title can land squarely on the bright side. A
+          soft pool of ink behind the copy holds it legible without flattening
+          the whole frame the way a full-bleed scrim would.
+        */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(58% 40% at 50% 44%, rgba(14,14,14,0.78) 0%, rgba(14,14,14,0.4) 55%, transparent 80%)",
+          }}
+        />
+
         {/* Title */}
         <div className="relative z-10 flex h-[100svh] flex-col items-center justify-center px-6">
           <motion.p
