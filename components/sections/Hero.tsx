@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { gsap } from "@/lib/gsap";
 import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
 import ArtPlate from "@/components/ui/ArtPlate";
+import TiltFrame from "@/components/ui/TiltFrame";
 import { EASE } from "@/lib/motion";
 
 /**
@@ -41,6 +42,13 @@ export default function Hero() {
   return (
     <section ref={sectionRef} id="hero" className="relative h-[210vh]">
       <div className="sticky top-0 h-[100svh] overflow-hidden bg-ink">
+        {/*
+          The tilt sits inside the sticky stage, not around it. A transformed
+          ancestor becomes a containing block and stops position: sticky from
+          sticking at all — measured at -441px instead of 0 when it was
+          wrapped from outside.
+        */}
+        <TiltFrame fill>
         <div data-hero-plate className="absolute inset-0">
           <ArtPlate
             src="/media/01-hero-night.mp4"
@@ -110,7 +118,10 @@ export default function Hero() {
             transition={{ duration: 1, ease: EASE, delay: 1.6 }}
             /* Set in its own ink chip — at the foot of the frame the artwork
                is at its brightest, and a shadow alone was not enough. */
-            className="absolute bottom-5 left-5 max-w-[min(86vw,36rem)] border border-paper/20 bg-ink/80 px-3 py-2 font-body text-[10px] leading-relaxed text-paper/75 backdrop-blur-[2px] sm:bottom-7 sm:left-7 sm:text-[11px]"
+            /* Inset past the tilt's reach: the stage is scaled 1.035 and leans
+               a few degrees, which carries anything hugging the edge off
+               screen. Corner furniture has to sit further in than usual. */
+            className="absolute bottom-10 left-10 max-w-[min(80vw,36rem)] border border-paper/20 bg-ink/80 px-3 py-2 font-body text-[10px] leading-relaxed text-paper/75 backdrop-blur-[2px] sm:bottom-12 sm:left-12 sm:text-[11px]"
           >
             არაოფიციალური დიზაინის კონცეპტი · ორიგინალი კამპანია ეკუთვნის
             თიბისი ბანკს —{" "}
@@ -124,6 +135,7 @@ export default function Hero() {
             </a>
           </motion.p>
         </div>
+        </TiltFrame>
       </div>
     </section>
   );
