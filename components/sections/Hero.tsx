@@ -97,6 +97,32 @@ export default function Hero() {
               მარათონი
             </span>
           </motion.h1>
+
+          {/*
+            The disclaimer lives in full in the footer, but the claim it makes
+            should not depend on the reader scrolling that far — so the cover
+            carries it too, as an imprint line.
+          */}
+          <motion.p
+            data-hero-meta
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, ease: EASE, delay: 1.6 }}
+            /* Set in its own ink chip — at the foot of the frame the artwork
+               is at its brightest, and a shadow alone was not enough. */
+            className="absolute bottom-5 left-5 max-w-[min(86vw,36rem)] border border-paper/20 bg-ink/80 px-3 py-2 font-body text-[10px] leading-relaxed text-paper/75 backdrop-blur-[2px] sm:bottom-7 sm:left-7 sm:text-[11px]"
+          >
+            არაოფიციალური დიზაინის კონცეპტი · ორიგინალი კამპანია ეკუთვნის
+            თიბისი ბანკს —{" "}
+            <a
+              href="https://tbcbank.ge/ka/treasure-marathon"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-2 transition-colors hover:text-paper"
+            >
+              tbcbank.ge
+            </a>
+          </motion.p>
         </div>
       </div>
     </section>

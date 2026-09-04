@@ -14,6 +14,9 @@ const nextConfig = {
   basePath: isPages ? repo : undefined,
   assetPrefix: isPages ? repo : undefined,
   images: { unoptimized: true },
+  // Raw asset URLs are not rewritten by basePath, so hand it to the client
+  // and let lib/asset.ts prefix them. See that file for why.
+  env: { NEXT_PUBLIC_BASE_PATH: isPages ? repo : "" },
   trailingSlash: true,
 };
 

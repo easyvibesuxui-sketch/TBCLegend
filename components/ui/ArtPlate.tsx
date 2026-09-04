@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { asset } from "@/lib/asset";
 
 type Tone = "paper" | "night" | "ochre" | "oxblood" | "red";
 
@@ -58,6 +59,12 @@ export default function ArtPlate({
   const [failed, setFailed] = useState(false);
   const showVideo = Boolean(src) && !failed;
 
+  // Prefixed here rather than at the call sites, so a plate cannot be wired
+  // with a path that works locally and 404s under the Pages base path.
+  const mp4 = asset(src);
+  const webm = asset(srcWebm);
+  const still = asset(poster);
+
   // A new source deserves a fresh attempt.
   useEffect(() => setFailed(false), [src, srcWebm]);
 
@@ -111,15 +118,15 @@ export default function ArtPlate({
       {showVideo ? (
         <video
           ref={video}
-          poster={poster}
+          poster={still}
           muted
           playsInline
           preload="auto"
           onError={() => setFailed(true)}
           className="h-full w-full object-cover"
         >
-          {srcWebm && <source src={srcWebm} type="video/webm" />}
-          <source src={src} type="video/mp4" />
+          {webm && <source src={webm} type="video/webm" />}
+          <source src={mp4} type="video/mp4" />
         </video>
       ) : (
         <>
