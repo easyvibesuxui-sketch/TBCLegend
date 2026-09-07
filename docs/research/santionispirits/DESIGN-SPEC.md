@@ -85,6 +85,66 @@ Everything on the page is built from these:
 - **Footer** — full black, logo left, `INSTAGRAM` / e-mail right, credits
   bottom right.
 
+## 6b. Mechanics, read from a 90-second screen recording
+
+The static frames gave the composition; a screen capture of the site being
+scrolled gave the behaviour. Key frames are in `docs/design-references/motion/`.
+Method: frames sampled every 3 s for the structure, then bursts at 6 fps across
+two transitions, with frame-to-frame pixel differences measured to separate
+scrubbing from playback.
+
+**1. The artwork is scroll-scrubbed, not autoplaying.** Across a 6 fps burst the
+frame-to-frame difference drops to 0.4 and 0.0 at points — the illustration
+stops dead. Video left to its own clock cannot do that. Playback is bound to
+scroll position, which is what `ArtPlate`'s `scrub` already assumes.
+
+**2. Panels fly in through 3D, they do not just appear.** On the paper page a
+panel is a visible **trapezoid** — narrower at the top, wider at the bottom —
+sitting low in the frame with the previous panel leaving at the top. As the
+reader scrolls it grows and its edges straighten until the border passes the
+viewport and the art goes full-bleed. It reads as a card travelling toward the
+camera: perspective plus translate-Z, scrubbed. See `panel-flight-far.png` →
+`panel-flight-near.png` → `rec-018s.png`.
+
+**3. Full-bleed is a takeover, not a layout.** Once a panel has arrived it stops
+being a panel on paper and becomes the whole screen, and the scene plays there.
+The paper page returns between beats.
+
+**4. Captions belong to the frame, not to the panel.** They sit in screen
+corners — bottom-left, top-left, top-right — and hold position while the art
+moves underneath. They are not pinned to the artwork they describe.
+
+**5. Inset panels survive the takeover.** A small bordered inset stays in a
+corner during a full-bleed scene, showing a detail of the same moment
+(`hold-and-move.png`, lower left).
+
+**6. The gesture puck has two states.** Idle it is a labelled circle
+(`HOLD & MOVE`, `HOLD & POUR`). Grabbed it collapses to a small plain white dot
+that sits at the point of contact and leads the illustration — the hand, the
+bottle, the pour all follow it.
+
+**7. Reactive elements deform under the gesture.** The red mark on the portal
+door is a liquid blob that swells and splashes as the hand nears it, not a
+static drawing being translated.
+
+**8. One accent per scene, confirmed in motion.** Ochre for the traveller,
+oxblood for the portal, signal red for the columns and the collection, liquid
+blue for the spirit itself. The palette never mixes mid-scene; it changes when
+the scene changes.
+
+**9. Chrome never moves.** The medallion top-left and the pill nav top-right
+hold through every transition, including the full-bleed takeovers.
+
+### Where this build currently falls short
+
+| Reference | This build |
+| --- | --- |
+| Panels fly in through perspective, scrubbed | Panels are static, with a small parallax drift |
+| Panel border passes the viewport into full-bleed | No takeover; panels stay panels |
+| Captions hold in frame corners during a scene | Captions scroll away with the content |
+| Puck collapses to a dot and drives the art | `HoldPuck` reports progress but nothing consumes it |
+| Reactive liquid deforms under the gesture | Nothing reactive |
+
 ## 7. What this means for Treasure Marathon
 
 The story maps cleanly onto the same spine — a lone figure, a sacred object, a
