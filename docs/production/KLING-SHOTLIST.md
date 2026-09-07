@@ -39,6 +39,23 @@ That puts the free route at **one clip a day**, plus the still on day one:
 Roughly 8 days for a clean pass, longer with retries. The prompts are identical
 on either route.
 
+## Generating on Veo instead (free)
+
+Veo 3.1 in the Gemini app is free and needs no credits, so it is the cheaper
+route for the remaining shots. Differences that matter:
+
+| | Kling | Veo 3.1 (Gemini app) |
+| --- | --- | --- |
+| Length | 5 s (what the free daily credits buy) | 8 s native — better, more footage to scrub |
+| Aspect | 16:9 / 9:16 / 1:1 | 16:9 / 9:16 |
+| Audio | optional | generated natively, always |
+| Negative prompt | none in the web UI | none — fold exclusions into the prompt |
+
+The generated audio does not matter: `prepare-clip.sh` strips it with `-an`.
+Prompts need rewording rather than copying, because Veo reads best as
+subject → action → camera → style, with the exclusions as closing sentences.
+Shot 04 below is written that way; the rest follow the same shape.
+
 ## Models
 
 | Use | Model | Why |
@@ -112,6 +129,27 @@ No text, no letters, no words, no captions, no watermark, no signature, no logo.
 ```
 
 ## Shot 04 — Chapter II — the shattering
+
+### Veo 3.1 version (Gemini app, free)
+
+- **Length:** `8` s · **Aspect:** `16:9` · **Resolution:** highest offered
+- **Save as:** `public/media/04-shattering.mp4`
+
+```
+A hand-inked graphic novel panel come to life: bold black linocut and woodcut engraving with dense cross-hatching, extremely high contrast, printed on grained off-white paper. The only colour anywhere in the frame is deep oxblood red — everything else is black ink and bare paper.
+
+An ancient ornate treasure chest rests on a carved stone altar. A single hairline crack opens across its lid. The chest detonates, bursting into millions of gold coins that erupt upward and outward until they fill the entire frame, each coin drawn as an engraved hatched disc tumbling and flipping end over end. As the coins scatter, the pale paper background floods to deep oxblood red. Ink splinters and torn paper debris streak past the lens.
+
+Camera: a locked wide shot on the altar, then a fast push-in at the instant the lid breaks, holding steady as the coins rain outward past the edges of the frame.
+
+Style: 2D hand-drawn animation on paper, flat matte fill, no gradients, visible paper grain and ink speckle. Not photorealistic, not 3D, not CGI. No text, letters, words, captions or watermarks anywhere in the frame. No second accent colour.
+```
+
+> The free tier stamps a visible watermark. `prepare-clip.sh` already crops the
+> bottom band; if Veo puts it elsewhere, pass a different crop height or adjust
+> the `crop` filter in the script.
+
+### Kling version
 
 - **Slot:** `sections/Legend.tsx`, flood section → `ArtPlate tone="oxblood"`
 - **Tool:** `text_to_video` · **Model:** `kling-video-v3_0_turbo` · **Aspect:** `16:9` · **Duration:** `5` s · **Resolution:** `720p`
