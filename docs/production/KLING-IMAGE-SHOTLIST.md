@@ -1,20 +1,28 @@
 # Kling image shot list — საგანძურის მარათონი
 
-Nineteen stills, covering every beat in [`STORY.md`](STORY.md). Stills rather
+Twenty stills, covering every beat in [`STORY.md`](STORY.md). Stills rather
 than clips because the mechanic that carries this page is the **panel flight** —
 a drawing travelling toward the camera in 3D — and that needs an image, not
 footage. Only the beats where a scene actually *plays* need video, and shot 00
 (the cover) is already done.
 
-An image on `kling-image-v3_0` costs roughly a credit or two against the 15–30
-a clip costs, so the whole set lands around **30 credits**.
+**Cost — an estimate, not a measurement.** Kling's MCP exposes no cost preflight
+(there is no `get_cost` equivalent), and the only figure measured on this
+account is video: 80 credits for ten seconds. Published figures put a standard
+image at roughly a credit; at 2k it may be more. So twenty shots at one
+candidate each is plausibly **20–40 credits**, and at two candidates each
+**40–80**.
+
+The first call settles it: check `query_membership_and_credits` immediately
+before and after shot `07`, and the difference is the real per-image price.
+Everything after can be planned on that number instead of on a guess.
 
 ---
 
 ## 1. The style block
 
 Every prompt below opens with the same sentence, verbatim. It is the only thing
-holding nineteen separate generations in one world — **do not paraphrase it
+holding twenty separate generations in one world — **do not paraphrase it
 between shots**.
 
 ```
@@ -39,7 +47,7 @@ Spot colours, one per image, never two:
 
 ## 2. Keeping the hero the same person
 
-Nineteen independent generations will produce nineteen different faces unless
+Twenty independent generations will produce twenty different faces unless
 the character is pinned. Kling's **Elements** exist for exactly this:
 
 1. Generate `03-hero-cloak` first and pick the best result.
