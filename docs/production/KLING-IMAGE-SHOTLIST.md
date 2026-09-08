@@ -19,6 +19,74 @@ Everything after can be planned on that number instead of on a guess.
 
 ---
 
+## 0. Still or clip — decided per beat
+
+The first draft of this list made everything a still. That under-read the
+recording, which contains **two different motions**, not one:
+
+| | What moves | Needs |
+| --- | --- | --- |
+| **Panel flight** | the panel travels toward the camera | a 3D transform — works on anything, already built, costs nothing |
+| **Content animation** | the scene itself redraws — the traveller crosses from far to the portal, coins erupt, the wheel turns | real footage |
+
+Measured across the portal approach at 6 fps, frame-to-frame change runs 6–22.
+A transform on a still cannot produce numbers that size: the drawing is being
+redrawn between frames. So for the beats where **motion is the content**, a
+still genuinely cannot stand in — the flight would move the frame while the
+picture inside it sat dead.
+
+But the reverse is just as true. For an establishing beat — a hall, a gate, an
+altar — the flight already supplies the motion, and a clip buys almost nothing
+for roughly twenty times the credits.
+
+### The route: stills first, then animate the few that need it
+
+Kling has `image_to_video`. So rather than choosing up front:
+
+1. Generate **all twenty as stills**. Cheap, composable, and the Element
+   binding keeps one face across the set.
+2. Approve the compositions.
+3. Run `image_to_video` **only on the beats where motion is the story**,
+   starting from the exact approved frame.
+
+That buys composition control, character consistency, and a poster frame for
+free — the still is the `poster` the clip loads behind.
+
+### Which beats earn a clip
+
+| Beat | Verdict | Why |
+| --- | --- | --- |
+| `12-shattering` | **clip, essential** | The whole point is coins erupting. A still here is a dead centre to the page. |
+| `17-house-kharjiani` | **clip** | The house *is* motion — banner thrashing, sparks climbing. Still it, and the character is gone. |
+| `19-house-dovlatia` | **clip** | A wheel that does not turn is a circle. |
+| `20-house-baratishvili` | **clip** | The seal pressing and lifting is one deliberate motion; that motion is the house. |
+| `09-gate-night` | **clip, worth it** | The hero walking out is the departure. |
+| `18-house-anabaridze` | still is fine | One ring rotating a notch reads as well held. Its character is stillness. |
+| `08-altar-treasure` | still is fine | The flight carries it; a slow glow can be done in CSS. |
+| `06-hall-cloak`, `16-four-banners`, `13`–`15` insets | **still** | Establishing and evidence shots. The flight is the motion. |
+| `10-hand-reaching`, `11-seal-liquid` | **still, required** | These must stay separate layers so the drag moves them independently. A flat clip cannot be taken apart. |
+| `01`–`05` crests, medallion | **SVG** | Heraldry, used small, recoloured per house. |
+| `07-hero-cloak` | **still, required** | This is the character reference the Element is built from. |
+
+**Five clips, fifteen stills.**
+
+### What that costs
+
+Measured on this account: ten seconds of video is 80 credits, so a five-second
+clip is around 40. Stills are unmeasured but published figures put them near a
+credit.
+
+| | Credits |
+| --- | --- |
+| All twenty as clips | **~800** |
+| All twenty as stills | **~20–40** |
+| **Five clips + fifteen stills** | **~215–235** |
+
+The hybrid costs roughly a quarter of all-video and puts the spend where the
+page actually moves.
+
+---
+
 ## 1. The style block
 
 Every prompt below opens with the same sentence, verbatim. It is the only thing
