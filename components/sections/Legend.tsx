@@ -8,6 +8,7 @@ import ArtPlate from "@/components/ui/ArtPlate";
 import Caption from "@/components/ui/Caption";
 import HoldPuck from "@/components/ui/HoldPuck";
 import Panel from "@/components/ui/Panel";
+import PanelFlight from "@/components/ui/PanelFlight";
 import TornEdge from "@/components/ui/TornEdge";
 
 /**
@@ -77,17 +78,26 @@ export default function Legend() {
           </span>
 
           <div className="relative">
-            <Panel
-              data-drift="1"
-              className="ml-auto aspect-[16/10] w-full sm:w-[86%]"
-            >
-              <ArtPlate label={one.plate} tone="paper" />
-            </Panel>
+            <PanelFlight className="ml-auto w-full sm:w-[86%]">
+              <Panel className="aspect-[16/10] w-full">
+                <ArtPlate label={one.plate} tone="paper" />
+              </Panel>
+            </PanelFlight>
 
-            {/* Inset panel, hung off the opposite corner */}
-            <Panel className="absolute -left-1 top-[14%] hidden aspect-[4/3] w-[26%] sm:block">
-              <ArtPlate label="[Inset: სამეფოს ხედი]" tone="ochre" />
-            </Panel>
+            {/*
+              The inset flies too, but from a steeper angle and a smaller
+              start, so it reads as a second card at a nearer depth rather
+              than a flat sticker on a moving panel.
+            */}
+            <PanelFlight
+              from={22}
+              scale={0.62}
+              className="absolute -left-1 top-[14%] hidden w-[26%] sm:block"
+            >
+              <Panel className="aspect-[4/3] w-full">
+                <ArtPlate label="[Inset: სამეფოს ხედი]" tone="ochre" />
+              </Panel>
+            </PanelFlight>
 
             <Caption className="relative -mt-10 ml-0 sm:absolute sm:-bottom-8 sm:left-[6%] sm:mt-0">
               {one.captions[0]}
@@ -155,12 +165,11 @@ export default function Legend() {
             </Caption>
           </div>
 
-          <Panel
-            data-drift="0.6"
-            className="aspect-[3/4] sm:col-span-7 sm:-mr-8"
-          >
-            <ArtPlate label={three.plate} tone="ochre" />
-          </Panel>
+          <PanelFlight from={10} scale={0.8} className="sm:col-span-7 sm:-mr-8">
+            <Panel className="aspect-[3/4] w-full">
+              <ArtPlate label={three.plate} tone="ochre" />
+            </Panel>
+          </PanelFlight>
         </div>
       </div>
     </section>
