@@ -6,6 +6,7 @@ import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
 import { LEGEND_CHAPTERS } from "@/lib/houses";
 import { PLATES } from "@/lib/plates";
 import ArtPlate from "@/components/ui/ArtPlate";
+import GesturePlate from "@/components/ui/GesturePlate";
 import Caption from "@/components/ui/Caption";
 import HoldPuck from "@/components/ui/HoldPuck";
 import Panel from "@/components/ui/Panel";
@@ -119,7 +120,35 @@ export default function Legend() {
 
         {/* The night bites up into the paper */}
         <div className="absolute inset-x-0 bottom-0 z-20 h-16 sm:h-24">
-          <TornEdge color="#6E2020" side="bottom" seed={9} />
+          <TornEdge color="#1C1C1C" side="bottom" seed={9} />
+        </div>
+      </div>
+
+      {/* ─────────── the departure ─────────── */}
+      {/*
+        No new prose: the clip is the beat. A band rather than a full viewport
+        so it reads as one more panel in the sequence, not a second hero.
+      */}
+      <div className="grain-paper grain-flood relative overflow-hidden bg-ink-night">
+        <div className="relative h-[62svh] min-h-[380px] w-full sm:h-[78svh]">
+          <ArtPlate {...PLATES.gate} tone="night" />
+          <div className="pointer-events-none absolute inset-0 flex items-end p-6 sm:p-12">
+            <span className="label text-paper/70">II — გამგზავრება</span>
+          </div>
+        </div>
+        <div className="absolute inset-x-0 bottom-0 z-20 h-16 sm:h-20">
+          <TornEdge color="#F2F1EF" side="bottom" seed={17} />
+        </div>
+      </div>
+
+      {/* ─────────── the reach ─────────── */}
+      <div className="grain-paper relative bg-paper px-4 py-24 sm:px-8 sm:py-36">
+        <div className="relative z-10 mx-auto w-full max-w-5xl">
+          <span className="label mb-10 block text-ink/45">III — ხელის გაწვდენა</span>
+          <GesturePlate />
+        </div>
+        <div className="absolute inset-x-0 bottom-0 z-20 h-16 sm:h-20">
+          <TornEdge color="#6E2020" side="bottom" seed={23} />
         </div>
       </div>
 

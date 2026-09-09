@@ -59,6 +59,14 @@ export const PLATES = {
   dovlatia: clip("19-house-dovlatia", "დოვლათიას იღბლის ბორბალი"),
   baratishvili: clip("20-house-baratishvili", "ბარათიშვილის ძველი ბეჭედი"),
 
+  // ── the gesture, two layers ────────────────────────────────────────────
+  // Drawn separately on bare paper so they can move independently. Unlike the
+  // rest of the set these carry a real alpha channel rather than relying on a
+  // multiply blend — see scripts/unmix-layer.py for why that trick does not
+  // survive here.
+  hand: { label: "ხელი იწვდება", image: "/media/10-hand-reaching.webp" },
+  seal: { label: "დნობილი ოქროს ბეჭედი — იხევს", image: "/media/11-seal-liquid.webp" },
+
   // ── the doubt, three insets ────────────────────────────────────────────
   accident: still("13-inset-accident", "გატეხილი რკინის ღერო"),
   betrayal: still("14-inset-betrayal", "ჩრდილი დახურულ კარზე"),
