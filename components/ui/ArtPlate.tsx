@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { asset } from "@/lib/asset";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 type Tone = "paper" | "night" | "ochre" | "oxblood" | "red";
 
@@ -17,10 +18,12 @@ const TONES: Record<Tone, { bg: string; ink: string; hatch: string }> = {
 /**
  * The slot the real artwork drops into.
  *
- * The reference site is built from frame-by-frame illustrated animation played
- * back as video, so this renders a <video> the moment `src` is supplied and
- * otherwise draws a hand-inked stand-in: flooded tone, engraved hatching, and
- * the caption naming the shot it stands for.
+ * Three states, in order of preference. A `src` renders the clip, because the
+ * reference site is built from frame-by-frame illustrated animation played
+ * back as video. An `image` with no clip renders the still — most beats are
+ * carried by the panel flight and never needed footage. With neither, it
+ * draws a hand-inked stand-in: flooded tone, engraved hatching, and the
+ * caption naming the shot it stands for.
  *
  * `scrub` ties playback to the 0 → 1 progress a section feeds it, rather than
  * letting the clip run on its own clock.
@@ -30,6 +33,7 @@ export default function ArtPlate({
   tone = "paper",
   src,
   srcWebm,
+  image,
   poster,
   scrub,
   labelAlign = "center",
@@ -41,6 +45,8 @@ export default function ArtPlate({
   src?: string;
   /** Optional VP9 WebM, offered first where it is supported */
   srcWebm?: string;
+  /** Still plate, for the beats the panel flight already animates */
+  image?: string;
   poster?: string;
   /** Live 0 → 1 playback position, written outside React */
   scrub?: React.MutableRefObject<number>;
@@ -50,6 +56,7 @@ export default function ArtPlate({
 }) {
   const video = useRef<HTMLVideoElement>(null);
   const t = TONES[tone];
+  const reduced = usePrefersReducedMotion();
 
   /*
    * Shots land one at a time, so a plate is routinely pointed at footage that
@@ -57,16 +64,21 @@ export default function ArtPlate({
    * back to the inked stand-in whenever the video cannot load or decode.
    */
   const [failed, setFailed] = useState(false);
+  const [stillFailed, setStillFailed] = useState(false);
   const showVideo = Boolean(src) && !failed;
+  // A clip that fell back still has a still to show, if one was supplied.
+  const showStill = !showVideo && Boolean(image) && !stillFailed;
 
   // Prefixed here rather than at the call sites, so a plate cannot be wired
   // with a path that works locally and 404s under the Pages base path.
   const mp4 = asset(src);
   const webm = asset(srcWebm);
   const still = asset(poster);
+  const plate = asset(image);
 
   // A new source deserves a fresh attempt.
   useEffect(() => setFailed(false), [src, srcWebm]);
+  useEffect(() => setStillFailed(false), [image]);
 
   /*
    * Deciding a plate has no footage is subtler than listening for an error.
@@ -91,6 +103,26 @@ export default function ArtPlate({
     }, 500);
     return () => window.clearInterval(id);
   }, [src, srcWebm, failed]);
+
+  /*
+   * A clip with no `scrub` has nothing driving it, so it would sit frozen on
+   * its poster. Loop it instead — but only while it is on screen, since four
+   * house plates decoding at once off-screen is wasted battery. Reduced motion
+   * keeps the poster frame, which is exactly the still the clip was made from.
+   */
+  useEffect(() => {
+    const el = video.current;
+    if (!el || scrub || !showVideo || reduced) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) void el.play().catch(() => {});
+        else el.pause();
+      },
+      { rootMargin: "150px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [scrub, showVideo, reduced]);
 
   useEffect(() => {
     const el = video.current;
@@ -121,6 +153,7 @@ export default function ArtPlate({
           poster={still}
           muted
           playsInline
+          loop={!scrub}
           preload="auto"
           onError={() => setFailed(true)}
           className="h-full w-full object-cover"
@@ -128,6 +161,21 @@ export default function ArtPlate({
           {webm && <source src={webm} type="video/webm" />}
           <source src={mp4} type="video/mp4" />
         </video>
+      ) : showStill ? (
+        /*
+         * Plain <img>: next/image is switched off for the static export, and
+         * these are already sized per role at build time. Decoding async keeps
+         * a large plate from blocking the scroll it flies in on.
+         */
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={plate}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          onError={() => setStillFailed(true)}
+          className="h-full w-full object-cover"
+        />
       ) : (
         <>
           {/* Engraved hatching — the linework the illustration will replace */}

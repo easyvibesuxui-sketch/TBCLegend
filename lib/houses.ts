@@ -1,3 +1,5 @@
+import { PLATES, type Plate } from "@/lib/plates";
+
 export type House = {
   id: string;
   name: string;
@@ -6,7 +8,7 @@ export type House = {
   description: string;
   /** Spot colour this house's panel commits to */
   tone: "paper" | "ochre" | "oxblood" | "red" | "night";
-  plate: string;
+  plate: Plate;
 };
 
 export const HOUSES: House[] = [
@@ -18,7 +20,7 @@ export const HOUSES: House[] = [
     description:
       "საგვარეულო, რომელსაც უყვარს მოქმედება, ცხოვრებით ტკბობა და ენერგიული აქტივობა. ისინი არ ერიდებიან რესურსების გაცემას მიზნების მისაღწევად.",
     tone: "red",
-    plate: "[Video: ხარჯიანის დროშა — ცეცხლი და მოძრაობა]",
+    plate: PLATES.kharjiani,
   },
   {
     id: "anabaridze",
@@ -28,7 +30,7 @@ export const HOUSES: House[] = [
     description:
       "წინდახედული, სტრატეგიული და დამზოგველი სახლი. მათი დევიზია რესურსების სწორად გადანაწილება და მომავლის დაზღვევა.",
     tone: "night",
-    plate: "[Video: ანაბარიძის საცავი — დალუქული კარი]",
+    plate: PLATES.anabaridze,
   },
   {
     id: "dovlatia",
@@ -38,7 +40,7 @@ export const HOUSES: House[] = [
     description:
       "საგვარეულო, რომელიც ორიენტირებულია სიმდიდრის მოზიდვაზე, იღბალსა და დიდებაზე.",
     tone: "ochre",
-    plate: "[Video: დოვლათიას იღბლის ბორბალი]",
+    plate: PLATES.dovlatia,
   },
   {
     id: "baratishvili",
@@ -48,7 +50,7 @@ export const HOUSES: House[] = [
     description:
       "ტრადიციული, მტკიცე და გავლენიანი საგვარეულო, რომელიც სამეფოს ძველ დიდებასა და წესრიგს იცავს.",
     tone: "oxblood",
-    plate: "[Video: ბარათიშვილის ძველი ბეჭედი]",
+    plate: PLATES.baratishvili,
   },
 ];
 
@@ -60,7 +62,7 @@ export type Chapter = {
    * blocks per chapter, never one long paragraph.
    */
   captions: string[];
-  plate: string;
+  plate: Plate;
   tone: "paper" | "ochre" | "oxblood" | "red" | "night";
   /** "flood" fills the viewport with the tone; "panel" sits on paper. */
   layout: "panel" | "flood" | "split";
@@ -74,7 +76,7 @@ export const LEGEND_CHAPTERS: Chapter[] = [
       "საუკუნეების განმავლობაში, ზღაპრულ სამეფოს ოთხი დიდი და დიდებული საგვარეულო (სახლი) ერთობლივად მართავდა.",
       "სამეფოში სიმშვიდეს, ბალანსსა და კეთილდღეობას იცავდა ერთი უძველესი, საიდუმლო საგანძური, რომელსაც ჯადოსნური ძალა ჰქონდა.",
     ],
-    plate: "[Video: უძველესი საგანძური საკურთხეველზე]",
+    plate: PLATES.altar,
     tone: "paper",
     layout: "panel",
   },
@@ -85,7 +87,7 @@ export const LEGEND_CHAPTERS: Chapter[] = [
       "ერთ მისტიკურ ღამეს, მოულოდნელად, ეს მთავარი საგანძური ნაწილებად დაიმსხვრა, მილიონობით ოქროს მონეტად იქცა და სამეფოს სხვადასხვა შორეულ კუთხეში მიმოიფანტა.",
       "არავინ იცის, ეს უბედური შემთხვევა იყო, მტრის ღალატი, თუ ძველი წინასწარმეტყველების აღსრულება.",
     ],
-    plate: "[Video: დამსხვრევა — მონეტები იფანტება]",
+    plate: PLATES.shattering,
     tone: "oxblood",
     layout: "flood",
   },
@@ -96,7 +98,7 @@ export const LEGEND_CHAPTERS: Chapter[] = [
       "სამეფოში ბალანსის აღსადგენად და საკუთარი ძალაუფლების დასამტკიცებლად, ოთხივე საგვარეულო ოქროს მონეტების საძიებლად გაემართა.",
       "თითოეულ სახლს აქვს თავისი სიმართლე, თავისი ეჭვები და სამეფოს მომავლის საკუთარი ხედვა.",
     ],
-    plate: "[Video: ოთხი დროშა გზაზე]",
+    plate: PLATES.banners,
     tone: "ochre",
     layout: "split",
   },

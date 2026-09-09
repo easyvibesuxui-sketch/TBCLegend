@@ -77,7 +77,7 @@ export default function Houses() {
               className="group"
             >
               <Panel className="aspect-[3/4.6] w-full transition-transform duration-500 group-hover:-translate-y-2">
-                <ArtPlate label={house.plate} tone={house.tone} />
+                <ArtPlate {...house.plate} tone={house.tone} />
 
                 {/* Name plate, struck across the foot of the panel */}
                 <div className="absolute inset-x-0 bottom-0 z-10 border-t border-ink bg-paper-bright">

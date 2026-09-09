@@ -4,12 +4,17 @@ import { useRef } from "react";
 import { gsap } from "@/lib/gsap";
 import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
 import { LEGEND_CHAPTERS } from "@/lib/houses";
+import { PLATES } from "@/lib/plates";
 import ArtPlate from "@/components/ui/ArtPlate";
 import Caption from "@/components/ui/Caption";
 import HoldPuck from "@/components/ui/HoldPuck";
 import Panel from "@/components/ui/Panel";
 import PanelFlight from "@/components/ui/PanelFlight";
 import TornEdge from "@/components/ui/TornEdge";
+
+/** The three readings of the shattering, in the order chapter II names them. */
+const DOUBTS = [PLATES.accident, PLATES.betrayal, PLATES.prophecy];
+const DOUBT_LABELS = ["უბედური შემთხვევა", "ღალატი", "წინასწარმეტყველება"];
 
 /**
  * The story, told as comic pages. Each chapter picks one of three
@@ -80,7 +85,7 @@ export default function Legend() {
           <div className="relative">
             <PanelFlight className="ml-auto w-full sm:w-[86%]">
               <Panel className="aspect-[16/10] w-full">
-                <ArtPlate label={one.plate} tone="paper" />
+                <ArtPlate {...one.plate} tone="paper" />
               </Panel>
             </PanelFlight>
 
@@ -95,7 +100,7 @@ export default function Legend() {
               className="absolute -left-1 top-[14%] hidden w-[26%] sm:block"
             >
               <Panel className="aspect-[4/3] w-full">
-                <ArtPlate label="[Inset: სამეფოს ხედი]" tone="ochre" />
+                <ArtPlate {...PLATES.hall} tone="paper" />
               </Panel>
             </PanelFlight>
 
@@ -126,7 +131,12 @@ export default function Legend() {
 
         <div className="relative z-10 flex min-h-[100svh] flex-col px-4 py-28 sm:px-8 sm:py-40">
           <div className="absolute inset-0">
-            <ArtPlate label={two.plate} tone="oxblood" scrub={shatter} labelAlign="bottom" />
+            <ArtPlate
+              {...two.plate}
+              tone="oxblood"
+              scrub={shatter}
+              labelAlign="bottom"
+            />
           </div>
 
           {/* flex-1 so the two caption blocks push to the top and foot of the plate */}
@@ -139,9 +149,38 @@ export default function Legend() {
             </div>
 
             <div className="flex flex-col items-start gap-10 sm:flex-row sm:items-end sm:justify-between">
-              <Caption delay={0.1} className="sm:w-[46%]">
-                {two.captions[1]}
-              </Caption>
+              <div className="sm:w-[52%]">
+                <Caption delay={0.1}>{two.captions[1]}</Caption>
+
+                {/*
+                  That caption names three possibilities — an accident, a
+                  betrayal, an old prophecy — so the three insets lay them out
+                  as evidence rather than leaving the line to carry them alone.
+                  They fly from a steeper angle than a full panel, at a nearer
+                  depth, the way the reference stacks its smaller cards.
+                */}
+                <ul className="mt-8 grid grid-cols-3 gap-3 sm:gap-4">
+                  {DOUBTS.map((plate, i) => (
+                    <li key={plate.label}>
+                      <PanelFlight from={18} scale={0.7}>
+                        <Panel className="aspect-[4/3] w-full">
+                          <ArtPlate {...plate} tone="paper" />
+                        </Panel>
+                      </PanelFlight>
+                      {/*
+                        The plate behind this row is full-bleed artwork, so a
+                        label tinted against the flood is legible over the red
+                        and invisible over the coins. Give it its own ground,
+                        the same paper chip the captions sit on.
+                      */}
+                      <span className="label mt-3 inline-block bg-paper px-2 py-1 text-ink/70">
+                        {DOUBT_LABELS[i]}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
               <HoldPuck lines={["დაიჭირე", "და გასწიე"]} />
             </div>
           </div>
@@ -166,8 +205,8 @@ export default function Legend() {
           </div>
 
           <PanelFlight from={10} scale={0.8} className="sm:col-span-7 sm:-mr-8">
-            <Panel className="aspect-[3/4] w-full">
-              <ArtPlate label={three.plate} tone="ochre" />
+            <Panel className="aspect-[21/9] w-full">
+              <ArtPlate {...three.plate} tone="ochre" />
             </Panel>
           </PanelFlight>
         </div>
