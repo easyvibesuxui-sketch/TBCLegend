@@ -112,7 +112,7 @@ export default function Houses() {
       </div>
 
       <div className="absolute inset-x-0 bottom-0 z-20 h-16 sm:h-20">
-        <TornEdge color="#CF2A20" side="bottom" seed={21} />
+        <TornEdge color="#1C1C1C" side="bottom" seed={21} />
       </div>
     </section>
   );

@@ -5,6 +5,7 @@ import InkButton from "@/components/ui/InkButton";
 import TornEdge from "@/components/ui/TornEdge";
 import { EASE } from "@/lib/motion";
 import { HOUSES } from "@/lib/houses";
+import { useHouse } from "@/components/HouseProvider";
 
 /** Illustrative standings only — wire to the real leaderboard API later. */
 const STANDINGS = [82, 74, 66, 58];
@@ -14,10 +15,16 @@ const STANDINGS = [82, 74, 66, 58];
  * cover scale, the standings beneath, and the two ways in.
  */
 export default function CTA() {
+  const { house: chosen } = useHouse();
+
   return (
     <section
       id="quiz"
-      className="grain-paper relative overflow-hidden bg-signal px-4 py-28 sm:px-8 sm:py-40"
+      className="grain-paper relative overflow-hidden px-4 py-28 sm:px-8 sm:py-40"
+      style={{
+        background: "var(--house, #CF2A20)",
+        color: "var(--house-ink, #0E0E0E)",
+      }}
     >
       <div className="relative z-10 mx-auto w-full max-w-6xl">
         <motion.h2
@@ -25,10 +32,19 @@ export default function CTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 1.1, ease: EASE }}
-          className="text-center font-display text-[clamp(2.4rem,9vw,8rem)] leading-[0.86] text-ink"
+          className="text-center font-display text-[clamp(2.4rem,9vw,8rem)] leading-[0.86]"
         >
-          <span className="block">შენ რომელ</span>
-          <span className="block">სახლს ეკუთვნი?</span>
+          {chosen ? (
+            <>
+              <span className="block">შენ ეკუთვნი</span>
+              <span className="block">სახლს {chosen.name}</span>
+            </>
+          ) : (
+            <>
+              <span className="block">შენ რომელ</span>
+              <span className="block">სახლს ეკუთვნი?</span>
+            </>
+          )}
         </motion.h2>
 
         {/* Three struck labels, as the reference sets its collection intro */}
@@ -44,7 +60,7 @@ export default function CTA() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.6 }}
               transition={{ duration: 0.8, ease: EASE }}
-              className="label leading-[1.7] text-ink"
+              className="label leading-[1.7]"
             >
               {line}
             </motion.p>
@@ -56,7 +72,7 @@ export default function CTA() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 1, ease: EASE, delay: 0.1 }}
-          className="mx-auto mt-14 max-w-[62ch] text-justify font-body text-[15px] leading-[1.85] text-ink/85 sm:text-base"
+          className="mx-auto mt-14 max-w-[62ch] text-justify font-body text-[15px] leading-[1.85] opacity-85 sm:text-base"
         >
           ახლა ოთხივე სახლი ერთმანეთს ეჯიბრება, რათა შეაგროვონ ყველაზე მეტი
           გაბნეული მონეტა, მოიპოვონ ლიდერობა და დაეუფლონ სამეფოს მთავარ
@@ -74,10 +90,18 @@ export default function CTA() {
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 0.8, ease: EASE, delay: i * 0.08 }}
             >
-              <p className="font-display text-[15px] text-ink">{house.name}</p>
-              <div className="mt-2 h-[3px] w-full bg-ink/20">
+              <p
+                className={`font-display text-[15px] ${
+                  chosen?.id === house.id ? "" : "opacity-55"
+                }`}
+              >
+                {house.name}
+                {chosen?.id === house.id && " ←"}
+              </p>
+              <div className="mt-2 h-[3px] w-full" style={{ background: "color-mix(in srgb, var(--house-ink, #0E0E0E) 22%, transparent)" }}>
                 <motion.span
-                  className="block h-full origin-left bg-ink"
+                  className="block h-full origin-left"
+                  style={{ background: "var(--house-ink, #0E0E0E)" }}
                   initial={{ scaleX: 0 }}
                   whileInView={{ scaleX: STANDINGS[i] / 100 }}
                   viewport={{ once: true, amount: 0.5 }}
@@ -87,7 +111,7 @@ export default function CTA() {
             </motion.li>
           ))}
         </ul>
-        <p className="mt-4 text-center font-body text-[10px] uppercase tracking-label text-ink/40">
+        <p className="mt-4 text-center font-body text-[10px] uppercase tracking-label opacity-40">
           [Placeholder data — ლიდერბორდი რეალურ დროში განახლდება]
         </p>
 

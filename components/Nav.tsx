@@ -45,7 +45,8 @@ export default function Nav() {
           ))}
           <a
             href="#quiz"
-            className="label border-l border-ink bg-signal px-3 py-2.5 text-paper transition-colors duration-300 hover:bg-ink sm:px-6 sm:py-3"
+            style={{ background: "var(--house, #CF2A20)" }}
+            className="label border-l border-ink px-3 py-2.5 text-paper transition-colors duration-300 hover:bg-ink sm:px-6 sm:py-3"
           >
             ქვიზი
           </a>

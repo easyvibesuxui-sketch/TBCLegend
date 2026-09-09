@@ -39,6 +39,13 @@ const still = (name: string, label: string): Plate => ({
 });
 
 export const PLATES = {
+  // ── the choice: four seals and the blank medallion ──────────────────────
+  crestKharjiani: still("01-crest-kharjiani", "ხარჯიანის გერბი — ალი ხელისგულზე"),
+  crestAnabaridze: still("02-crest-anabaridze", "ანაბარიძის გერბი — დალუქული კარი"),
+  crestDovlatia: still("03-crest-dovlatia", "დოვლათიას გერბი — იღბლის ბორბალი"),
+  crestBaratishvili: still("04-crest-baratishvili", "ბარათიშვილის გერბი — ბეჭედი ცვილში"),
+  medallion: still("05-medallion-empty", "ცარიელი მედალიონი — დასარტყმელად მზად"),
+
   // ── the story ──────────────────────────────────────────────────────────
   altar: still("08-altar-treasure", "უძველესი საგანძური საკურთხეველზე"),
   hall: still("06-hall-cloak", "საგვარეულო დარბაზი და სამგზავრო მოსასხამი"),
