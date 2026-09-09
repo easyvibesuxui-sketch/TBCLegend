@@ -10,19 +10,24 @@ set -euo pipefail
 
 SRC=${1:?usage: prepare-clip.sh <downloaded.mp4> <output-name> [crop-height]}
 NAME=${2:?usage: prepare-clip.sh <downloaded.mp4> <output-name> [crop-height]}
-# Kling's 720p output is 1280x720; 632 trims the watermark band. Pass a third
-# argument to keep the full frame (720) once a watermark-free download exists.
-CROP_H=${3:-632}
+# Kling does not always return 1280x720 -- the plates in this set came back
+# 1324x696, matching the aspect of the still they were animated from. So the
+# watermark band is a proportion of the frame, not a fixed pixel count: it was
+# measured at ~7.6% of the height up from the bottom, so trimming 10% clears it
+# with margin at any size ffmpeg hands us. Pass a third argument to override,
+# including the full height once a watermark-free download exists.
+CROP_H=${3:-}
 
 FF=${FFMPEG:-ffmpeg}
 OUT_DIR="$(cd "$(dirname "$0")/.." && pwd)/public/media"
 mkdir -p "$OUT_DIR"
 
-# iw is ffmpeg's input-width variable, so the crop adapts to whatever Kling
-# delivered without a separate ffprobe call.
-VF="crop=iw:${CROP_H}:0:0"
+# ih is ffmpeg's input-height variable, so the trim scales with the input and
+# needs no separate ffprobe call. floor to an even number: H.264 and VP9 both
+# require even dimensions with yuv420p.
+VF="crop=iw:${CROP_H:-floor(ih*0.90/2)*2}:0:0"
 
-echo "→ $NAME  (full width, cropped to ${CROP_H}px tall)"
+echo "→ $NAME  (full width, cropped to ${CROP_H:-90% of input height})"
 
 # H.264: the universal fallback, and what Safari needs. faststart moves the
 # index to the front so the first frame paints during download.
