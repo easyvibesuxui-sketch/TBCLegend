@@ -379,6 +379,46 @@ Result URLs **expire 24 hours after generation**, so they are not recorded
 here — by the time anyone reads this they would be dead links. Download on
 generation and commit the files.
 
+### The review pass, and what it caught
+
+Adding `*.klingai.com` to the environment's network allowlist (Custom network
+access, with the package-manager defaults kept) let the CDN be read directly
+from the session, which closes the loop: generate, download, look, regenerate.
+The MCP connector already bypassed the allowlist, which is why generation
+worked while downloading did not.
+
+Sixteen of twenty-one landed first time. Five did not, and the failures were
+worth recording because four of them are prompt bugs, not model noise:
+
+| Shot | What went wrong | Fix |
+| --- | --- | --- |
+| `02-crest-anabaridze` | square plaque, then a spoked wheel that collided with Dovlatia's crest | name the round format, then exclude spokes and wheels by name |
+| `10-hand-reaching` | flat grey field behind the hand | "the hand is the ONLY thing drawn", exclude grey fill and cast shadow |
+| `11-seal-liquid` | dark cross-hatched panel behind the seal | same treatment; both are layered assets and need bare paper for the multiply blend |
+| `15-inset-prophecy` | drew the chest, not the page | "illustration of a chest breaking apart" hijacked the subject; demote it to a tiny woodcut printed on the page and say the subject is the PAGE |
+| `18-house-anabaridze` | modern bank safe in soft pencil | specify stone and hand-forged iron; exclude the dial, the wheel handle and the pencil shading |
+
+The pattern: **a negative sentence in the style block does not survive a
+positive noun later in the prompt.** "Nothing else in the frame" loses to a
+described background; the exclusion has to name the specific thing to avoid.
+
+### Watermark
+
+Free-tier results carry a `KlingAI 3.0` mark in the bottom-right, and this
+account's `query_tasks` returns no `urlWithoutWatermark`. Measured, the mark is
+45–70 px tall and sits ~40 px above the bottom edge, so a **7% bottom crop**
+clears it at every aspect ratio in the set without costing any composition.
+Verified per file rather than assumed.
+
+### What is committed
+
+- `assets/masters/` — the 2k crops, 26 MB, so the set never has to be paid for
+  twice.
+- `public/media/` — what the site serves: sized per role rather than one
+  blanket number (900 px for crests used as marks, 1900 px for the panoramic
+  plate, 1400–1600 px in between), quality 80 progressive. **6.8 MB for all
+  twenty-one**, down from 26.
+
 Files land in `public/media/` as `.jpg`, wired the same way as the clips:
 
 ```tsx
