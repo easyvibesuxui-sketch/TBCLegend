@@ -6,16 +6,18 @@ a drawing travelling toward the camera in 3D — and that needs an image, not
 footage. Only the beats where a scene actually *plays* need video, and shot 00
 (the cover) is already done.
 
-**Cost — an estimate, not a measurement.** Kling's MCP exposes no cost preflight
-(there is no `get_cost` equivalent), and the only figure measured on this
-account is video: 80 credits for ten seconds. Published figures put a standard
-image at roughly a credit; at 2k it may be more. So twenty shots at one
-candidate each is plausibly **20–40 credits**, and at two candidates each
-**40–80**.
+**Cost — measured, not estimated.** Credits were read before and after every
+call on this account, so these are prices, not guesses:
 
-The first call settles it: check `query_membership_and_credits` immediately
-before and after shot `07`, and the difference is the real per-image price.
-Everything after can be planned on that number instead of on a guess.
+| Call | Price |
+| --- | --- |
+| `text_to_image`, `kling-image-v3_0`, 2k | **1 credit per image** |
+| `image_to_image`, `kling-image-v3_0`, 2k | **1 credit per image** |
+| `image_to_image`, `kling-image-v3_0_omni`, 2k | **2 credits per image** |
+| `text_to_video`, 10s | **80 credits** |
+
+The whole still set — twenty shots plus the two extra hero views the Element
+needed — came to **27 credits**.
 
 ---
 
@@ -113,19 +115,43 @@ Spot colours, one per image, never two:
 | `bright signal red` | `#CF2A20` | House Kharjiani, the finale |
 | *(none)* | — | House Anabaridze, and every neutral plate |
 
-## 2. Keeping the hero the same person
+## 2. Keeping the hero the same person — done
 
 Twenty independent generations will produce twenty different faces unless
-the character is pinned. Kling's **Elements** exist for exactly this:
+the character is pinned. Kling's **Elements** exist for exactly this, and the
+Element now exists:
 
-1. Generate `03-hero-cloak` first and pick the best result.
-2. `element_create` from it — that returns an element id.
-3. Every later shot with the hero in it goes through **`image_to_image`**, not
-   `text_to_image`, carrying `elements: [{id, bindName: "hero"}]` and writing
-   `<<<id>>>` where the hero appears in the prompt.
+```
+element id: 320915877667232      name: Legend Hero — ink woodcut traveller
+```
 
-`text_to_image` accepts no elements at all, so a hero shot sent there silently
-loses the likeness. Shots below are marked **[element]** where this applies.
+Every shot with the hero in it goes through **`image_to_image`**, not
+`text_to_image`, carrying `elements: [{"id":"320915877667232","bindName":"hero"}]`
+and writing `<<<hero>>>` where the hero appears in the prompt. `text_to_image`
+accepts no elements at all, so a hero shot sent there silently loses the
+likeness. Shots below are marked **[element]** where this applies.
+
+### Two things the API enforces that the first draft of this doc missed
+
+- **`element_create` requires 1–3 secondary images, not just a cover.** The
+  four `07-hero-cloak` candidates could not serve as each other's secondaries —
+  they are four *different people*, not four views of one — so the winner was
+  run back through `image_to_image` twice to produce a three-quarter face and a
+  full-figure walking profile of the *same* character. Those two are the
+  secondaries. Budget two extra generations for this.
+- **`image_to_image` still requires `image_1` even when an element is bound.**
+  The element is the identity; `image_1` is an auxiliary reference. Pass the
+  view whose pose is closest to the shot and say in the prompt that it is a
+  character reference, not a composition to copy — otherwise the model
+  reproduces the reference's framing.
+
+### On the cover URL
+
+`element_create` wants a publicly accessible cover URL, and Kling's own CDN
+(`s15-kling.klingai.com`) qualifies. It is blocked from this container by the
+network policy, but that does not matter: the URL has to be reachable by
+**Kling**, not by the machine making the call. Result URLs from a prior
+generation can be passed straight back in.
 
 ## 3. Neutral plates and the tint trick
 
@@ -341,6 +367,17 @@ in 24 hours — download immediately.**
    trick reads correctly before committing to the coloured shots.
 3. Everything else, in batches by spot colour so the eye can judge consistency
    within a colour.
+
+**Status: all twenty stills are generated.** Step 1 produced four candidates,
+one was chosen, and the Element was built from it. Steps 2 and 3 were then run
+as a single batch of nineteen — one image per shot rather than the two
+candidates this doc originally suggested, because at a credit each a
+regeneration of a shot that disappoints is cheaper than doubling the set and
+doubling what has to be reviewed and downloaded.
+
+Result URLs **expire 24 hours after generation**, so they are not recorded
+here — by the time anyone reads this they would be dead links. Download on
+generation and commit the files.
 
 Files land in `public/media/` as `.jpg`, wired the same way as the clips:
 
