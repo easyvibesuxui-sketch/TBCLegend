@@ -135,15 +135,33 @@ the scene changes.
 **9. Chrome never moves.** The medallion top-left and the pill nav top-right
 hold through every transition, including the full-bleed takeovers.
 
-### Where this build currently falls short
+### Where this build stands against the reference
 
 | Reference | This build |
 | --- | --- |
-| Panels fly in through perspective, scrubbed | Panels are static, with a small parallax drift |
-| Panel border passes the viewport into full-bleed | No takeover; panels stay panels |
-| Captions hold in frame corners during a scene | Captions scroll away with the content |
-| Puck collapses to a dot and drives the art | `HoldPuck` reports progress but nothing consumes it |
-| Reactive liquid deforms under the gesture | Nothing reactive |
+| Panels fly in through perspective, scrubbed | `PanelFlight` — done |
+| Panel border passes the viewport into full-bleed | `PanelTakeover` on the shattering — done |
+| Captions hold in frame corners during a scene | Held in the takeover's corners, on its timeline — done |
+| Puck collapses to a dot and drives the art | Collapses 95px → 22px, drives the reach — done |
+| Reactive liquid deforms under the gesture | **Still open.** The seal translates, scales and tilts away from the hand; it does not deform. A real swell-and-splash needs the blob as geometry — SVG path morphing or a shader — rather than a bitmap being transformed. |
+
+Three things measured while closing those rows, all of which cost a wrong
+first attempt:
+
+- **A sticky stage cannot live inside the tilt.** A transformed ancestor
+  becomes the containing block, so `Legend` no longer takes a `TiltFrame` from
+  the page; its chapters carry their own, and the takeover carries one inside
+  its stage. Hero already worked this way.
+- **`TiltFrame` renders a different element once the tilt enables**, which it
+  decides in an effect. Anything captured by ref inside it during a layout
+  effect is detached moments later — the takeover's card was animating a node
+  that had been thrown away, while the captions, which sit outside the tilt,
+  animated fine. The card now sits outside the tilt with the tilt inside it.
+- **`top+=X%` on a ScrollTrigger is a percentage of the trigger's height, not
+  of the range it stays stuck for.** With a 260vh block in a 100vh viewport
+  the stuck range is 61% of the height, so caption windows written as
+  percentages ran past the release and never fired. They ride the takeover's
+  timeline instead, which spans exactly the stuck range.
 
 ## 7. What this means for Treasure Marathon
 

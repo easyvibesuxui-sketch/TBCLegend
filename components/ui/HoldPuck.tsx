@@ -10,6 +10,12 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
  * Press and drag it and `onProgress` reports 0 → 1 across `travel` pixels, so
  * a section can scrub artwork from the drag instead of from scroll. Releasing
  * springs it home.
+ *
+ * It has two states, read from the reference recording: idle it is the
+ * labelled circle, and the moment it is grabbed it collapses to a small plain
+ * dot that leads the illustration. The label would be under the reader's own
+ * finger during the drag, so it goes; what is left is the smallest mark that
+ * still says where the gesture is.
  */
 export default function HoldPuck({
   lines,
@@ -55,6 +61,25 @@ export default function HoldPuck({
   return (
     <motion.div
       role="slider"
+      animate={held ? "held" : "idle"}
+      variants={{
+        /*
+         * The idle pulse lives here rather than in the CSS keyframe it used to
+         * use. A CSS animation overrides inline styles, so the two would fight
+         * over `transform` on release: the pulse would win the instant the
+         * class came back and snap the dot to full size mid-spring.
+         */
+        idle: {
+          scale: [1, 1.06, 1],
+          transition: { duration: 2.6, repeat: Infinity, ease: "easeInOut" },
+        },
+        // Small enough to read as a point of contact rather than a shrunken
+        // button, which is what the recording shows.
+        held: {
+          scale: 0.24,
+          transition: { type: "spring", stiffness: 420, damping: 32 },
+        },
+      }}
       aria-label={`${lines[0]} ${lines[1]}`}
       aria-valuemin={0}
       aria-valuemax={100}
@@ -69,11 +94,24 @@ export default function HoldPuck({
         held ? "" : "animate-puckPulse"
       } ${className}`}
     >
-      <span className="label leading-[1.35]">
+      {/*
+        The label scales up as its parent scales down, so it would stay the
+        same size on screen while the puck shrank underneath it. Countering the
+        scale keeps it inside the dot as it collapses, and it fades before that
+        becomes visible.
+      */}
+      <motion.span
+        className="label leading-[1.35]"
+        variants={{
+          idle: { opacity: 1, scale: 1 },
+          held: { opacity: 0, scale: 0.5 },
+        }}
+        transition={{ duration: 0.16, ease: "easeOut" }}
+      >
         {lines[0]}
         <br />
         {lines[1]}
-      </span>
+      </motion.span>
     </motion.div>
   );
 }

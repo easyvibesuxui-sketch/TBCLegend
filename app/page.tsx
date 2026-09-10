@@ -26,9 +26,12 @@ export default function Page() {
           <main className="relative">
             {/* Hero tilts from inside its own sticky stage — see Hero.tsx */}
             <Hero />
-            <TiltFrame>
-              <Legend />
-            </TiltFrame>
+            {/*
+              Legend tilts from inside: its takeover uses a sticky stage, and a
+              transform out here would become that stage's containing block and
+              stop it sticking. Same reason Hero is not wrapped either.
+            */}
+            <Legend />
             <TiltFrame>
               <Houses />
             </TiltFrame>

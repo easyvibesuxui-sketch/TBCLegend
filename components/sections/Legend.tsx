@@ -8,10 +8,11 @@ import { PLATES } from "@/lib/plates";
 import ArtPlate from "@/components/ui/ArtPlate";
 import GesturePlate from "@/components/ui/GesturePlate";
 import Caption from "@/components/ui/Caption";
-import HoldPuck from "@/components/ui/HoldPuck";
 import Panel from "@/components/ui/Panel";
 import PanelFlight from "@/components/ui/PanelFlight";
+import PanelTakeover from "@/components/ui/PanelTakeover";
 import TornEdge from "@/components/ui/TornEdge";
+import TiltFrame from "@/components/ui/TiltFrame";
 
 /** The three readings of the shattering, in the order chapter II names them. */
 const DOUBTS = [PLATES.accident, PLATES.betrayal, PLATES.prophecy];
@@ -72,6 +73,7 @@ export default function Legend() {
 
   return (
     <section ref={sectionRef} id="legend" className="relative">
+      <TiltFrame>
       {/* ─────────── I — on paper, panel with insets ─────────── */}
       <div className="grain-paper relative bg-paper px-4 pb-24 pt-32 sm:px-8 sm:pb-36 sm:pt-44">
         {/* The paper tears in over the cover above it */}
@@ -152,71 +154,72 @@ export default function Legend() {
         </div>
       </div>
 
-      {/* ─────────── II — oxblood flood, the gesture ─────────── */}
-      <div
+      </TiltFrame>
+
+      {/* ─────────── IV — the takeover ─────────── */}
+      {/*
+        The one beat that stops being a panel. The card arrives, its border
+        passes the viewport, and the shattering plays full-bleed while the
+        captions hold their corners. The doubts follow on paper after it, since
+        three small insets inside a takeover would fight the scene rather than
+        read as evidence beside it.
+      */}
+      <PanelTakeover
         data-flood
-        className="grain-paper grain-flood relative overflow-hidden bg-oxblood"
+        ground="#6E2020"
+        captions={[
+          {
+            corner: "top-left",
+            at: [0.05, 0.3],
+            node: (
+              <>
+                <span className="label mb-4 block text-paper/70">
+                  {two.index} — მისტიკური ღამე
+                </span>
+                <Caption>{two.captions[0]}</Caption>
+              </>
+            ),
+          },
+          {
+            corner: "bottom-right",
+            at: [0.45, 0.72],
+            node: <Caption>{two.captions[1]}</Caption>,
+          },
+        ]}
       >
+        <ArtPlate
+          {...two.plate}
+          tone="oxblood"
+          scrub={shatter}
+          labelAlign="bottom"
+        />
+      </PanelTakeover>
 
-        <div className="relative z-10 flex min-h-[100svh] flex-col px-4 py-28 sm:px-8 sm:py-40">
-          <div className="absolute inset-0">
-            <ArtPlate
-              {...two.plate}
-              tone="oxblood"
-              scrub={shatter}
-              labelAlign="bottom"
-            />
-          </div>
-
-          {/* flex-1 so the two caption blocks push to the top and foot of the plate */}
-          <div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col justify-between gap-24">
-            <div>
-              <span className="label mb-8 block text-paper/75">
-                {two.index} — მისტიკური ღამე
-              </span>
-              <Caption className="sm:w-[52%]">{two.captions[0]}</Caption>
-            </div>
-
-            <div className="flex flex-col items-start gap-10 sm:flex-row sm:items-end sm:justify-between">
-              <div className="sm:w-[52%]">
-                <Caption delay={0.1}>{two.captions[1]}</Caption>
-
-                {/*
-                  That caption names three possibilities — an accident, a
-                  betrayal, an old prophecy — so the three insets lay them out
-                  as evidence rather than leaving the line to carry them alone.
-                  They fly from a steeper angle than a full panel, at a nearer
-                  depth, the way the reference stacks its smaller cards.
-                */}
-                <ul className="mt-8 grid grid-cols-3 gap-3 sm:gap-4">
-                  {DOUBTS.map((plate, i) => (
-                    <li key={plate.label}>
-                      <PanelFlight from={18} scale={0.7}>
-                        <Panel className="aspect-[4/3] w-full">
-                          <ArtPlate {...plate} tone="paper" />
-                        </Panel>
-                      </PanelFlight>
-                      {/*
-                        The plate behind this row is full-bleed artwork, so a
-                        label tinted against the flood is legible over the red
-                        and invisible over the coins. Give it its own ground,
-                        the same paper chip the captions sit on.
-                      */}
-                      <span className="label mt-3 inline-block bg-paper px-2 py-1 text-ink/70">
-                        {DOUBT_LABELS[i]}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <HoldPuck lines={["დაიჭირე", "და გასწიე"]} />
-            </div>
-          </div>
-        </div>
-
-        <div className="absolute inset-x-0 bottom-0 z-20 h-16 sm:h-20">
-          <TornEdge color="#F2F1EF" side="bottom" seed={14} />
+      <TiltFrame>
+      {/* ─────────── the doubt, on paper after the scene ─────────── */}
+      <div className="grain-paper relative bg-paper px-4 py-24 sm:px-8 sm:py-32">
+        <div className="relative z-10 mx-auto w-full max-w-5xl">
+          <p className="label mb-10 text-ink/45">სამი ვერსია</p>
+          {/*
+            The caption above names an accident, a betrayal and an old
+            prophecy, and nothing rendered them. The three insets lay them out
+            as evidence, flying from a steeper angle than a full panel so they
+            read at a nearer depth.
+          */}
+          <ul className="grid grid-cols-3 gap-4 sm:gap-8">
+            {DOUBTS.map((plate, i) => (
+              <li key={plate.label}>
+                <PanelFlight from={18} scale={0.7}>
+                  <Panel className="aspect-[4/3] w-full">
+                    <ArtPlate {...plate} tone="paper" />
+                  </Panel>
+                </PanelFlight>
+                <span className="label mt-3 block text-ink/60">
+                  {DOUBT_LABELS[i]}
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
 
@@ -240,6 +243,7 @@ export default function Legend() {
           </PanelFlight>
         </div>
       </div>
+      </TiltFrame>
     </section>
   );
 }
