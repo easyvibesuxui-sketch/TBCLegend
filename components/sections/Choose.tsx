@@ -17,9 +17,10 @@ import { EASE } from "@/lib/motion";
  * strikes its seal into the medallion and threads that house's colour through
  * the rest of the page — see HouseProvider for how the colour travels.
  *
- * The seal composites into the medallion under `mix-blend-multiply`, which is
- * why every plate in this set was drawn as black ink on bare paper: the paper
- * drops out and the ink keeps its grain, so no alpha channel is needed.
+ * Beat 01 of the story, and it runs before the reader learns anything: the
+ * choice is meant to be instinct rather than calculation, which is exactly
+ * what the quiz at the end tests. Everything after this is addressed to
+ * someone who has already chosen.
  */
 export default function Choose() {
   const { house, choose } = useHouse();
@@ -29,7 +30,15 @@ export default function Choose() {
       id="choose"
       className="grain-paper grain-flood relative overflow-hidden bg-ink-night px-4 py-28 sm:px-8 sm:py-40"
     >
+      {/* The night tears in over the cover */}
+      <div className="absolute inset-x-0 -top-14 z-20 h-16 sm:-top-20 sm:h-24">
+        <TornEdge color="#1C1C1C" side="top" seed={3} />
+      </div>
+
       <div className="relative z-10 mx-auto w-full max-w-6xl">
+        <span className="label mb-8 block text-center text-paper/35">
+          01 · სისხლი
+        </span>
         <motion.h2
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -40,7 +49,7 @@ export default function Choose() {
           აირჩიე შენი სახლი
         </motion.h2>
         <p className="label mt-6 text-center text-paper/45">
-          ოთხი გზა — ერთი საგანძური
+          სანამ გზას დაადგები — აირჩიე, ვისი სისხლი გდის
         </p>
 
         <div className="mt-16 grid items-center gap-10 sm:mt-24 sm:grid-cols-12 sm:gap-10">
@@ -159,7 +168,7 @@ export default function Choose() {
       </div>
 
       <div className="absolute inset-x-0 bottom-0 z-20 h-16 sm:h-20">
-        <TornEdge color="#CF2A20" side="bottom" seed={33} />
+        <TornEdge color="#F2F1EF" side="bottom" seed={33} />
       </div>
     </section>
   );

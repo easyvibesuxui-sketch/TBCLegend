@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { gsap } from "@/lib/gsap";
 import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
 import { HOUSES } from "@/lib/houses";
+import { useHouse } from "@/components/HouseProvider";
 import ArtPlate from "@/components/ui/ArtPlate";
 import Panel from "@/components/ui/Panel";
 import TornEdge from "@/components/ui/TornEdge";
@@ -17,6 +18,17 @@ import { EASE } from "@/lib/motion";
  */
 export default function Houses() {
   const sectionRef = useRef<HTMLElement>(null);
+  const { house: chosen } = useHouse();
+
+  /*
+   * Beat 09: "three foreign houses pass, yours stays last." Ordering the
+   * reader's own house to the end is the whole of it — the row then reads as
+   * the others going by and yours arriving, rather than as a grid of four
+   * equal cards.
+   */
+  const ordered = chosen
+    ? [...HOUSES.filter((h) => h.id !== chosen.id), chosen]
+    : HOUSES;
 
   useIsomorphicLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -62,11 +74,13 @@ export default function Houses() {
         </motion.h2>
 
         <div className="mt-6 flex items-center justify-center gap-6">
-          <span className="label text-signal">თითოეულს თავისი სიმართლე</span>
+          <span className="label" style={{ color: "var(--house, #CF2A20)" }}>
+            თითოეულს თავისი სიმართლე
+          </span>
         </div>
 
         <div className="mt-16 grid gap-5 sm:mt-24 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4">
-          {HOUSES.map((house, i) => (
+          {ordered.map((house, i) => (
             <motion.div
               key={house.id}
               data-house
@@ -76,7 +90,14 @@ export default function Houses() {
               transition={{ duration: 0.9, ease: EASE, delay: (i % 4) * 0.08 }}
               className="group"
             >
-              <Panel className="aspect-[3/4.6] w-full transition-transform duration-500 group-hover:-translate-y-2">
+              <Panel
+                className="aspect-[3/4.6] w-full transition-transform duration-500 group-hover:-translate-y-2"
+                style={
+                  chosen?.id === house.id
+                    ? { borderColor: "var(--house)", borderWidth: 3 }
+                    : undefined
+                }
+              >
                 <ArtPlate {...house.plate} tone={house.tone} />
 
                 {/* Name plate, struck across the foot of the panel */}
@@ -85,7 +106,9 @@ export default function Houses() {
                     <h3 className="font-display text-[clamp(1.3rem,2.2vw,1.9rem)] leading-none text-ink">
                       {house.name}
                     </h3>
-                    <p className="label mt-2 text-ink/45">{house.latin}</p>
+                    <p className="label mt-2 text-ink/45">
+                      {chosen?.id === house.id ? "შენი სახლი" : house.latin}
+                    </p>
                   </div>
 
                   {/*
@@ -95,7 +118,10 @@ export default function Houses() {
                   <div className="grid grid-rows-[1fr] transition-[grid-template-rows] duration-500 ease-out lg:grid-rows-[0fr] lg:group-hover:grid-rows-[1fr]">
                     <div className="overflow-hidden">
                       <div className="border-t border-ink/15 px-4 py-4">
-                        <p className="font-display text-[13px] text-signal">
+                        <p
+                          className="font-display text-[13px]"
+                          style={{ color: "var(--house, #CF2A20)" }}
+                        >
                           „{house.motto}“
                         </p>
                         <p className="mt-3 font-body text-[12.5px] leading-[1.75] text-ink/70">
@@ -112,7 +138,7 @@ export default function Houses() {
       </div>
 
       <div className="absolute inset-x-0 bottom-0 z-20 h-16 sm:h-20">
-        <TornEdge color="#1C1C1C" side="bottom" seed={21} />
+        <TornEdge color="var(--house, #CF2A20)" side="bottom" seed={21} />
       </div>
     </section>
   );

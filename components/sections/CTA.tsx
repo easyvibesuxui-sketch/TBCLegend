@@ -35,9 +35,14 @@ export default function CTA() {
           className="text-center font-display text-[clamp(2.4rem,9vw,8rem)] leading-[0.86]"
         >
           {chosen ? (
+            /*
+              Beat 11, in the story's own words. It is not a statement of
+              belonging — it is the page handing the reader's instinct back to
+              them as a question, which is what the quiz then answers.
+            */
             <>
-              <span className="block">შენ ეკუთვნი</span>
-              <span className="block">სახლს {chosen.name}</span>
+              <span className="block">შენ {chosen.name} აირჩიე.</span>
+              <span className="block">მართლა {chosen.name} ხარ?</span>
             </>
           ) : (
             <>

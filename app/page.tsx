@@ -27,6 +27,16 @@ export default function Page() {
             {/* Hero tilts from inside its own sticky stage — see Hero.tsx */}
             <Hero />
             {/*
+              Beat 01. The story is explicit that this comes before the reader
+              learns anything — "the choice happens in the first second" — so
+              that it is instinct rather than calculation, which is exactly
+              what the quiz at the end goes on to test. Everything below is
+              addressed to someone who has already chosen.
+            */}
+            <TiltFrame>
+              <Choose />
+            </TiltFrame>
+            {/*
               Legend tilts from inside: its takeover uses a sticky stage, and a
               transform out here would become that stage's containing block and
               stop it sticking. Same reason Hero is not wrapped either.
@@ -34,9 +44,6 @@ export default function Page() {
             <Legend />
             <TiltFrame>
               <Houses />
-            </TiltFrame>
-            <TiltFrame>
-              <Choose />
             </TiltFrame>
             <TiltFrame>
               <CTA />

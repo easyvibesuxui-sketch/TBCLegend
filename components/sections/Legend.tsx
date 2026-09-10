@@ -14,14 +14,22 @@ import PanelTakeover from "@/components/ui/PanelTakeover";
 import TornEdge from "@/components/ui/TornEdge";
 import TiltFrame from "@/components/ui/TiltFrame";
 
-/** The three readings of the shattering, in the order chapter II names them. */
+/** The three readings of the shattering, in the order beat 06 names them. */
 const DOUBTS = [PLATES.accident, PLATES.betrayal, PLATES.prophecy];
 const DOUBT_LABELS = ["უბედური შემთხვევა", "ღალატი", "წინასწარმეტყველება"];
 
 /**
- * The story, told as comic pages. Each chapter picks one of three
- * compositions from the reference: a panel with insets on paper, a full
- * colour flood carrying the gesture, or a split page.
+ * Beats 02 to 08 of `docs/production/STORY.md`, in that document's order.
+ *
+ * The page used to compress these into three chapters, which is what made it
+ * read as a handful of sections rather than a story: the hall was a thumbnail
+ * pinned to the altar's panel, and the altar itself was a panel among panels
+ * rather than the moment the balance is established. Each beat is its own
+ * section now, and the two the story marks as takeovers are takeovers.
+ *
+ * Beat 01 — the choice — is deliberately not here. It runs before this, right
+ * after the cover, because everything below is addressed to a reader who has
+ * already picked a house.
  */
 export default function Legend() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -49,7 +57,7 @@ export default function Legend() {
         );
       });
 
-      // The shattering plate scrubs with the flood section that holds it.
+      // The shattering plate scrubs with the takeover that holds it.
       gsap.to(
         {},
         {
@@ -74,107 +82,111 @@ export default function Legend() {
   return (
     <section ref={sectionRef} id="legend" className="relative">
       <TiltFrame>
-      {/* ─────────── I — on paper, panel with insets ─────────── */}
-      <div className="grain-paper relative bg-paper px-4 pb-24 pt-32 sm:px-8 sm:pb-36 sm:pt-44">
-        {/* The paper tears in over the cover above it */}
-        <div className="absolute inset-x-0 -top-14 z-20 h-16 sm:-top-20 sm:h-24">
-          <TornEdge color="#F2F1EF" side="top" seed={5} />
-        </div>
-        <div className="relative z-10 mx-auto w-full max-w-6xl">
-          <span className="label mb-10 block text-ink/45">
-            {one.index} — პროლოგი
-          </span>
+        {/* ─────────── 02 · სახლი ─────────── */}
+        <div className="grain-paper relative bg-paper px-4 pb-28 pt-32 sm:px-8 sm:pb-40 sm:pt-44">
+          {/* The paper tears in over the choice above it */}
+          <div className="absolute inset-x-0 -top-14 z-20 h-16 sm:-top-20 sm:h-24">
+            <TornEdge color="#F2F1EF" side="top" seed={5} />
+          </div>
 
-          <div className="relative">
-            <PanelFlight className="ml-auto w-full sm:w-[86%]">
-              <Panel className="aspect-[16/10] w-full">
-                <ArtPlate {...one.plate} tone="paper" />
-              </Panel>
-            </PanelFlight>
+          <div className="relative z-10 mx-auto w-full max-w-6xl">
+            <span className="label mb-10 block text-ink/45">02 · სახლი</span>
 
-            {/*
-              The inset flies too, but from a steeper angle and a smaller
-              start, so it reads as a second card at a nearer depth rather
-              than a flat sticker on a moving panel.
-            */}
-            <PanelFlight
-              from={22}
-              scale={0.62}
-              className="absolute -left-1 top-[14%] hidden w-[26%] sm:block"
+            <div className="relative">
+              <PanelFlight className="ml-auto w-full sm:w-[84%]">
+                <Panel className="aspect-[16/10] w-full">
+                  <ArtPlate {...PLATES.hall} tone="paper" />
+                </Panel>
+              </PanelFlight>
+
+              <Caption className="relative -mt-10 ml-0 sm:absolute sm:-bottom-10 sm:left-0 sm:mt-0 sm:w-[44%]">
+                {one.captions[0]}
+              </Caption>
+            </div>
+
+            {/* The cloak is the reader's colour — the first place the choice shows */}
+            <p
+              className="label mt-16 sm:mt-28"
+              style={{ color: "var(--house)" }}
             >
-              <Panel className="aspect-[4/3] w-full">
-                <ArtPlate {...PLATES.hall} tone="paper" />
-              </Panel>
-            </PanelFlight>
-
-            <Caption className="relative -mt-10 ml-0 sm:absolute sm:-bottom-8 sm:left-[6%] sm:mt-0">
-              {one.captions[0]}
-            </Caption>
+              ლაბადა კედელზე შენი ფერისაა
+            </p>
           </div>
 
-          <Caption
-            delay={0.1}
-            className="ml-auto mt-10 sm:mt-24 sm:w-[46%]"
-          >
-            {one.captions[1]}
-          </Caption>
-        </div>
-
-        {/* The night bites up into the paper */}
-        <div className="absolute inset-x-0 bottom-0 z-20 h-16 sm:h-24">
-          <TornEdge color="#1C1C1C" side="bottom" seed={9} />
-        </div>
-      </div>
-
-      {/* ─────────── the departure ─────────── */}
-      {/*
-        No new prose: the clip is the beat. A band rather than a full viewport
-        so it reads as one more panel in the sequence, not a second hero.
-      */}
-      <div className="grain-paper grain-flood relative overflow-hidden bg-ink-night">
-        <div className="relative h-[62svh] min-h-[380px] w-full sm:h-[78svh]">
-          <ArtPlate {...PLATES.gate} tone="night" />
-          <div className="pointer-events-none absolute inset-0 flex items-end p-6 sm:p-12">
-            <span className="label text-paper/70">II — გამგზავრება</span>
+          <div className="absolute inset-x-0 bottom-0 z-20 h-16 sm:h-24">
+            <TornEdge color="#B08D57" side="bottom" seed={9} />
           </div>
         </div>
-        <div className="absolute inset-x-0 bottom-0 z-20 h-16 sm:h-20">
-          <TornEdge color="#F2F1EF" side="bottom" seed={17} />
-        </div>
-      </div>
-
-      {/* ─────────── the reach ─────────── */}
-      <div className="grain-paper relative bg-paper px-4 py-24 sm:px-8 sm:py-36">
-        <div className="relative z-10 mx-auto w-full max-w-5xl">
-          <span className="label mb-10 block text-ink/45">III — ხელის გაწვდენა</span>
-          <GesturePlate />
-        </div>
-        <div className="absolute inset-x-0 bottom-0 z-20 h-16 sm:h-20">
-          <TornEdge color="#6E2020" side="bottom" seed={23} />
-        </div>
-      </div>
-
       </TiltFrame>
 
-      {/* ─────────── IV — the takeover ─────────── */}
+      {/* ─────────── 03 · წონასწორობა — takeover ─────────── */}
       {/*
-        The one beat that stops being a panel. The card arrives, its border
-        passes the viewport, and the shattering plays full-bleed while the
-        captions hold their corners. The doubts follow on paper after it, since
-        three small insets inside a takeover would fight the scene rather than
-        read as evidence beside it.
+        The story marks this a takeover, and it earns one: the treasure whole
+        and breathing is the state everything after it breaks.
       */}
+      <PanelTakeover
+        ground="#B08D57"
+        scrollLength="220vh"
+        captions={[
+          {
+            corner: "top-left",
+            at: [0.05, 0.28],
+            node: <span className="label text-ink/70">03 · წონასწორობა</span>,
+          },
+          {
+            corner: "bottom-left",
+            at: [0.3, 0.6],
+            node: <Caption>{one.captions[1]}</Caption>,
+          },
+        ]}
+      >
+        <ArtPlate {...PLATES.altar} tone="ochre" />
+      </PanelTakeover>
+
+      <TiltFrame>
+        {/* ─────────── 04 · გამგზავრება ─────────── */}
+        {/* No new prose: the clip is the beat. */}
+        <div className="grain-paper grain-flood relative overflow-hidden bg-ink-night">
+          <div className="relative h-[62svh] min-h-[380px] w-full sm:h-[78svh]">
+            <ArtPlate {...PLATES.gate} tone="night" />
+            <div className="pointer-events-none absolute inset-0 flex items-end justify-between p-6 sm:p-12">
+              <span className="label text-paper/70">04 · გამგზავრება</span>
+              <span className="label" style={{ color: "var(--house)" }}>
+                მარტო — შენი ფერის ლაბადით
+              </span>
+            </div>
+          </div>
+          <div className="absolute inset-x-0 bottom-0 z-20 h-16 sm:h-20">
+            <TornEdge color="#F2F1EF" side="bottom" seed={17} />
+          </div>
+        </div>
+
+        {/* ─────────── 05 · საკურთხეველი — the gesture ─────────── */}
+        <div className="grain-paper relative bg-paper px-4 py-24 sm:px-8 sm:py-36">
+          <div className="relative z-10 mx-auto w-full max-w-5xl">
+            <span className="label mb-10 block text-ink/45">
+              05 · საკურთხეველი
+            </span>
+            <GesturePlate />
+          </div>
+          <div className="absolute inset-x-0 bottom-0 z-20 h-16 sm:h-20">
+            <TornEdge color="#6E2020" side="bottom" seed={23} />
+          </div>
+        </div>
+      </TiltFrame>
+
+      {/* ─────────── 06 · ნაპრალი + 07 · ეჭვი — takeover ─────────── */}
       <PanelTakeover
         data-flood
         ground="#6E2020"
         captions={[
           {
             corner: "top-left",
-            at: [0.05, 0.3],
+            at: [0.04, 0.26],
             node: (
               <>
                 <span className="label mb-4 block text-paper/70">
-                  {two.index} — მისტიკური ღამე
+                  06 · ნაპრალი
                 </span>
                 <Caption>{two.captions[0]}</Caption>
               </>
@@ -182,8 +194,40 @@ export default function Legend() {
           },
           {
             corner: "bottom-right",
-            at: [0.45, 0.72],
+            at: [0.42, 0.62],
             node: <Caption>{two.captions[1]}</Caption>,
+          },
+          {
+            /*
+              Beat 07 stays inside the scene rather than following it on paper.
+              The recording is explicit that inset panels survive a takeover —
+              a small bordered strip in a corner showing a detail of the same
+              moment — and the three readings of the shattering are exactly
+              that. They were briefly moved out to paper; that lost the point,
+              which is that the doubt sits inside the event, not after it.
+            */
+            corner: "bottom-left",
+            at: [0.66, 0.88],
+            node: (
+              <ul className="flex gap-2 sm:gap-3">
+                {DOUBTS.map((plate, i) => (
+                  <li key={plate.label} className="w-[30%] max-w-[9rem]">
+                    {/*
+                      Label above the plate, not below: below, it fell off the
+                      foot of the viewport. On its own dark chip, because the
+                      strip sits over the artwork and a tinted label is legible
+                      on the red ground and invisible on the coins.
+                    */}
+                    <span className="label mb-2 inline-block bg-ink/85 px-1.5 py-1 text-[9px] text-paper sm:text-[10px]">
+                      {DOUBT_LABELS[i]}
+                    </span>
+                    <Panel className="aspect-[4/3] w-full">
+                      <ArtPlate {...plate} tone="paper" />
+                    </Panel>
+                  </li>
+                ))}
+              </ul>
+            ),
           },
         ]}
       >
@@ -196,53 +240,26 @@ export default function Legend() {
       </PanelTakeover>
 
       <TiltFrame>
-      {/* ─────────── the doubt, on paper after the scene ─────────── */}
-      <div className="grain-paper relative bg-paper px-4 py-24 sm:px-8 sm:py-32">
-        <div className="relative z-10 mx-auto w-full max-w-5xl">
-          <p className="label mb-10 text-ink/45">სამი ვერსია</p>
-          {/*
-            The caption above names an accident, a betrayal and an old
-            prophecy, and nothing rendered them. The three insets lay them out
-            as evidence, flying from a steeper angle than a full panel so they
-            read at a nearer depth.
-          */}
-          <ul className="grid grid-cols-3 gap-4 sm:gap-8">
-            {DOUBTS.map((plate, i) => (
-              <li key={plate.label}>
-                <PanelFlight from={18} scale={0.7}>
-                  <Panel className="aspect-[4/3] w-full">
-                    <ArtPlate {...plate} tone="paper" />
-                  </Panel>
-                </PanelFlight>
-                <span className="label mt-3 block text-ink/60">
-                  {DOUBT_LABELS[i]}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+        {/* ─────────── 08 · ოთხი ჰორიზონტი ─────────── */}
+        <div className="grain-paper relative bg-paper px-4 py-24 sm:px-8 sm:py-36">
+          <div className="relative z-10 mx-auto grid w-full max-w-6xl gap-10 sm:grid-cols-12 sm:gap-8">
+            <div className="sm:col-span-5 sm:pt-16">
+              <span className="label mb-8 block text-ink/45">
+                08 · ოთხი ჰორიზონტი
+              </span>
+              <Caption>{three.captions[0]}</Caption>
+              <p className="label mt-8 sm:ml-10" style={{ color: "var(--house)" }}>
+                ერთი მათგანი შენია
+              </p>
+            </div>
 
-      {/* ─────────── III — split page on paper ─────────── */}
-      <div className="grain-paper relative bg-paper px-4 py-24 sm:px-8 sm:py-36">
-        <div className="relative z-10 mx-auto grid w-full max-w-6xl gap-10 sm:grid-cols-12 sm:gap-8">
-          <div className="sm:col-span-5 sm:pt-16">
-            <span className="label mb-8 block text-ink/45">
-              {three.index} — მარათონი
-            </span>
-            <Caption>{three.captions[0]}</Caption>
-            <Caption delay={0.1} className="mt-8 sm:ml-10">
-              {three.captions[1]}
-            </Caption>
+            <PanelFlight from={10} scale={0.8} className="sm:col-span-7 sm:-mr-8">
+              <Panel className="aspect-[21/9] w-full">
+                <ArtPlate {...three.plate} tone="ochre" />
+              </Panel>
+            </PanelFlight>
           </div>
-
-          <PanelFlight from={10} scale={0.8} className="sm:col-span-7 sm:-mr-8">
-            <Panel className="aspect-[21/9] w-full">
-              <ArtPlate {...three.plate} tone="ochre" />
-            </Panel>
-          </PanelFlight>
         </div>
-      </div>
       </TiltFrame>
     </section>
   );
