@@ -46,35 +46,54 @@ export default function GesturePlate() {
   );
 
   return (
-    <div className="relative w-full">
-      <div className="relative aspect-[2/1] w-full overflow-hidden border border-ink bg-paper-bright">
-        {/* The seal, recoiling */}
-        <motion.img
-          src={asset(PLATES.seal.image)}
-          alt={PLATES.seal.label}
-          style={{ x: sealX, scale: sealScale, rotate: sealTilt }}
-          className="absolute right-[11%] top-[54%] w-[38%] -translate-y-1/2"
-        />
+    /*
+      Both layers centre themselves through the motion `y`, never through a
+      `-translate-y-1/2` class. Framer writes the whole `transform` inline to
+      drive `x`, and an inline transform beats the class outright — so the
+      class was silently dropped and both drawings hung *downward* from their
+      54% top, landing in the bottom corner with the frame empty above them.
+      Keeping the centring inside the same transform is the only way the two
+      compose.
 
-        {/* The hand, reaching in from the frame edge */}
-        <motion.img
-          src={asset(PLATES.hand.image)}
-          alt={PLATES.hand.label}
-          style={{ x: handX }}
-          className="absolute left-[-4%] top-[54%] w-[56%] -translate-y-1/2"
-        />
-      </div>
+      They also sit closer together than they did. Pinned to the frame edges
+      the beat read as two objects in separate corners rather than one reach.
+    */
+    <div className="relative aspect-[4/3] w-full overflow-hidden border border-ink bg-paper-bright sm:aspect-[2/1]">
+      {/* The seal, recoiling */}
+      <motion.img
+        src={asset(PLATES.seal.image)}
+        alt={PLATES.seal.label}
+        style={{ x: sealX, y: "-50%", scale: sealScale, rotate: sealTilt }}
+        className="absolute right-[14%] top-1/2 w-[32%]"
+      />
 
-      <div className="mt-8 flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
-        <p className="label max-w-[34ch] text-ink/55">
-          ხელი უახლოვდება — საგანძური იხევს
-        </p>
-        <HoldPuck
-          lines={["დაიჭირე", "და გასწიე"]}
-          onProgress={onProgress}
-          className="shrink-0"
-        />
-      </div>
+      {/* The hand, reaching in toward it */}
+      <motion.img
+        src={asset(PLATES.hand.image)}
+        alt={PLATES.hand.label}
+        style={{ x: handX, y: "-50%" }}
+        className="absolute left-[6%] top-1/2 w-[44%]"
+      />
+
+      {/*
+        The puck sits on the plate rather than under it: it is the handle for
+        this drawing, and parked outside the frame it read as a caption's
+        companion instead of a control. The instruction it carried in prose
+        underneath is gone — the puck already says "hold and pull".
+      */}
+      <HoldPuck
+        lines={["დაიჭირე", "და გასწიე"]}
+        onProgress={onProgress}
+        /*
+          At its default 92px the puck covered the seal outright on a phone —
+          half the height of a 2:1 frame 358px wide. Below sm the frame takes
+          a 4:3 ratio and the puck a smaller diameter, which together leave
+          the drawings their own band across the middle and the puck a clear
+          strip beneath, with neither overlapping the other.
+        */
+        sizeClass="h-[68px] w-[68px] sm:h-[92px] sm:w-[92px]"
+        className="absolute bottom-3 right-3 z-10 sm:bottom-6 sm:right-6"
+      />
     </div>
   );
 }

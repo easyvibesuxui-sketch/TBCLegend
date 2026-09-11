@@ -22,12 +22,20 @@ export default function HoldPuck({
   travel = 190,
   axis = "x",
   onProgress,
+  /**
+   * The puck's diameter, as Tailwind classes. It *replaces* the default
+   * rather than being appended to it: two competing `h-`/`w-` utilities in
+   * one class list are resolved by their order in the stylesheet, not in the
+   * attribute, so appending an override is a coin flip.
+   */
+  sizeClass = "h-[92px] w-[92px]",
   className = "",
 }: {
   lines: [string, string];
   travel?: number;
   axis?: "x" | "y";
   onProgress?: (p: number) => void;
+  sizeClass?: string;
   className?: string;
 }) {
   const [held, setHeld] = useState(false);
@@ -71,6 +79,7 @@ export default function HoldPuck({
          */
         idle: {
           scale: [1, 1.06, 1],
+          opacity: [1, 0.92, 1],
           transition: { duration: 2.6, repeat: Infinity, ease: "easeInOut" },
         },
         // Small enough to read as a point of contact rather than a shrunken
@@ -90,9 +99,14 @@ export default function HoldPuck({
       onPointerUp={onUp}
       onPointerCancel={onUp}
       style={{ [axis]: pos } as never}
-      className={`z-30 flex h-[92px] w-[92px] cursor-grab touch-none select-none items-center justify-center rounded-full border border-ink bg-paper-bright text-center active:cursor-grabbing ${
-        held ? "" : "animate-puckPulse"
-      } ${className}`}
+      /*
+        `animate-puckPulse` used to ride along here. It was left behind when
+        the pulse moved into the variants above, and a CSS animation overrides
+        inline styles — so while idle the keyframe's `transform: scale()` was
+        still overwriting the very transform the drag writes. The variants own
+        the pulse, opacity included; the class is gone.
+      */
+      className={`z-30 flex ${sizeClass} cursor-grab touch-none select-none items-center justify-center rounded-full border border-ink bg-paper-bright text-center active:cursor-grabbing ${className}`}
     >
       {/*
         The label scales up as its parent scales down, so it would stay the
@@ -101,7 +115,14 @@ export default function HoldPuck({
         becomes visible.
       */}
       <motion.span
-        className="label leading-[1.35]"
+        /*
+          The label carries its own size rather than taking `.label`'s 11px:
+          on the smaller puck the gesture frame uses at phone width, two
+          tracked uppercase words at 11px simply do not fit inside a 68px
+          circle and spilled over its border. Utilities outrank the component
+          layer `.label` sits in, so these win without an !important.
+        */
+        className="label text-[8.5px] leading-[1.3] tracking-[0.06em] sm:text-[13px] sm:leading-[1.35] sm:tracking-label"
         variants={{
           idle: { opacity: 1, scale: 1 },
           held: { opacity: 0, scale: 0.5 },

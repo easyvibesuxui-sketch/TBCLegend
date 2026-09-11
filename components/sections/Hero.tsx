@@ -57,7 +57,7 @@ export default function Hero() {
             tone="night"
             scrub={scrub}
             labelAlign="bottom"
-            label="ღამის ცა მელნის ღრუბლებით; ქვემოთ სამეფო და საკურთხეველზე მთელი საგანძური"
+            label="ღამის ცა მელნის ღრუბლებით; ქვემოთ სამეფო და საჭურჭლეში მთელი საგანძური"
           />
         </div>
 

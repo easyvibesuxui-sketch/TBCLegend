@@ -2,6 +2,7 @@
 
 import { TRIALS } from "@/lib/trials";
 import { PLATES } from "@/lib/plates";
+import { asset } from "@/lib/asset";
 import { LEGEND_CHAPTERS } from "@/lib/houses";
 import ArtPlate from "@/components/ui/ArtPlate";
 import Caption from "@/components/ui/Caption";
@@ -39,6 +40,10 @@ export default function Marathon() {
                 <PanelFlight from={14} scale={0.8}>
                   <Panel className="aspect-[4/3] w-full bg-paper-bright">
                     {/*
+                      asset() is not optional here: basePath does not rewrite a
+                      raw src, so under the project-Pages deploy this resolved
+                      to the domain root and 404'd while working locally.
+
                       The coin carries alpha rather than sitting in a plate, so
                       it reads as an object lying on the page instead of a
                       picture of one — the same treatment the gesture layers
@@ -46,7 +51,7 @@ export default function Marathon() {
                     */}
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={PLATES.firstCoin.image}
+                      src={asset(PLATES.firstCoin.image)}
                       alt={PLATES.firstCoin.label}
                       loading="lazy"
                       decoding="async"

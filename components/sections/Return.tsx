@@ -11,7 +11,7 @@ import PanelFlight from "@/components/ui/PanelFlight";
 import { EASE } from "@/lib/motion";
 
 /**
- * Beat 19: back at the altar, with what the road actually yielded.
+ * Beat 19: back at the treasury, with what the road actually yielded.
  *
  * The same stone as beat 06, and still empty — the treasure does not come
  * back, which is the one promise the story refuses to make. What the reader
@@ -44,7 +44,7 @@ export default function Return() {
 
           <div className="sm:col-span-5">
             <p className="font-body text-[15px] leading-[1.8] text-ink/85 sm:text-base">
-              საკურთხევლისკენ დაბრუნდი და რაც შეაგროვე, ქვაზე დააწყვე.
+              საჭურჭლისკენ დაბრუნდი და რაც შეაგროვე, ქვაზე დააწყვე.
             </p>
             <p className="mt-5 font-body text-[15px] leading-[1.8] text-ink/85 sm:text-base">
               გროვა პატარაა. საგანძური არ აღდგება.

@@ -104,12 +104,20 @@ export default function Legend() {
               </Caption>
             </div>
 
-            {/* The cloak is the reader's colour — the first place the choice shows */}
+            {/*
+              This line used to read "the cloak on the wall is your colour",
+              which the picture flatly contradicts: the cloak is grey. The
+              shotlist called for four coloured plates, or one neutral plate
+              plus a tint layer, and neither was drawn — so the copy was
+              describing art that does not exist. It now says what the plate
+              actually shows, and the house colour is carried by the type.
+              Restore the original line only alongside the coloured plate.
+            */}
             <p
               className="label mt-16 sm:mt-28"
               style={{ color: "var(--house)" }}
             >
-              ლაბადა კედელზე შენი ფერისაა
+              ლაბადა კედელზე გელოდება
             </p>
           </div>
 
@@ -179,8 +187,9 @@ export default function Legend() {
             <ArtPlate {...PLATES.gate} tone="night" />
             <div className="pointer-events-none absolute inset-0 flex items-end justify-between p-6 sm:p-12">
               <span className="label text-paper/70">05 · გამგზავრება</span>
+              {/* Same correction as beat 02: the cloak is not tinted yet. */}
               <span className="label" style={{ color: "var(--house-night, #E35249)" }}>
-                მარტო — შენი ფერის ლაბადით
+                მარტო, ღამით
               </span>
             </div>
           </div>
@@ -189,11 +198,11 @@ export default function Legend() {
           </div>
         </div>
 
-        {/* ─────────── 06 · საკურთხეველი — the gesture ─────────── */}
+        {/* ─────────── 06 · საჭურჭლე — the gesture ─────────── */}
         <div className="grain-paper relative bg-paper px-4 py-24 sm:px-8 sm:py-36">
           <div className="relative z-10 mx-auto w-full max-w-5xl">
             <span className="label mb-10 block text-ink/45">
-              06 · საკურთხეველი
+              06 · საჭურჭლე
             </span>
             <GesturePlate />
           </div>
@@ -293,8 +302,8 @@ export default function Legend() {
               <p className="font-body text-[15px] leading-[1.8] text-ink/85 sm:col-span-6 sm:text-base">
                 და ოთხივემ ერთი და იგივე იფიქრა — მაშინ ვინ?
                 <span className="mt-4 block" style={{ color: "var(--house)" }}>
-                  აქედან წასვლა შენ არავის დაუვალებია. უბრალოდ, დარჩენას აზრი
-                  აღარ ჰქონდა.
+                  წასვლა არავის მოუთხოვია. უბრალოდ, დარჩენას აზრი აღარ
+                  ჰქონდა.
                 </span>
               </p>
             </div>

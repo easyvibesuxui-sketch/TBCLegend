@@ -47,7 +47,7 @@ export const PLATES = {
   medallion: still("05-medallion-empty", "ცარიელი მედალიონი — დასარტყმელად მზად"),
 
   // ── the story ──────────────────────────────────────────────────────────
-  altar: still("08-altar-treasure", "უძველესი საგანძური საკურთხეველზე"),
+  altar: still("08-altar-treasure", "უძველესი საგანძური საჭურჭლეში"),
   hall: still("06-hall-cloak", "საგვარეულო დარბაზი და სამგზავრო მოსასხამი"),
   shattering: clip("12-shattering", "დამსხვრევა — მონეტები იფანტება"),
   banners: still("16-four-banners", "ოთხი დროშა ერთ ჰორიზონტზე"),
@@ -80,7 +80,7 @@ export const PLATES = {
   winter: still("26-winter", "თოვლიანი გზა, შორეული შუქი"),
   purse: still("27-purse", "მიტოვებული ქისა ბილიკზე"),
   well: still("28-well", "ჭის პირი — ოთხი ანარეკლი წყალში"),
-  ret: still("29-return", "ცარიელი საკურთხეველი, მონეტების გროვა"),
+  ret: still("29-return", "ცარიელი საჭურჭლე, მონეტების გროვა"),
 
   // ── the doubt, three insets ────────────────────────────────────────────
   accident: still("13-inset-accident", "გატეხილი რკინის ღერო"),
