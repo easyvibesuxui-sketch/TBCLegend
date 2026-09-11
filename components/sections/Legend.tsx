@@ -105,19 +105,16 @@ export default function Legend() {
             </div>
 
             {/*
-              This line used to read "the cloak on the wall is your colour",
-              which the picture flatly contradicts: the cloak is grey. The
-              shotlist called for four coloured plates, or one neutral plate
-              plus a tint layer, and neither was drawn — so the copy was
-              describing art that does not exist. It now says what the plate
-              actually shows, and the house colour is carried by the type.
-              Restore the original line only alongside the coloured plate.
+              True again. This line claimed the cloak was the reader's colour
+              while the plate showed a grey one, so it was briefly reworded;
+              the plate now carries a spot-colour layer keyed to the house and
+              the original sentence describes what is actually on screen.
             */}
             <p
               className="label mt-16 sm:mt-28"
               style={{ color: "var(--house)" }}
             >
-              ლაბადა კედელზე გელოდება
+              ლაბადა კედელზე შენი ფერისაა
             </p>
           </div>
 

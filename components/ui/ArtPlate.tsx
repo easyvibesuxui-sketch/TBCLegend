@@ -35,6 +35,7 @@ export default function ArtPlate({
   srcWebm,
   image,
   poster,
+  tintMask,
   scrub,
   labelAlign = "center",
   className = "",
@@ -47,6 +48,14 @@ export default function ArtPlate({
   srcWebm?: string;
   /** Still plate, for the beats the panel flight already animates */
   image?: string;
+  /**
+   * A silhouette whose alpha marks the one region of the plate that wears the
+   * reader's house colour — see scripts/make-cloak-mask.py. Rendered as a
+   * spot-colour layer in multiply, which is how a second plate behaves in
+   * print: the black linework stays black and only the paper beneath it takes
+   * the ink.
+   */
+  tintMask?: string;
   poster?: string;
   /** Live 0 → 1 playback position, written outside React */
   scrub?: React.MutableRefObject<number>;
@@ -75,6 +84,7 @@ export default function ArtPlate({
   const webm = asset(srcWebm);
   const still = asset(poster);
   const plate = asset(image);
+  const tint = asset(tintMask);
 
   // A new source deserves a fresh attempt.
   useEffect(() => setFailed(false), [src, srcWebm]);
@@ -142,7 +152,12 @@ export default function ArtPlate({
 
   return (
     <div
-      className={`relative h-full w-full overflow-hidden ${className}`}
+      /*
+        `isolate` gives the tint layer below a stacking context of its own.
+        Without it a multiply blend reaches past the plate and darkens
+        whatever the section is standing on.
+      */
+      className={`relative isolate h-full w-full overflow-hidden ${className}`}
       style={{ background: t.bg }}
       role="img"
       aria-label={label}
@@ -214,6 +229,36 @@ export default function ArtPlate({
             </span>
           </div>
         </>
+      )}
+
+      {/*
+        The spot-colour plate. It rides over the artwork rather than being
+        baked into it, so one mask serves all four houses and follows any
+        later change to a house's accent for free — the alternative the
+        shotlist offered was drawing this plate four times.
+
+        `cover`/`center` on the mask because the artwork underneath is
+        `object-cover` with the default centre origin; any other pairing
+        slides the silhouette off the thing it is meant to be tracing. It is
+        held back until the still is actually showing, so it cannot land on
+        the hatched stand-in and colour a shape that is not there.
+      */}
+      {tint && showStill && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 mix-blend-multiply"
+          style={{
+            background: "var(--house, #CF2A20)",
+            maskImage: `url(${tint})`,
+            WebkitMaskImage: `url(${tint})`,
+            maskSize: "cover",
+            WebkitMaskSize: "cover",
+            maskPosition: "center",
+            WebkitMaskPosition: "center",
+            maskRepeat: "no-repeat",
+            WebkitMaskRepeat: "no-repeat",
+          }}
+        />
       )}
     </div>
   );

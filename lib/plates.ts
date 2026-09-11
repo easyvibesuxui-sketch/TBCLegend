@@ -15,6 +15,8 @@ export type Plate = {
   label: string;
   /** Still plate */
   image?: string;
+  /** Silhouette marking the region that wears the reader's house colour */
+  tintMask?: string;
   /** Clip, for the five beats where the drawing itself has to move */
   src?: string;
   srcWebm?: string;
@@ -48,7 +50,12 @@ export const PLATES = {
 
   // ── the story ──────────────────────────────────────────────────────────
   altar: still("08-altar-treasure", "უძველესი საგანძური საჭურჭლეში"),
-  hall: still("06-hall-cloak", "საგვარეულო დარბაზი და სამგზავრო მოსასხამი"),
+  // The one plate with a spot colour: the cloak takes the reader's house.
+  // See scripts/make-cloak-mask.py for how the silhouette was built.
+  hall: {
+    ...still("06-hall-cloak", "საგვარეულო დარბაზი და სამგზავრო მოსასხამი"),
+    tintMask: "/media/06-hall-cloak-mask.png",
+  },
   shattering: clip("12-shattering", "დამსხვრევა — მონეტები იფანტება"),
   banners: still("16-four-banners", "ოთხი დროშა ერთ ჰორიზონტზე"),
   gate: clip("09-gate-night", "გამგზავრება — ჭიშკარი ღამით"),
