@@ -144,13 +144,41 @@ export default function Legend() {
       </PanelTakeover>
 
       <TiltFrame>
-        {/* ─────────── 04 · გამგზავრება ─────────── */}
+        {/* ─────────── 04 · შიკრიკი ─────────── */}
+        {/*
+          A summons nobody sent. The seal is the reader's own house; the hand
+          is not. Beat 19 pays this off — the letter was written by the
+          treasure itself, as the crack began.
+        */}
+        <div className="grain-paper relative bg-paper px-4 py-24 sm:px-8 sm:py-32">
+          <div className="relative z-10 mx-auto grid w-full max-w-5xl items-center gap-10 sm:grid-cols-12 sm:gap-8">
+            <div className="sm:col-span-7">
+              <PanelFlight from={16} scale={0.78}>
+                <Panel className="aspect-[3/2] w-full">
+                  <ArtPlate {...PLATES.messenger} tone="night" />
+                </Panel>
+              </PanelFlight>
+            </div>
+            <div className="sm:col-span-5">
+              <span className="label mb-6 block text-ink/45">04 · შიკრიკი</span>
+              <p className="font-body text-[15px] leading-[1.8] text-ink/85 sm:text-base">
+                შუაღამისას კარზე დააკაკუნეს. კაკუნი ერთხელ გაისმა. კარს მიღმა
+                არავინ იდგა — მხოლოდ წერილი, შენი საგვარეულოს ბეჭდით დალუქული.
+              </p>
+              <p className="mt-6 font-display text-[clamp(1.1rem,2.2vw,1.6rem)] leading-[1.3]" style={{ color: "var(--house)" }}>
+                ბეჭედი შენია. ხელწერა — არა.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ─────────── 05 · გამგზავრება ─────────── */}
         {/* No new prose: the clip is the beat. */}
         <div className="grain-paper grain-flood relative overflow-hidden bg-ink-night">
           <div className="relative h-[62svh] min-h-[380px] w-full sm:h-[78svh]">
             <ArtPlate {...PLATES.gate} tone="night" />
             <div className="pointer-events-none absolute inset-0 flex items-end justify-between p-6 sm:p-12">
-              <span className="label text-paper/70">04 · გამგზავრება</span>
+              <span className="label text-paper/70">05 · გამგზავრება</span>
               <span className="label" style={{ color: "var(--house)" }}>
                 მარტო — შენი ფერის ლაბადით
               </span>
@@ -161,11 +189,11 @@ export default function Legend() {
           </div>
         </div>
 
-        {/* ─────────── 05 · საკურთხეველი — the gesture ─────────── */}
+        {/* ─────────── 06 · საკურთხეველი — the gesture ─────────── */}
         <div className="grain-paper relative bg-paper px-4 py-24 sm:px-8 sm:py-36">
           <div className="relative z-10 mx-auto w-full max-w-5xl">
             <span className="label mb-10 block text-ink/45">
-              05 · საკურთხეველი
+              06 · საკურთხეველი
             </span>
             <GesturePlate />
           </div>
@@ -175,7 +203,7 @@ export default function Legend() {
         </div>
       </TiltFrame>
 
-      {/* ─────────── 06 · ნაპრალი + 07 · ეჭვი — takeover ─────────── */}
+      {/* ─────────── 07 · ნაპრალი + 08 · ეჭვი — takeover ─────────── */}
       <PanelTakeover
         data-flood
         ground="#6E2020"
@@ -186,7 +214,7 @@ export default function Legend() {
             node: (
               <>
                 <span className="label mb-4 block text-paper/70">
-                  06 · ნაპრალი
+                  07 · ნაპრალი
                 </span>
                 <Caption>{two.captions[0]}</Caption>
               </>
@@ -240,24 +268,48 @@ export default function Legend() {
       </PanelTakeover>
 
       <TiltFrame>
-        {/* ─────────── 08 · ოთხი ჰორიზონტი ─────────── */}
-        <div className="grain-paper relative bg-paper px-4 py-24 sm:px-8 sm:py-36">
-          <div className="relative z-10 mx-auto grid w-full max-w-6xl gap-10 sm:grid-cols-12 sm:gap-8">
-            <div className="sm:col-span-5 sm:pt-16">
-              <span className="label mb-8 block text-ink/45">
-                08 · ოთხი ჰორიზონტი
-              </span>
-              <Caption>{three.captions[0]}</Caption>
-              <p className="label mt-8 sm:ml-10" style={{ color: "var(--house)" }}>
-                ერთი მათგანი შენია
-              </p>
-            </div>
-
-            <PanelFlight from={10} scale={0.8} className="sm:col-span-7 sm:-mr-8">
-              <Panel className="aspect-[21/9] w-full">
-                <ArtPlate {...three.plate} tone="ochre" />
+        {/* ─────────── 09 · განაჩენი ─────────── */}
+        {/*
+          Every house says the same thing and every house wonders the same
+          thing. Nobody orders the traveller out; staying simply stops making
+          sense, which is a better reason to leave than an errand.
+        */}
+        <div className="grain-paper relative bg-paper px-4 py-24 sm:px-8 sm:py-32">
+          <div className="relative z-10 mx-auto w-full max-w-5xl">
+            <span className="label mb-8 block text-ink/45">09 · განაჩენი</span>
+            <PanelFlight from={12} scale={0.82}>
+              <Panel className="aspect-[3/2] w-full">
+                <ArtPlate {...PLATES.verdict} tone="paper" />
               </Panel>
             </PanelFlight>
+
+            <div className="mt-10 grid gap-8 sm:grid-cols-12">
+              <p className="font-body text-[15px] leading-[1.8] text-ink/85 sm:col-span-6 sm:text-base">
+                დილით ოთხივე სახლი შეიკრიბა. ოთხივემ ერთი და იგივე თქვა:
+                <span className="mt-4 block font-display text-[clamp(1.3rem,3vw,2rem)] leading-none text-ink">
+                  „ჩვენ არა."
+                </span>
+              </p>
+              <p className="font-body text-[15px] leading-[1.8] text-ink/85 sm:col-span-6 sm:text-base">
+                და ოთხივემ ერთი და იგივე იფიქრა — მაშინ ვინ?
+                <span className="mt-4 block" style={{ color: "var(--house)" }}>
+                  აქედან წასვლა შენ არავის დაუვალებია. უბრალოდ, დარჩენას აზრი
+                  აღარ ჰქონდა.
+                </span>
+              </p>
+            </div>
+          </div>
+          <div className="absolute inset-x-0 bottom-0 z-20 h-16 sm:h-20">
+            <TornEdge color="#F2F1EF" side="bottom" seed={37} />
+          </div>
+        </div>
+      </TiltFrame>
+
+      <TiltFrame>
+        {/* ─────────── the marathon opens ─────────── */}
+        <div className="grain-paper relative bg-paper px-4 pb-8 pt-20 sm:px-8 sm:pb-10 sm:pt-28">
+          <div className="relative z-10 mx-auto w-full max-w-5xl">
+            <Caption>{three.captions[0]}</Caption>
           </div>
         </div>
       </TiltFrame>

@@ -67,6 +67,21 @@ export const PLATES = {
   hand: { label: "ხელი იწვდება", image: "/media/10-hand-reaching.webp" },
   seal: { label: "დნობილი ოქროს ბეჭედი — იხევს", image: "/media/11-seal-liquid.webp" },
 
+  // ── the road: beats 21 to 29 of STORY-V2.md ────────────────────────────
+  messenger: still("21-messenger", "წერილი კარის ქვეშ, ცვილის ბეჭდით"),
+  verdict: still("22-verdict", "ოთხი ბეჭედი საბჭოს მაგიდაზე"),
+  // A layer like the hand and seal — drawn on bare paper, carries real alpha.
+  firstCoin: {
+    label: "პირველი მონეტა გზის მტვერში",
+    image: "/media/23-first-coin.webp",
+  },
+  bridge: still("24-bridge", "ქვის ხიდი და ბაჟის ჯიხური"),
+  market: still("25-market", "ბაზრის მაგიდა, გაშლილი რუკა"),
+  winter: still("26-winter", "თოვლიანი გზა, შორეული შუქი"),
+  purse: still("27-purse", "მიტოვებული ქისა ბილიკზე"),
+  well: still("28-well", "ჭის პირი — ოთხი ანარეკლი წყალში"),
+  ret: still("29-return", "ცარიელი საკურთხეველი, მონეტების გროვა"),
+
   // ── the doubt, three insets ────────────────────────────────────────────
   accident: still("13-inset-accident", "გატეხილი რკინის ღერო"),
   betrayal: still("14-inset-betrayal", "ჩრდილი დახურულ კარზე"),

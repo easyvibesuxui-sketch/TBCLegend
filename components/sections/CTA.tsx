@@ -6,6 +6,7 @@ import TornEdge from "@/components/ui/TornEdge";
 import { EASE } from "@/lib/motion";
 import { HOUSES } from "@/lib/houses";
 import { useHouse } from "@/components/HouseProvider";
+import Reckoning from "@/components/ui/Reckoning";
 
 /** Illustrative standings only — wire to the real leaderboard API later. */
 const STANDINGS = [82, 74, 66, 58];
@@ -119,6 +120,13 @@ export default function CTA() {
         <p className="mt-4 text-center font-body text-[10px] uppercase tracking-label opacity-40">
           [Placeholder data — ლიდერბორდი რეალურ დროში განახლდება]
         </p>
+
+        {/*
+          The evidence for the question above it: what the reader actually did
+          on the road, set against the house they picked on instinct. Renders
+          nothing until both exist.
+        */}
+        <Reckoning />
 
         <div className="mt-16 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-5">
           <InkButton href="#leaderboard" variant="outline">
