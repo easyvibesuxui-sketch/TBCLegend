@@ -170,11 +170,45 @@ export default function ArtPlate({
           playsInline
           loop={!scrub}
           preload="auto"
-          onError={() => setFailed(true)}
+          /*
+            Only a failure of the media element itself counts. When a <source>
+            cannot be decoded the browser fires `error` on that <source> and
+            moves on to the next one, which is ordinary fallback, not a dead
+            plate — and React delivers it here all the same. Taking it at face
+            value meant a browser missing the first-listed codec lost *every*
+            clip on the page: measured, seven videos became seven stills
+            within 400ms in a Chromium without H.264.
+
+            On a <source> error the target is that <source>; when the element
+            itself gives up, target and currentTarget are the same node. The
+            poll below still catches genuine exhaustion.
+          */
+          onError={(e) => {
+            if (e.target === e.currentTarget) setFailed(true);
+          }}
           className="h-full w-full object-cover"
         >
-          {webm && <source src={webm} type="video/webm" />}
+          {/*
+            MP4 first, WebM second — the reverse of how this started, and the
+            order the encodes actually justify. A <source> list is a
+            preference order, so whichever comes first is what nearly every
+            reader downloads.
+
+            Measured on the well clip against its master: x264 at crf 27 is
+            1.58 MB at SSIM 0.9675, while libvpx-vp9 at crf 40 is 2.24 MB at
+            SSIM 0.9412 — larger *and* worse. Pushing VP9 down to 1.47 MB
+            costs another 0.037 SSIM. Dense engraving is high-frequency
+            detail across the whole frame, which is the case x264 handles
+            well and VP9 does not, and five of the six clips in this set show
+            the same inversion.
+
+            The WebM still ships: it is the royalty-free path for a build
+            without H.264, where MP4-only silently degrades to the poster.
+            That is not hypothetical — it is what the headless Chromium these
+            plates are tested in does.
+          */}
           <source src={mp4} type="video/mp4" />
+          {webm && <source src={webm} type="video/webm" />}
         </video>
       ) : showStill ? (
         /*

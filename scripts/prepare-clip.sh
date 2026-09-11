@@ -46,5 +46,32 @@ echo "→ $NAME  (full width, cropped to ${CROP_H:-90% of input height})"
 du -h "$OUT_DIR/$NAME".{mp4,webm,jpg} |
   awk '{ n = $2; sub(/.*\//, "", n); printf "   %-6s %s\n", $1, n }'
 echo
+
+# VP9 usually loses on this material, and that is expected rather than a
+# fault to fix. The plates are dense engraving -- high-frequency detail across
+# the whole frame -- which x264 handles well and libvpx does not: measured on
+# the well clip, x264 crf 27 came out 1.58 MB at SSIM 0.9675 against VP9 crf
+# 40 at 2.24 MB and SSIM 0.9412. So the MP4 is the one ArtPlate offers first,
+# and the WebM ships as the fallback for a build without H.264. A larger WebM
+# is therefore fine; it is rarely the file anyone downloads.
+MP4_B=$(stat -c%s "$OUT_DIR/$NAME.mp4")
+WEBM_B=$(stat -c%s "$OUT_DIR/$NAME.webm")
+if [ "$WEBM_B" -ge "$MP4_B" ]; then
+  echo "   (WebM is larger than the MP4, $((WEBM_B/1024))K vs $((MP4_B/1024))K -- expected here; the MP4 is served first.)"
+  echo
+fi
 echo "Now point the plate at it:"
-echo "   src=\"/media/$NAME.mp4\" srcWebm=\"/media/$NAME.webm\" poster=\"/media/$NAME.jpg\""
+echo "   clip(\"$NAME\", \"...\")"rst, so a larger one means nearly every reader downloads the bigger file
+# for nothing. Check rather than assume.
+MP4_B=$(stat -c%s "$OUT_DIR/$NAME.mp4")
+WEBM_B=$(stat -c%s "$OUT_DIR/$NAME.webm")
+if [ "$WEBM_B" -ge "$MP4_B" ]; then
+  echo "   ! the WebM is larger than the MP4 ($((WEBM_B/1024))K vs $((MP4_B/1024))K)."
+  echo "     Delete it and register the plate with { webm: false }:"
+  echo
+  echo "     rm public/media/$NAME.webm"
+  echo "     clip(\"$NAME\", \"...\", { webm: false })"
+else
+  echo "Now point the plate at it:"
+  echo "   clip(\"$NAME\", \"...\")"
+fi

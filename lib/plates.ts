@@ -23,7 +23,13 @@ export type Plate = {
   poster?: string;
 };
 
-/** A clip plus its poster and WebM twin, from one base name. */
+/**
+ * A clip plus its poster and WebM twin, from one base name.
+ *
+ * Both encodes ship, but the MP4 is the one offered first — see the source
+ * order in ArtPlate for the measurements behind that. The WebM exists for
+ * builds without H.264, not to save bytes; on this material it saves none.
+ */
 const clip = (name: string, label: string): Plate => ({
   label,
   src: `/media/${name}.mp4`,
@@ -86,7 +92,7 @@ export const PLATES = {
   market: still("25-market", "ბაზრის მაგიდა, გაშლილი რუკა"),
   winter: still("26-winter", "თოვლიანი გზა, შორეული შუქი"),
   purse: still("27-purse", "მიტოვებული ქისა ბილიკზე"),
-  well: still("28-well", "ჭის პირი — ოთხი ანარეკლი წყალში"),
+  well: clip("28-well", "ჭის პირი — ოთხი ანარეკლი წყალში"),
   ret: still("29-return", "ცარიელი საჭურჭლე, მონეტების გროვა"),
 
   // ── the doubt, three insets ────────────────────────────────────────────
