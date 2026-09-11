@@ -117,7 +117,7 @@ export default function Marathon() {
             node: (
               <p
                 className="font-display text-[clamp(1.1rem,2.4vw,1.8rem)] leading-[1.25]"
-                style={{ color: "var(--house)" }}
+                style={{ color: "var(--house-night, #E35249)" }}
               >
                 სხვა სახლი მტერი
                 <br />

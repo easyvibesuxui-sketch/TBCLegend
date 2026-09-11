@@ -10,6 +10,8 @@ import Hero from "@/components/sections/Hero";
 import Legend from "@/components/sections/Legend";
 import Marathon from "@/components/sections/Marathon";
 import Houses from "@/components/sections/Houses";
+import Price from "@/components/sections/Price";
+import Return from "@/components/sections/Return";
 import Choose from "@/components/sections/Choose";
 import CTA from "@/components/sections/CTA";
 
@@ -47,9 +49,25 @@ export default function Page() {
               <Legend />
               {/* The road: four trials the reader steers. See STORY-V2.md. */}
               <Marathon />
+              {/* Beat 16: the four houses at their best. */}
               <TiltFrame>
                 <Houses />
               </TiltFrame>
+              {/* Beat 17: the same four, and what each one costs. */}
+              <TiltFrame>
+                <Price />
+              </TiltFrame>
+              {/* Beat 19: the altar again, and the size of the road walked. */}
+              <TiltFrame>
+                <Return />
+              </TiltFrame>
+              {/*
+                Beats 18 and 20 share one plate. The story lists them apart,
+                with the return between, but the standings and the closing
+                question are the same red flood — splitting them to honour the
+                numbering would cost the close its weight, so 19 sits in front
+                of the pair instead of inside it.
+              */}
               <TiltFrame>
                 <CTA />
               </TiltFrame>

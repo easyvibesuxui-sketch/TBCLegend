@@ -5,6 +5,13 @@ export type House = {
   name: string;
   latin: string;
   motto: string;
+  /**
+   * What the motto costs when followed all the way — beat 17. Every house
+   * gets one, because the campaign only stays honest if none of the four is
+   * the right answer; a house with a virtue and no price would be exactly
+   * that.
+   */
+  price: string;
   description: string;
   /** Spot colour this house's panel commits to */
   tone: "paper" | "ochre" | "oxblood" | "red" | "night";
@@ -20,6 +27,15 @@ export type House = {
    * house states its own rather than leaving it to be guessed.
    */
   onAccent: string;
+  /**
+   * The accent again, for the page's night grounds (#1C1C1C — the gate, the
+   * well, the price). Two of the four accents are dark by design: Anabaridze
+   * is #2A2A2A, which measures 1.19:1 against that ground, and Baratishvili's
+   * oxblood 1.53:1 — both effectively invisible. These are the same marks
+   * lifted until they clear 4.5:1, so a house reads on black without the page
+   * having to pick a different colour and call it the same house.
+   */
+  accentOnDark: string;
   plate: Plate;
   /** The seal, shown in the choice and struck into the medallion */
   crest: Plate;
@@ -31,10 +47,12 @@ export const HOUSES: House[] = [
     name: "ხარჯიანი",
     latin: "HOUSE KHARJIANI",
     motto: "ცხოვრება ერთხელ გვეძლევა",
+    price: "და ზამთარი ყოველწლიურად მოდის",
     description:
       "საგვარეულო, რომელსაც უყვარს მოქმედება, ცხოვრებით ტკბობა და ენერგიული აქტივობა. ისინი არ ერიდებიან რესურსების გაცემას მიზნების მისაღწევად.",
     tone: "red",
     accent: "#CF2A20",
+    accentOnDark: "#E35249",
     plate: PLATES.kharjiani,
     onAccent: "#0E0E0E",
     crest: PLATES.crestKharjiani,
@@ -44,10 +62,12 @@ export const HOUSES: House[] = [
     name: "ანაბარიძე",
     latin: "HOUSE ANABARIDZE",
     motto: "მომავალი იგება დღეს",
+    price: "ზოგჯერ იმდენ ხანს იგება, რომ დღე აღარ რჩება",
     description:
       "წინდახედული, სტრატეგიული და დამზოგველი სახლი. მათი დევიზია რესურსების სწორად გადანაწილება და მომავლის დაზღვევა.",
     tone: "night",
     accent: "#2A2A2A",
+    accentOnDark: "#F2F1EF",
     plate: PLATES.anabaridze,
     onAccent: "#F2F1EF",
     crest: PLATES.crestAnabaridze,
@@ -57,10 +77,12 @@ export const HOUSES: House[] = [
     name: "დოვლათია",
     latin: "HOUSE DOVLATIA",
     motto: "იღბალი მამაცებს ერგებათ",
+    price: "მამაცებს — და მათაც, ვისაც ხელახლა სცადეს",
     description:
       "საგვარეულო, რომელიც ორიენტირებულია სიმდიდრის მოზიდვაზე, იღბალსა და დიდებაზე.",
     tone: "ochre",
     accent: "#B08D57",
+    accentOnDark: "#B08D57",
     plate: PLATES.dovlatia,
     onAccent: "#0E0E0E",
     crest: PLATES.crestDovlatia,
@@ -70,10 +92,12 @@ export const HOUSES: House[] = [
     name: "ბარათიშვილი",
     latin: "HOUSE BARATISHVILI",
     motto: "წესრიგი ძველი დიდებიდან",
+    price: "ძველი წესრიგი ახალ გზას ვერ ხედავს",
     description:
       "ტრადიციული, მტკიცე და გავლენიანი საგვარეულო, რომელიც სამეფოს ძველ დიდებასა და წესრიგს იცავს.",
     tone: "oxblood",
     accent: "#6E2020",
+    accentOnDark: "#C46B5E",
     plate: PLATES.baratishvili,
     onAccent: "#F2F1EF",
     crest: PLATES.crestBaratishvili,

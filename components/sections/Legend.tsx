@@ -179,7 +179,7 @@ export default function Legend() {
             <ArtPlate {...PLATES.gate} tone="night" />
             <div className="pointer-events-none absolute inset-0 flex items-end justify-between p-6 sm:p-12">
               <span className="label text-paper/70">05 · გამგზავრება</span>
-              <span className="label" style={{ color: "var(--house)" }}>
+              <span className="label" style={{ color: "var(--house-night, #E35249)" }}>
                 მარტო — შენი ფერის ლაბადით
               </span>
             </div>

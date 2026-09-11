@@ -15,6 +15,8 @@ const STORAGE_KEY = "tbc-legend:house";
 /** The signal red the page wears before a house has been chosen, and the ink that reads on it. */
 const UNCHOSEN = "#CF2A20";
 const UNCHOSEN_INK = "#0E0E0E";
+/** That same signal red, lifted to read on the night grounds (4.52:1). */
+const UNCHOSEN_NIGHT = "#E35249";
 
 type Ctx = {
   house: House | null;
@@ -68,6 +70,10 @@ export default function HouseProvider({
     const root = document.documentElement;
     root.style.setProperty("--house", house?.accent ?? UNCHOSEN);
     root.style.setProperty("--house-ink", house?.onAccent ?? UNCHOSEN_INK);
+    // The same mark, lifted to read on the page's night grounds. Anything
+    // drawn on #1C1C1C must use this rather than --house: two of the four
+    // accents are dark enough to vanish there.
+    root.style.setProperty("--house-night", house?.accentOnDark ?? UNCHOSEN_NIGHT);
     if (house) root.dataset.house = house.id;
     else delete root.dataset.house;
   }, [house]);
