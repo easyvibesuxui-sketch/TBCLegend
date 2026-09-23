@@ -1,8 +1,9 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import type { Trial } from "@/lib/trials";
+import type { SpokenTrial } from "@/lib/trials";
 import { useLedger } from "@/components/LedgerProvider";
+import { useI18n } from "@/components/LocaleProvider";
 import ArtPlate from "@/components/ui/ArtPlate";
 import Panel from "@/components/ui/Panel";
 import PanelFlight from "@/components/ui/PanelFlight";
@@ -22,7 +23,8 @@ import { EASE } from "@/lib/motion";
  * instead of answering honestly — which would ruin the one measurement the
  * ending depends on.
  */
-export default function TrialPanel({ trial }: { trial: Trial }) {
+export default function TrialPanel({ trial }: { trial: SpokenTrial }) {
+  const { t } = useI18n();
   const { ledger, record, unrecord } = useLedger();
   const taken = ledger[trial.id];
   const chosen = trial.options.find((o) => o.house === taken) ?? null;
@@ -111,7 +113,7 @@ export default function TrialPanel({ trial }: { trial: Trial }) {
                   onClick={() => unrecord(trial.id)}
                   className="label mt-6 block text-ink/35 underline-offset-4 transition-colors hover:text-ink/70 hover:underline"
                 >
-                  სხვა გზა ამირჩევია
+                  {t.trialPanel.otherWay}
                 </button>
               </motion.div>
             )}

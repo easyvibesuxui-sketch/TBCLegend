@@ -7,12 +7,14 @@ import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
 import ArtPlate from "@/components/ui/ArtPlate";
 import TiltFrame from "@/components/ui/TiltFrame";
 import { EASE } from "@/lib/motion";
+import { useI18n } from "@/components/LocaleProvider";
 
 /**
  * The cover of the book: a flooded night plate, the title struck over it, and
  * the paper tearing in at the bottom to introduce the story.
  */
 export default function Hero() {
+  const { t } = useI18n();
   const sectionRef = useRef<HTMLElement>(null);
   const scrub = useRef(0);
 
@@ -57,7 +59,7 @@ export default function Hero() {
             tone="night"
             scrub={scrub}
             labelAlign="bottom"
-            label="ღამის ცა მელნის ღრუბლებით; ქვემოთ სამეფო და საჭურჭლეში მთელი საგანძური"
+            label="heroNight"
           />
         </div>
 
@@ -86,7 +88,7 @@ export default function Hero() {
             className="label mb-8 text-paper sm:mb-10"
             style={{ textShadow: "0 2px 18px rgba(14,14,14,0.9)" }}
           >
-            TBC · ოთხი სახლის ამბავი
+            {t.hero.eyebrow}
           </motion.p>
 
           <motion.h1
@@ -97,12 +99,12 @@ export default function Hero() {
             className="text-center font-display text-[clamp(2.9rem,10.5vw,9.5rem)] leading-[0.86] text-paper"
             style={{ textShadow: "0 4px 40px rgba(14,14,14,0.75)" }}
           >
-            <span className="sr-only">საგანძურის მარათონი</span>
+            <span className="sr-only">{`${t.hero.title1} ${t.hero.title2}`}</span>
             <span aria-hidden className="block">
-              საგანძურის
+              {t.hero.title1}
             </span>
             <span aria-hidden className="block">
-              მარათონი
+              {t.hero.title2}
             </span>
           </motion.h1>
 
@@ -123,8 +125,7 @@ export default function Hero() {
                screen. Corner furniture has to sit further in than usual. */
             className="absolute bottom-10 left-10 max-w-[min(80vw,36rem)] border border-paper/20 bg-ink/80 px-3 py-2 font-body text-[10px] leading-relaxed text-paper/75 backdrop-blur-[2px] sm:bottom-12 sm:left-12 sm:text-[11px]"
           >
-            არაოფიციალური დიზაინის კონცეპტი · ორიგინალი კამპანია ეკუთვნის
-            თიბისი ბანკს —{" "}
+            {t.hero.note1}{" "}
             <a
               href="https://tbcbank.ge/ka/treasure-marathon"
               target="_blank"

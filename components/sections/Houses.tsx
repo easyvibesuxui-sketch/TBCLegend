@@ -4,7 +4,8 @@ import { useRef } from "react";
 import { motion } from "framer-motion";
 import { gsap } from "@/lib/gsap";
 import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
-import { HOUSES } from "@/lib/houses";
+import { useHouses } from "@/hooks/useContent";
+import { useI18n } from "@/components/LocaleProvider";
 import { useHouse } from "@/components/HouseProvider";
 import ArtPlate from "@/components/ui/ArtPlate";
 import Panel from "@/components/ui/Panel";
@@ -18,6 +19,8 @@ import { EASE } from "@/lib/motion";
  */
 export default function Houses() {
   const sectionRef = useRef<HTMLElement>(null);
+  const { t } = useI18n();
+  const HOUSES = useHouses();
   const { house: chosen } = useHouse();
 
   /*
@@ -27,7 +30,12 @@ export default function Houses() {
    * equal cards.
    */
   const ordered = chosen
-    ? [...HOUSES.filter((h) => h.id !== chosen.id), chosen]
+    ? [
+        ...HOUSES.filter((h) => h.id !== chosen.id),
+        // Pulled from the named list, not from useHouse(): that one carries no
+        // words, and mixing the two widens the array back to House[].
+        ...HOUSES.filter((h) => h.id === chosen.id),
+      ]
     : HOUSES;
 
   useIsomorphicLayoutEffect(() => {
@@ -69,13 +77,13 @@ export default function Houses() {
           transition={{ duration: 1, ease: EASE }}
           className="text-center font-display text-[clamp(2.2rem,7.5vw,6.5rem)] leading-[0.88] text-ink"
         >
-          <span className="block">ოთხი სახლი</span>
-          <span className="block">ერთი საგანძური</span>
+          <span className="block">{t.houses.heading1}</span>
+          <span className="block">{t.houses.heading2}</span>
         </motion.h2>
 
         <div className="mt-6 flex items-center justify-center gap-6">
           <span className="label" style={{ color: "var(--house, #CF2A20)" }}>
-            თითოეულს თავისი სიმართლე
+            {t.houses.tagline}
           </span>
         </div>
 
@@ -107,7 +115,7 @@ export default function Houses() {
                       {house.name}
                     </h3>
                     <p className="label mt-2 text-ink/45">
-                      {chosen?.id === house.id ? "შენი სახლი" : house.latin}
+                      {chosen?.id === house.id ? t.houses.yours : house.latin}
                     </p>
                   </div>
 

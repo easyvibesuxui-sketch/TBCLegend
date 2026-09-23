@@ -9,6 +9,7 @@ import Caption from "@/components/ui/Caption";
 import Panel from "@/components/ui/Panel";
 import PanelFlight from "@/components/ui/PanelFlight";
 import { EASE } from "@/lib/motion";
+import { useI18n } from "@/components/LocaleProvider";
 
 /**
  * Beat 19: back at the treasury, with what the road actually yielded.
@@ -25,6 +26,7 @@ import { EASE } from "@/lib/motion";
  * about money, which is what the treasure was the whole time.
  */
 export default function Return() {
+  const { t } = useI18n();
   const { answered } = useLedger();
 
   return (
@@ -33,7 +35,7 @@ export default function Return() {
       className="grain-paper relative bg-paper-dim px-4 py-28 sm:px-8 sm:py-40"
     >
       <div className="relative z-10 mx-auto w-full max-w-6xl">
-        <span className="label mb-10 block text-ink/45">19 · დაბრუნება</span>
+        <span className="label mb-10 block text-ink/45">{t.ret.beat}</span>
 
         <div className="grid items-center gap-12 sm:grid-cols-12 sm:gap-10">
           <PanelFlight from={13} scale={0.8} className="sm:col-span-7">
@@ -44,10 +46,10 @@ export default function Return() {
 
           <div className="sm:col-span-5">
             <p className="font-body text-[15px] leading-[1.8] text-ink/85 sm:text-base">
-              საჭურჭლისკენ დაბრუნდი და რაც შეაგროვე, ქვაზე დააწყვე.
+              {t.ret.l1}
             </p>
             <p className="mt-5 font-body text-[15px] leading-[1.8] text-ink/85 sm:text-base">
-              გროვა პატარაა. საგანძური არ აღდგება.
+              {t.ret.l2}
             </p>
 
             {/*
@@ -61,7 +63,7 @@ export default function Return() {
                 whileInView="lit"
                 viewport={{ once: true, amount: 0.8 }}
                 className="mt-10 flex gap-3"
-                aria-label={`შეგროვებული მონეტები: ${answered} ${TRIALS.length}-იდან`}
+                aria-label={t.ret.coins(answered, TRIALS.length)}
               >
                 {Array.from({ length: answered }).map((_, i) => (
                   <motion.li
@@ -83,9 +85,9 @@ export default function Return() {
             )}
 
             <p className="mt-10 font-display text-[clamp(1.2rem,2.8vw,2rem)] leading-[1.25] text-ink">
-              მაგრამ ეს გროვა{" "}
-              <span style={{ color: "var(--house, #CF2A20)" }}>შენი გზაა</span>{" "}
-              — თითო მონეტა ერთი გადაწყვეტილებაა, რომელიც შენ მიიღე.
+              {t.ret.pileA}
+              <span style={{ color: "var(--house, #CF2A20)" }}>{t.ret.pileEm}</span>
+              {t.ret.pileB}
             </p>
           </div>
         </div>
@@ -98,10 +100,10 @@ export default function Return() {
           transition={{ duration: 1, ease: EASE }}
           className="mx-auto mt-24 max-w-[24ch] text-center font-display text-[clamp(1.8rem,5.5vw,4rem)] leading-[0.98] text-ink sm:mt-32"
         >
-          საგანძური არასდროს ყოფილა ოქრო.
+          {t.ret.big1}
           <br />
           <span style={{ color: "var(--house, #CF2A20)" }}>
-            ის იყო წესი, რომლითაც ოქროს ეპყრობი.
+            {t.ret.big2}
           </span>
         </motion.p>
 
@@ -112,7 +114,7 @@ export default function Return() {
         */}
         <div className="mt-16 flex justify-center">
           <Caption delay={0.15}>
-            წერილი არავის გამოუგზავნია. ბეჭედი შენი იყო — ხელწერა კი არა.
+            {t.ret.caption}
           </Caption>
         </div>
       </div>

@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { HOUSES } from "@/lib/houses";
+import { useHouses } from "@/hooks/useContent";
+import { useI18n } from "@/components/LocaleProvider";
 import { useHouse } from "@/components/HouseProvider";
 import { EASE } from "@/lib/motion";
 
@@ -21,6 +22,8 @@ import { EASE } from "@/lib/motion";
  * fifth scene rather than the turn of the one before it.
  */
 export default function Price() {
+  const { t } = useI18n();
+  const HOUSES = useHouses();
   const { house: chosen } = useHouse();
 
   return (
@@ -30,7 +33,7 @@ export default function Price() {
       style={{ background: "#1C1C1C", color: "#F2F1EF" }}
     >
       <div className="relative z-10 mx-auto w-full max-w-5xl">
-        <span className="label mb-10 block text-paper/40">17 · ფასი</span>
+        <span className="label mb-10 block text-paper/40">{t.price.beat}</span>
 
         <motion.h2
           initial={{ opacity: 0, y: 22 }}
@@ -39,11 +42,11 @@ export default function Price() {
           transition={{ duration: 1, ease: EASE }}
           className="max-w-[20ch] font-display text-[clamp(1.9rem,5.5vw,4rem)] leading-[0.95]"
         >
-          ყველა სათნოებას აქვს ფასი
+          {t.price.heading}
         </motion.h2>
 
         <p className="mt-6 max-w-[46ch] font-body text-[15px] leading-[1.8] text-paper/60 sm:text-base">
-          როცა ბოლომდე მიჰყვები.
+          {t.price.sub}
         </p>
 
         <ul className="mt-16 sm:mt-24">
@@ -115,7 +118,7 @@ export default function Price() {
           className="mt-16 max-w-[44ch] font-display text-[clamp(1.1rem,2.4vw,1.7rem)] leading-[1.3]"
           style={{ color: "var(--house-night, #E35249)" }}
         >
-          არც ერთი მათგანი არ არის სწორი პასუხი. სწორედ ამიტომ არის არჩევანი.
+          {t.price.closing}
         </motion.p>
       </div>
     </section>

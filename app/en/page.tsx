@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Page from "@/components/Page";
 import { DICTS } from "@/lib/i18n/dict";
 
-const t = DICTS.ka;
+const t = DICTS.en;
 
 export const metadata: Metadata = {
   title: t.meta.title,
@@ -11,14 +11,14 @@ export const metadata: Metadata = {
     title: t.meta.ogTitle,
     description: t.meta.ogDescription,
     type: "website",
-    locale: "ka",
+    locale: "en",
   },
   alternates: {
     languages: { ka: "/", en: "/en/" },
   },
 };
 
-/** Georgian — the language the story was written in — lives at the root. */
+/** English, at /en/. Its own prerendered file, not a runtime translation. */
 export default function Route() {
-  return <Page locale="ka" />;
+  return <Page locale="en" />;
 }

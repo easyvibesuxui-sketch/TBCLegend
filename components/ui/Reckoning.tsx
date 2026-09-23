@@ -3,7 +3,9 @@
 import { motion } from "framer-motion";
 import { useHouse } from "@/components/HouseProvider";
 import { useLedger } from "@/components/LedgerProvider";
-import { TRIALS } from "@/lib/trials";
+import { useTrials } from "@/hooks/useContent";
+import { useNamedHouse } from "@/hooks/useContent";
+import { useI18n } from "@/components/LocaleProvider";
 import { EASE } from "@/lib/motion";
 
 /**
@@ -21,8 +23,12 @@ import { EASE } from "@/lib/motion";
  * failure, and the copy says so.
  */
 export default function Reckoning() {
-  const { house } = useHouse();
-  const { behaved, answered, tally } = useLedger();
+  const { t } = useI18n();
+  const TRIALS = useTrials();
+  const { house: rawHouse } = useHouse();
+  const house = useNamedHouse(rawHouse);
+  const { behaved: rawBehaved, answered, tally } = useLedger();
+  const behaved = useNamedHouse(rawBehaved);
 
   // Nothing to reckon with until there is both an instinct and a road behind
   // it. Half a ledger would let the page make a claim it cannot support.
@@ -33,24 +39,18 @@ export default function Reckoning() {
   const topCount = tally[0]?.count ?? 0;
   const tied = tally.filter((t) => t.count === topCount && t.count > 0);
 
+  // Names for the tally rows, in the reader's language.
+  const nameOf = (id: string) =>
+    t.houseText[id as keyof typeof t.houseText]?.name ?? id;
+
   const verdict =
     matched >= 2
-      ? {
-          line: "სისხლი არ მოგატყუა.",
-          note: `ოთხიდან ${matched}-ჯერ ზუსტად ისე მოიქეცი, როგორც ${house.name}. ქვიზი ამას გაამყარებს.`,
-        }
+      ? t.reckoning.matched(matched, house.name)
       : matched === 1
-        ? {
-            line: "ინსტინქტმა ერთი თქვა, ხელმა — სხვა.",
-            note: "ეს ჩვეულებრივია. ადამიანების უმეტესობა ერთ სახლს გრძნობს და მეორესავით იქცევა.",
-          }
+        ? t.reckoning.near()
         : behaved
-        ? {
-            line: `გზაზე ${behaved.name} იყავი.`,
-            note: `${house.name} აირჩიე — და ოთხივე გადაწყვეტილება სხვა სახლისა იყო. ეს არ არის შეცდომა; ეს კითხვაა.`,
-          }
-        : {
-            /*
+          ? t.reckoning.against(behaved.name, house.name)
+          : /*
              * No single house led, which given the trial pairings can only
              * mean two of them tied on two each — each pair of trials offers
              * the same two houses, so a reader who matched their own house
@@ -58,9 +58,10 @@ export default function Reckoning() {
              * Saying "you repeated no house" here, as this once did, is
              * simply false: they repeated two.
              */
-            line: `გზაზე ${tied.map((t) => t.house.name).join(" და ")} შორის იყავი.`,
-            note: `${house.name} აირჩიე, მაგრამ ხელი ორჯერ ერთისკენ წავიდა და ორჯერ მეორისკენ. არჩევანი ერთია — ხასიათი ორი.`,
-          };
+            t.reckoning.split(
+              tied.map((r) => nameOf(r.house.id)),
+              house.name,
+            );
 
   return (
     <motion.div
@@ -71,7 +72,7 @@ export default function Reckoning() {
       className="mx-auto mt-16 max-w-3xl border-t pt-10"
       style={{ borderColor: "color-mix(in srgb, var(--house-ink, #0E0E0E) 25%, transparent)" }}
     >
-      <p className="label opacity-55">გზის ანგარიში</p>
+      <p className="label opacity-55">{t.reckoning.title}</p>
 
       {/* The four trials, each showing which way it went */}
       <ul className="mt-6 grid grid-cols-2 gap-x-8 gap-y-3 sm:grid-cols-4">
@@ -97,8 +98,10 @@ export default function Reckoning() {
 
 /** The house whose road the reader took at one trial. */
 function TrialTaken({ trialId }: { trialId: string }) {
+  const { t } = useI18n();
   const { ledger } = useLedger();
-  const trial = TRIALS.find((t) => t.id === trialId);
+  const trials = useTrials();
+  const trial = trials.find((tr) => tr.id === trialId);
   const option = trial?.options.find((o) => o.house === ledger[trialId]);
-  return <>{option?.label ?? "—"}</>;
+  return <>{option?.label ?? t.reckoning.none}</>;
 }

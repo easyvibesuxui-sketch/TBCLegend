@@ -33,18 +33,6 @@ const body = Noto_Sans_Georgian({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "საგანძურის მარათონი | Treasure Marathon",
-  description:
-    "ზღაპრული სამეფოს უძველესი საგანძური დაიმსხვრა და მილიონობით ოქროს მონეტად იქცა. ოთხი დიდი საგვარეულო მათ საძებნელად გაემართა — შენ რომელ სახლს ეკუთვნი?",
-  openGraph: {
-    title: "საგანძურის მარათონი",
-    description:
-      "ოთხი საგვარეულო, მილიონობით ოქროს მონეტა და ერთი ლეგენდა. გაიარე ფინანსური ქვიზი და გაიგე, რომელ სახლს ეკუთვნი.",
-    type: "website",
-  },
-};
-
 export const viewport: Viewport = {
   themeColor: "#F2F1EF",
   colorScheme: "light",
@@ -56,6 +44,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
+    /*
+      `lang` here is the Georgian page's, because this one layout wraps both
+      languages and App Router gives a route no way to change <html> without a
+      [locale] segment. The English route overrides it on its own wrapper —
+      `lang` is valid on any element and assistive tech honours the nearest
+      one — so a screen reader is never told English is Georgian.
+    */
     <html
       lang="ka"
       className={`${display.variable} ${serif.variable} ${body.variable}`}

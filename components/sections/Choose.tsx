@@ -1,7 +1,8 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { HOUSES } from "@/lib/houses";
+import { useHouses, useNamedHouse } from "@/hooks/useContent";
+import { useI18n } from "@/components/LocaleProvider";
 import { PLATES } from "@/lib/plates";
 import { useHouse } from "@/components/HouseProvider";
 import { asset } from "@/lib/asset";
@@ -23,7 +24,10 @@ import { EASE } from "@/lib/motion";
  * someone who has already chosen.
  */
 export default function Choose() {
-  const { house, choose } = useHouse();
+  const { t } = useI18n();
+  const HOUSES = useHouses();
+  const { house: rawHouse, choose } = useHouse();
+  const house = useNamedHouse(rawHouse);
 
   return (
     <section
@@ -37,7 +41,7 @@ export default function Choose() {
 
       <div className="relative z-10 mx-auto w-full max-w-6xl">
         <span className="label mb-8 block text-center text-paper/35">
-          01 · სისხლი
+          {t.choose.beat}
         </span>
         <motion.h2
           initial={{ opacity: 0, y: 24 }}
@@ -46,10 +50,10 @@ export default function Choose() {
           transition={{ duration: 1, ease: EASE }}
           className="text-center font-display text-[clamp(2rem,6.5vw,5rem)] leading-[0.9] text-paper"
         >
-          აირჩიე შენი სახლი
+          {t.choose.heading}
         </motion.h2>
         <p className="label mt-6 text-center text-paper/45">
-          სანამ გზას დაადგები — აირჩიე, ვისი სისხლი გდის
+          {t.choose.sub}
         </p>
 
         <div className="mt-16 grid items-center gap-10 sm:mt-24 sm:grid-cols-12 sm:gap-10">
@@ -104,7 +108,7 @@ export default function Choose() {
                     exit={{ opacity: 0 }}
                     className="label text-paper/35"
                   >
-                    მედალიონი ჯერ ცარიელია
+                    {t.choose.empty}
                   </motion.p>
                 )}
               </AnimatePresence>

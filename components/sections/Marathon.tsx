@@ -1,6 +1,7 @@
 "use client";
 
-import { TRIALS } from "@/lib/trials";
+import { useTrials } from "@/hooks/useContent";
+import { useI18n } from "@/components/LocaleProvider";
 import { PLATES } from "@/lib/plates";
 import { asset } from "@/lib/asset";
 import { LEGEND_CHAPTERS } from "@/lib/houses";
@@ -23,6 +24,8 @@ import TrialPanel from "@/components/ui/TrialPanel";
  * stops from a test into a thought — every other house had its reasons too.
  */
 export default function Marathon() {
+  const { t } = useI18n();
+  const TRIALS = useTrials();
   const [, , three] = LEGEND_CHAPTERS;
 
   return (
@@ -32,7 +35,7 @@ export default function Marathon() {
         <div className="grain-paper relative bg-paper px-4 pb-24 pt-28 sm:px-8 sm:pb-32 sm:pt-36">
           <div className="relative z-10 mx-auto w-full max-w-5xl">
             <span className="label mb-8 block text-ink/45">
-              10 · პირველი მონეტა
+              {t.marathon.beat10}
             </span>
 
             <div className="grid items-center gap-10 sm:grid-cols-12 sm:gap-8">
@@ -63,11 +66,11 @@ export default function Marathon() {
 
               <div className="sm:col-span-5">
                 <p className="font-body text-[15px] leading-[1.8] text-ink/85 sm:text-base">
-                  პირველი მონეტა გზაზე იდო. არავის დაუცავს, არავის დაუმალავს.
+                  {t.marathon.coin}
                 </p>
                 <p className="caption mt-8 inline-block">
                   <span className="caption-text">
-                    ასე იწყება ყველა მარათონი — ადვილად.
+                    {t.marathon.coinCaption}
                   </span>
                 </p>
               </div>
@@ -105,14 +108,14 @@ export default function Marathon() {
           {
             corner: "top-left",
             at: [0.05, 0.26],
-            node: <span className="label text-paper/70">15 · ჭა</span>,
+            node: <span className="label text-paper/70">{t.marathon.beat15}</span>,
           },
           {
             corner: "bottom-left",
             at: [0.3, 0.54],
             node: (
               <Caption>
-                ჭასთან დაიხარე და წყალში ოთხი სახე დაინახე. ოთხივე შენ იყავი.
+                {t.marathon.well1}
               </Caption>
             ),
           },
@@ -124,11 +127,11 @@ export default function Marathon() {
                 className="font-display text-[clamp(1.1rem,2.4vw,1.8rem)] leading-[1.25]"
                 style={{ color: "var(--house-night, #E35249)" }}
               >
-                სხვა სახლი მტერი
+                {t.marathon.well2[0]}
                 <br />
-                არასდროს ყოფილა.
+                {t.marathon.well2[1]}
                 <br />
-                ის შენი სხვა ვარიანტია.
+                {t.marathon.well2[2]}
               </p>
             ),
           },
@@ -143,13 +146,13 @@ export default function Marathon() {
           <div className="relative z-10 mx-auto grid w-full max-w-6xl gap-10 sm:grid-cols-12 sm:gap-8">
             <div className="sm:col-span-5 sm:pt-16">
               <span className="label mb-8 block text-ink/45">
-                16 · ოთხი ჰორიზონტი
+                {t.marathon.beat16}
               </span>
               <p
                 className="label mt-8 sm:ml-10"
                 style={{ color: "var(--house)" }}
               >
-                ერთი მათგანი შენია
+                {t.marathon.oneIsYours}
               </p>
             </div>
 

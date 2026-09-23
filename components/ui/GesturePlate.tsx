@@ -3,6 +3,7 @@
 import { useCallback } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { PLATES } from "@/lib/plates";
+import { useI18n } from "@/components/LocaleProvider";
 import { asset } from "@/lib/asset";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import HoldPuck from "@/components/ui/HoldPuck";
@@ -22,6 +23,7 @@ import HoldPuck from "@/components/ui/HoldPuck";
  * scripts/unmix-layer.py.
  */
 export default function GesturePlate() {
+  const { t } = useI18n();
   const reduced = usePrefersReducedMotion();
 
   // The puck writes here; the spring is what the layers actually follow, so a
@@ -82,7 +84,7 @@ export default function GesturePlate() {
         underneath is gone — the puck already says "hold and pull".
       */}
       <HoldPuck
-        lines={["დაიჭირე", "და გასწიე"]}
+        lines={[t.gesture.puck1, t.gesture.puck2]}
         onProgress={onProgress}
         /*
           At its default 92px the puck covered the seal outright on a phone —

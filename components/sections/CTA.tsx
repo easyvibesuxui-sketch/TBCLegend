@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import InkButton from "@/components/ui/InkButton";
 import TornEdge from "@/components/ui/TornEdge";
 import { EASE } from "@/lib/motion";
-import { HOUSES } from "@/lib/houses";
+import { useHouses, useNamedHouse } from "@/hooks/useContent";
+import { useI18n } from "@/components/LocaleProvider";
 import { useHouse } from "@/components/HouseProvider";
 import Reckoning from "@/components/ui/Reckoning";
 
@@ -16,7 +17,10 @@ const STANDINGS = [82, 74, 66, 58];
  * cover scale, the standings beneath, and the two ways in.
  */
 export default function CTA() {
-  const { house: chosen } = useHouse();
+  const { t } = useI18n();
+  const HOUSES = useHouses();
+  const { house: rawChosen } = useHouse();
+  const chosen = useNamedHouse(rawChosen);
 
   return (
     <section
@@ -42,13 +46,13 @@ export default function CTA() {
               them as a question, which is what the quiz then answers.
             */
             <>
-              <span className="block">შენ {chosen.name} აირჩიე.</span>
-              <span className="block">მართლა {chosen.name} ხარ?</span>
+              <span className="block">{t.cta.chose(chosen.name)}</span>
+              <span className="block">{t.cta.really(chosen.name)}</span>
             </>
           ) : (
             <>
-              <span className="block">შენ რომელ</span>
-              <span className="block">სახლს ეკუთვნი?</span>
+              <span className="block">{t.cta.which1}</span>
+              <span className="block">{t.cta.which2}</span>
             </>
           )}
         </motion.h2>
@@ -56,9 +60,7 @@ export default function CTA() {
         {/* Three struck labels, as the reference sets its collection intro */}
         <div className="mt-16 grid gap-8 text-center sm:mt-24 sm:grid-cols-3">
           {[
-            "ოთხივე სახლი ერთმანეთს ეჯიბრება",
-            "ყველაზე მეტი მონეტა — ლიდერობა",
-            "სამეფოს მთავარი ჯილდოები",
+            ...t.cta.strap,
           ].map((line) => (
             <motion.p
               key={line}
@@ -80,10 +82,7 @@ export default function CTA() {
           transition={{ duration: 1, ease: EASE, delay: 0.1 }}
           className="mx-auto mt-14 max-w-[62ch] text-justify font-body text-[15px] leading-[1.85] opacity-85 sm:text-base"
         >
-          ახლა ოთხივე სახლი ერთმანეთს ეჯიბრება, რათა შეაგროვონ ყველაზე მეტი
-          გაბნეული მონეტა, მოიპოვონ ლიდერობა და დაეუფლონ სამეფოს მთავარ
-          ჯილდოებს. გსურთ გაიგოთ რომელი საგვარეულო ლიდერობს, ან გაიაროთ
-          ფინანსური ქვიზი და მიხვდეთ, თქვენ რომელ ოჯახს მიეკუთვნებით?
+          {t.cta.body}
         </motion.p>
 
         {/* Standings */}
@@ -118,7 +117,7 @@ export default function CTA() {
           ))}
         </ul>
         <p className="mt-4 text-center font-body text-[10px] uppercase tracking-label opacity-40">
-          [Placeholder data — ლიდერბორდი რეალურ დროში განახლდება]
+          {t.cta.placeholder}
         </p>
 
         {/*
@@ -130,10 +129,10 @@ export default function CTA() {
 
         <div className="mt-16 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-5">
           <InkButton href="#leaderboard" variant="outline">
-            ლიდერბორდის ნახვა
+            {t.cta.leaderboard}
           </InkButton>
           <InkButton href="#quiz-start" variant="solid">
-            გაიარე ქვიზი
+            {t.cta.quiz}
           </InkButton>
         </div>
       </div>

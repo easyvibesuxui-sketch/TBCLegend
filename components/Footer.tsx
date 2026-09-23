@@ -1,4 +1,7 @@
+"use client";
+
 import Medallion from "@/components/ui/Medallion";
+import { useI18n } from "@/components/LocaleProvider";
 
 const ORIGINAL = "https://tbcbank.ge/ka/treasure-marathon";
 
@@ -15,6 +18,9 @@ function Note({ title, children }: { title: string; children: React.ReactNode })
 }
 
 export default function Footer() {
+  const { t } = useI18n();
+  const f = t.footer;
+
   return (
     <footer className="grain-paper grain-flood relative bg-ink px-6 py-14 text-paper sm:px-10 sm:py-20">
       <div className="relative z-10 mx-auto w-full max-w-7xl">
@@ -22,21 +28,21 @@ export default function Footer() {
           <div className="flex items-center gap-3">
             <Medallion className="h-14 w-14 shrink-0" />
             <span className="font-display text-xl leading-[0.95] sm:text-2xl">
-              საგანძურის
+              {f.brand1}
               <br />
-              მარათონი
+              {f.brand2}
             </span>
           </div>
 
           <div className="flex flex-col gap-3 sm:items-end sm:text-right">
-            <span className="label text-paper/90">დემონსტრაციული კონცეპტი</span>
+            <span className="label text-paper/90">{f.concept}</span>
             <a
               href={ORIGINAL}
               target="_blank"
               rel="noopener noreferrer"
               className="font-body text-sm text-paper/60 underline-offset-4 transition-colors hover:text-paper hover:underline"
             >
-              ორიგინალი კამპანია — tbcbank.ge
+              {f.originalLink}
             </a>
           </div>
         </div>
@@ -44,16 +50,15 @@ export default function Footer() {
         {/* ── Disclaimer ─────────────────────────────────────── */}
         <div className="mt-16 border-t border-paper/15 pt-12">
           <div className="grid gap-10 sm:grid-cols-3">
-            <Note title="საიტის შესახებ">
+            <Note title={f.aboutTitle}>
               <strong className="font-semibold text-paper/80">
-                ეს საიტი ნამდვილი არ არის.
-              </strong>{" "}
-              ეს დიზაინის კონცეპტია, არა მოქმედი პროდუქტი. აქ მხოლოდ{" "}
+                {f.aboutNotReal}
+              </strong>
+              {f.aboutA}
               <strong className="font-semibold text-paper/80">
-                ინტერფეისი და ვიზუალური გადაწყვეტაა ჩემი
-              </strong>{" "}
-              — კამპანიის იდეა, ისტორია და ტექსტები ეკუთვნის თიბისი ბანკს.
-              ორიგინალი კამპანია „საგანძურის მარათონი“ იხილეთ აქ:{" "}
+                {f.aboutMine}
+              </strong>
+              {f.aboutB}
               <a
                 href={ORIGINAL}
                 target="_blank"
@@ -65,34 +70,23 @@ export default function Footer() {
               .
             </Note>
 
-            <Note title="არაკომერციული">
-              გვერდი არ არის კომერციული და არ მოაქვს რაიმე შემოსავალი. აქ არ
-              იყიდება და არ იდება არანაირი პროდუქტი თუ მომსახურება. ავტორი არ
-              არის თიბისი ბანკთან აფილირებული და გვერდი არ წარმოადგენს ბანკის
-              ოფიციალურ კომუნიკაციას. ღილაკები და ლიდერბორდის რიცხვები
-              დემონსტრაციულია და რეალურ მონაცემებს არ ასახავს.
-            </Note>
+            <Note title={f.nonCommercialTitle}>{f.nonCommercial}</Note>
 
-            <Note title="კონფიდენციალურობა">
-              გვერდი სტატიკურია და{" "}
+            <Note title={f.privacyTitle}>
+              {f.privacyA}
               <strong className="font-semibold text-paper/80">
-                არანაირ პერსონალურ მონაცემს არ აგროვებს
+                {f.privacyNone}
               </strong>
-              : არ იყენებს ქუქიებს, ანალიტიკას ან თვალთვალის ხელსაწყოებს, არ
-              აქვს ფორმა და ავტორიზაცია. ფონტები და მედია თავად გვერდიდან
-              იტვირთება, ანუ მესამე მხარეს მოთხოვნა არ ეგზავნება.
+              {f.privacyB}
             </Note>
           </div>
 
           <p className="mt-12 max-w-[80ch] font-body text-[11.5px] leading-[1.8] text-paper/35">
-            ბრენდის სახელწოდებები, ლოგოები და კამპანიის ტექსტები მათი
-            მფლობელების საკუთრებაა და აქ გამოყენებულია მხოლოდ საილუსტრაციოდ.
-            ილუსტრაციები ამ დემოსთვის AI-თია გენერირებული. თუ უფლების მფლობელს
-            სურს მასალის მოხსნა, გვერდი დაუყოვნებლივ ჩამოიხსნება.
+            {f.marks}
           </p>
 
           <p className="mt-8 font-body text-[11px] uppercase tracking-label text-paper/30">
-            © {new Date().getFullYear()} · არაოფიციალური დიზაინის კონცეპტი
+            {f.rights(new Date().getFullYear())}
           </p>
         </div>
       </div>

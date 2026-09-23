@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { asset } from "@/lib/asset";
+import { useI18n } from "@/components/LocaleProvider";
+import type { PlateKey } from "@/lib/plates";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 type Tone = "paper" | "night" | "ochre" | "oxblood" | "red";
@@ -40,7 +42,8 @@ export default function ArtPlate({
   labelAlign = "center",
   className = "",
 }: {
-  label: string;
+  /** Dictionary key, resolved here so no caller carries a sentence */
+  label: PlateKey;
   tone?: Tone;
   /** H.264 MP4 — the universal fallback, and what Safari needs */
   src?: string;
@@ -64,6 +67,8 @@ export default function ArtPlate({
   className?: string;
 }) {
   const video = useRef<HTMLVideoElement>(null);
+  const { t: dict } = useI18n();
+  const text = dict.plateText[label];
   const t = TONES[tone];
   const reduced = usePrefersReducedMotion();
 
@@ -160,7 +165,7 @@ export default function ArtPlate({
       className={`relative isolate h-full w-full overflow-hidden ${className}`}
       style={{ background: t.bg }}
       role="img"
-      aria-label={label}
+      aria-label={text}
     >
       {showVideo ? (
         <video
@@ -259,7 +264,7 @@ export default function ArtPlate({
               className="border px-3 py-2 text-center font-body text-[9px] uppercase leading-relaxed tracking-wide2 sm:text-[10px]"
               style={{ color: t.ink, borderColor: t.ink }}
             >
-              {label}
+              {text}
             </span>
           </div>
         </>

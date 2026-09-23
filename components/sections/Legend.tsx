@@ -12,11 +12,12 @@ import Panel from "@/components/ui/Panel";
 import PanelFlight from "@/components/ui/PanelFlight";
 import PanelTakeover from "@/components/ui/PanelTakeover";
 import TornEdge from "@/components/ui/TornEdge";
+import { useI18n } from "@/components/LocaleProvider";
 import TiltFrame from "@/components/ui/TiltFrame";
 
 /** The three readings of the shattering, in the order beat 06 names them. */
 const DOUBTS = [PLATES.accident, PLATES.betrayal, PLATES.prophecy];
-const DOUBT_LABELS = ["უბედური შემთხვევა", "ღალატი", "წინასწარმეტყველება"];
+
 
 /**
  * Beats 02 to 08 of `docs/production/STORY.md`, in that document's order.
@@ -32,6 +33,7 @@ const DOUBT_LABELS = ["უბედური შემთხვევა", "ღ�
  * already picked a house.
  */
 export default function Legend() {
+  const { t } = useI18n();
   const sectionRef = useRef<HTMLElement>(null);
   const shatter = useRef(0);
 
@@ -90,7 +92,7 @@ export default function Legend() {
           </div>
 
           <div className="relative z-10 mx-auto w-full max-w-6xl">
-            <span className="label mb-10 block text-ink/45">02 · სახლი</span>
+            <span className="label mb-10 block text-ink/45">{t.legend.beat02}</span>
 
             <div className="relative">
               <PanelFlight className="ml-auto w-full sm:w-[84%]">
@@ -100,7 +102,7 @@ export default function Legend() {
               </PanelFlight>
 
               <Caption className="relative -mt-10 ml-0 sm:absolute sm:-bottom-10 sm:left-0 sm:mt-0 sm:w-[44%]">
-                {one.captions[0]}
+                {t.legend.chapters[one.text][0]}
               </Caption>
             </div>
 
@@ -114,7 +116,7 @@ export default function Legend() {
               className="label mt-16 sm:mt-28"
               style={{ color: "var(--house)" }}
             >
-              ლაბადა კედელზე შენი ფერისაა
+              {t.legend.cloak}
             </p>
           </div>
 
@@ -136,12 +138,12 @@ export default function Legend() {
           {
             corner: "top-left",
             at: [0.05, 0.28],
-            node: <span className="label text-ink/70">03 · წონასწორობა</span>,
+            node: <span className="label text-ink/70">{t.legend.beat03}</span>,
           },
           {
             corner: "bottom-left",
             at: [0.3, 0.6],
-            node: <Caption>{one.captions[1]}</Caption>,
+            node: <Caption>{t.legend.chapters[one.text][1]}</Caption>,
           },
         ]}
       >
@@ -165,13 +167,12 @@ export default function Legend() {
               </PanelFlight>
             </div>
             <div className="sm:col-span-5">
-              <span className="label mb-6 block text-ink/45">04 · შიკრიკი</span>
+              <span className="label mb-6 block text-ink/45">{t.legend.beat04}</span>
               <p className="font-body text-[15px] leading-[1.8] text-ink/85 sm:text-base">
-                შუაღამისას კარზე დააკაკუნეს. კაკუნი ერთხელ გაისმა. კარს მიღმა
-                არავინ იდგა — მხოლოდ წერილი, შენი საგვარეულოს ბეჭდით დალუქული.
+                {t.legend.messenger}
               </p>
               <p className="mt-6 font-display text-[clamp(1.1rem,2.2vw,1.6rem)] leading-[1.3]" style={{ color: "var(--house)" }}>
-                ბეჭედი შენია. ხელწერა — არა.
+                {t.legend.messengerLine}
               </p>
             </div>
           </div>
@@ -183,10 +184,10 @@ export default function Legend() {
           <div className="relative h-[62svh] min-h-[380px] w-full sm:h-[78svh]">
             <ArtPlate {...PLATES.gate} tone="night" />
             <div className="pointer-events-none absolute inset-0 flex items-end justify-between p-6 sm:p-12">
-              <span className="label text-paper/70">05 · გამგზავრება</span>
+              <span className="label text-paper/70">{t.legend.beat05}</span>
               {/* Same correction as beat 02: the cloak is not tinted yet. */}
               <span className="label" style={{ color: "var(--house-night, #E35249)" }}>
-                მარტო, ღამით
+                {t.legend.gate}
               </span>
             </div>
           </div>
@@ -199,7 +200,7 @@ export default function Legend() {
         <div className="grain-paper relative bg-paper px-4 py-24 sm:px-8 sm:py-36">
           <div className="relative z-10 mx-auto w-full max-w-5xl">
             <span className="label mb-10 block text-ink/45">
-              06 · საჭურჭლე
+              {t.legend.beat06}
             </span>
             <GesturePlate />
           </div>
@@ -220,16 +221,16 @@ export default function Legend() {
             node: (
               <>
                 <span className="label mb-4 block text-paper/70">
-                  07 · ნაპრალი
+                  {t.legend.beat07}
                 </span>
-                <Caption>{two.captions[0]}</Caption>
+                <Caption>{t.legend.chapters[two.text][0]}</Caption>
               </>
             ),
           },
           {
             corner: "bottom-right",
             at: [0.42, 0.62],
-            node: <Caption>{two.captions[1]}</Caption>,
+            node: <Caption>{t.legend.chapters[two.text][1]}</Caption>,
           },
           {
             /*
@@ -253,7 +254,7 @@ export default function Legend() {
                       on the red ground and invisible on the coins.
                     */}
                     <span className="label mb-2 inline-block bg-ink/85 px-1.5 py-1 text-[9px] text-paper sm:text-[10px]">
-                      {DOUBT_LABELS[i]}
+                      {t.legend.doubts[i]}
                     </span>
                     <Panel className="aspect-[4/3] w-full">
                       <ArtPlate {...plate} tone="paper" />
@@ -282,7 +283,7 @@ export default function Legend() {
         */}
         <div className="grain-paper relative bg-paper px-4 py-24 sm:px-8 sm:py-32">
           <div className="relative z-10 mx-auto w-full max-w-5xl">
-            <span className="label mb-8 block text-ink/45">09 · განაჩენი</span>
+            <span className="label mb-8 block text-ink/45">{t.legend.beat09}</span>
             <PanelFlight from={12} scale={0.82}>
               <Panel className="aspect-[3/2] w-full">
                 <ArtPlate {...PLATES.verdict} tone="paper" />
@@ -291,16 +292,15 @@ export default function Legend() {
 
             <div className="mt-10 grid gap-8 sm:grid-cols-12">
               <p className="font-body text-[15px] leading-[1.8] text-ink/85 sm:col-span-6 sm:text-base">
-                დილით ოთხივე სახლი შეიკრიბა. ოთხივემ ერთი და იგივე თქვა:
+                {t.legend.verdict1}
                 <span className="mt-4 block font-display text-[clamp(1.3rem,3vw,2rem)] leading-none text-ink">
-                  „ჩვენ არა."
+                  {t.legend.verdictQuote}
                 </span>
               </p>
               <p className="font-body text-[15px] leading-[1.8] text-ink/85 sm:col-span-6 sm:text-base">
-                და ოთხივემ ერთი და იგივე იფიქრა — მაშინ ვინ?
+                {t.legend.verdict2}
                 <span className="mt-4 block" style={{ color: "var(--house)" }}>
-                  წასვლა არავის მოუთხოვია. უბრალოდ, დარჩენას აზრი აღარ
-                  ჰქონდა.
+                  {t.legend.verdict3}
                 </span>
               </p>
             </div>
@@ -315,7 +315,7 @@ export default function Legend() {
         {/* ─────────── the marathon opens ─────────── */}
         <div className="grain-paper relative bg-paper px-4 pb-8 pt-20 sm:px-8 sm:pb-10 sm:pt-28">
           <div className="relative z-10 mx-auto w-full max-w-5xl">
-            <Caption>{three.captions[0]}</Caption>
+            <Caption>{t.legend.chapters[three.text][0]}</Caption>
           </div>
         </div>
       </TiltFrame>

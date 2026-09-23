@@ -1,18 +1,17 @@
 import { PLATES, type Plate } from "@/lib/plates";
+import type { Dict } from "@/lib/i18n";
 
+/**
+ * A house, minus its words.
+ *
+ * Name, motto, price and description live in the locale dictionaries keyed by
+ * `id` — see lib/i18n/ka.ts. What stays here is everything that is the same
+ * in every language: the identity, the colours, the artwork. `useHouses()`
+ * puts the two halves back together for the current locale.
+ */
 export type House = {
   id: string;
-  name: string;
   latin: string;
-  motto: string;
-  /**
-   * What the motto costs when followed all the way — beat 17. Every house
-   * gets one, because the campaign only stays honest if none of the four is
-   * the right answer; a house with a virtue and no price would be exactly
-   * that.
-   */
-  price: string;
-  description: string;
   /** Spot colour this house's panel commits to */
   tone: "paper" | "ochre" | "oxblood" | "red" | "night";
   /**
@@ -44,12 +43,7 @@ export type House = {
 export const HOUSES: House[] = [
   {
     id: "kharjiani",
-    name: "ხარჯიანი",
     latin: "HOUSE KHARJIANI",
-    motto: "ცხოვრება ერთხელ გვეძლევა",
-    price: "და ზამთარი ყოველწლიურად მოდის",
-    description:
-      "საგვარეულო, რომელსაც უყვარს მოქმედება, ცხოვრებით ტკბობა და ენერგიული აქტივობა. ისინი არ ერიდებიან რესურსების გაცემას მიზნების მისაღწევად.",
     tone: "red",
     accent: "#CF2A20",
     accentOnDark: "#E35249",
@@ -59,12 +53,7 @@ export const HOUSES: House[] = [
   },
   {
     id: "anabaridze",
-    name: "ანაბარიძე",
     latin: "HOUSE ANABARIDZE",
-    motto: "მომავალი იგება დღეს",
-    price: "ზოგჯერ იმდენ ხანს იგება, რომ დღე აღარ რჩება",
-    description:
-      "წინდახედული, სტრატეგიული და დამზოგველი სახლი. მათი დევიზია რესურსების სწორად გადანაწილება და მომავლის დაზღვევა.",
     tone: "night",
     accent: "#2A2A2A",
     accentOnDark: "#F2F1EF",
@@ -74,12 +63,7 @@ export const HOUSES: House[] = [
   },
   {
     id: "dovlatia",
-    name: "დოვლათია",
     latin: "HOUSE DOVLATIA",
-    motto: "იღბალი მამაცებს ერგებათ",
-    price: "მამაცებს — და მათაც, ვისაც ხელახლა სცადეს",
-    description:
-      "საგვარეულო, რომელიც ორიენტირებულია სიმდიდრის მოზიდვაზე, იღბალსა და დიდებაზე.",
     tone: "ochre",
     accent: "#B08D57",
     accentOnDark: "#B08D57",
@@ -89,12 +73,7 @@ export const HOUSES: House[] = [
   },
   {
     id: "baratishvili",
-    name: "ბარათიშვილი",
     latin: "HOUSE BARATISHVILI",
-    motto: "წესრიგი ძველი დიდებიდან",
-    price: "ძველი წესრიგი ახალ გზას ვერ ხედავს",
-    description:
-      "ტრადიციული, მტკიცე და გავლენიანი საგვარეულო, რომელიც სამეფოს ძველ დიდებასა და წესრიგს იცავს.",
     tone: "oxblood",
     accent: "#6E2020",
     accentOnDark: "#C46B5E",
@@ -107,11 +86,13 @@ export const HOUSES: House[] = [
 export type Chapter = {
   id: string;
   index: string;
-  /**
+  /** Index into `legend.chapters` in the dictionaries */
+  text: number;
+  /*
    * The story runs as caption boxes hung off panel edges — two or three short
-   * blocks per chapter, never one long paragraph.
+   * blocks per chapter, never one long paragraph. The blocks themselves are
+   * in the dictionaries; `text` says which set.
    */
-  captions: string[];
   plate: Plate;
   tone: "paper" | "ochre" | "oxblood" | "red" | "night";
   /** "flood" fills the viewport with the tone; "panel" sits on paper. */
@@ -122,10 +103,7 @@ export const LEGEND_CHAPTERS: Chapter[] = [
   {
     id: "chapter-1",
     index: "I",
-    captions: [
-      "საუკუნეების განმავლობაში, ზღაპრულ სამეფოს ოთხი დიდი და დიდებული საგვარეულო (სახლი) ერთობლივად მართავდა.",
-      "სამეფოში სიმშვიდეს, ბალანსსა და კეთილდღეობას იცავდა ერთი უძველესი, საიდუმლო საგანძური, რომელსაც ჯადოსნური ძალა ჰქონდა.",
-    ],
+    text: 0,
     plate: PLATES.altar,
     tone: "paper",
     layout: "panel",
@@ -133,10 +111,7 @@ export const LEGEND_CHAPTERS: Chapter[] = [
   {
     id: "chapter-2",
     index: "IV",
-    captions: [
-      "ერთ მისტიკურ ღამეს, მოულოდნელად, ეს მთავარი საგანძური ნაწილებად დაიმსხვრა, მილიონობით ოქროს მონეტად იქცა და სამეფოს სხვადასხვა შორეულ კუთხეში მიმოიფანტა.",
-      "არავინ იცის, ეს უბედური შემთხვევა იყო, მტრის ღალატი, თუ ძველი წინასწარმეტყველების აღსრულება.",
-    ],
+    text: 1,
     plate: PLATES.shattering,
     tone: "oxblood",
     layout: "flood",
@@ -144,12 +119,22 @@ export const LEGEND_CHAPTERS: Chapter[] = [
   {
     id: "chapter-3",
     index: "V",
-    captions: [
-      "სამეფოში ბალანსის აღსადგენად და საკუთარი ძალაუფლების დასამტკიცებლად, ოთხივე საგვარეულო ოქროს მონეტების საძიებლად გაემართა.",
-      "თითოეულ სახლს აქვს თავისი სიმართლე, თავისი ეჭვები და სამეფოს მომავლის საკუთარი ხედვა.",
-    ],
+    text: 2,
     plate: PLATES.banners,
     tone: "ochre",
     layout: "split",
   },
 ];
+
+/** A house with its words for one locale. */
+export type NamedHouse = House & {
+  name: string;
+  motto: string;
+  price: string;
+  description: string;
+};
+
+/** Join a house to its text. */
+export function named(house: House, t: Dict): NamedHouse {
+  return { ...house, ...t.houseText[house.id as keyof Dict["houseText"]] };
+}

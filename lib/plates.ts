@@ -1,3 +1,8 @@
+import type { Dict } from "@/lib/i18n";
+
+/** The set of plate names the dictionaries carry text for. */
+export type PlateKey = keyof Dict["plateText"];
+
 /**
  * Every beat's artwork, in one place.
  *
@@ -11,8 +16,13 @@
  * the prompt that made it.
  */
 export type Plate = {
-  /** Accessible name, and the stand-in caption if the asset fails */
-  label: string;
+  /**
+   * Key into `plateText` in the locale dictionaries — not the text itself.
+   * It is the accessible name and the stand-in caption, so it has to speak
+   * the reader's language; resolve it with `useI18n().t.plateText[label]`,
+   * or let ArtPlate do it for you.
+   */
+  label: PlateKey;
   /** Still plate */
   image?: string;
   /** Silhouette marking the region that wears the reader's house colour */
@@ -30,7 +40,7 @@ export type Plate = {
  * order in ArtPlate for the measurements behind that. The WebM exists for
  * builds without H.264, not to save bytes; on this material it saves none.
  */
-const clip = (name: string, label: string): Plate => ({
+const clip = (name: string, label: PlateKey): Plate => ({
   label,
   src: `/media/${name}.mp4`,
   srcWebm: `/media/${name}.webm`,
@@ -41,62 +51,62 @@ const clip = (name: string, label: string): Plate => ({
 });
 
 /** A still plate. */
-const still = (name: string, label: string): Plate => ({
+const still = (name: string, label: PlateKey): Plate => ({
   label,
   image: `/media/${name}.jpg`,
 });
 
 export const PLATES = {
   // ── the choice: four seals and the blank medallion ──────────────────────
-  crestKharjiani: still("01-crest-kharjiani", "ხარჯიანის გერბი — ალი ხელისგულზე"),
-  crestAnabaridze: still("02-crest-anabaridze", "ანაბარიძის გერბი — დალუქული კარი"),
-  crestDovlatia: still("03-crest-dovlatia", "დოვლათიას გერბი — იღბლის ბორბალი"),
-  crestBaratishvili: still("04-crest-baratishvili", "ბარათიშვილის გერბი — ბეჭედი ცვილში"),
-  medallion: still("05-medallion-empty", "ცარიელი მედალიონი — დასარტყმელად მზად"),
+  crestKharjiani: still("01-crest-kharjiani", "crestKharjiani"),
+  crestAnabaridze: still("02-crest-anabaridze", "crestAnabaridze"),
+  crestDovlatia: still("03-crest-dovlatia", "crestDovlatia"),
+  crestBaratishvili: still("04-crest-baratishvili", "crestBaratishvili"),
+  medallion: still("05-medallion-empty", "medallion"),
 
   // ── the story ──────────────────────────────────────────────────────────
-  altar: still("08-altar-treasure", "უძველესი საგანძური საჭურჭლეში"),
+  altar: still("08-altar-treasure", "altar"),
   // The one plate with a spot colour: the cloak takes the reader's house.
   // See scripts/make-cloak-mask.py for how the silhouette was built.
   hall: {
-    ...still("06-hall-cloak", "საგვარეულო დარბაზი და სამგზავრო მოსასხამი"),
+    ...still("06-hall-cloak", "hall"),
     tintMask: "/media/06-hall-cloak-mask.png",
   },
-  shattering: clip("12-shattering", "დამსხვრევა — მონეტები იფანტება"),
-  banners: still("16-four-banners", "ოთხი დროშა ერთ ჰორიზონტზე"),
-  gate: clip("09-gate-night", "გამგზავრება — ჭიშკარი ღამით"),
+  shattering: clip("12-shattering", "shattering"),
+  banners: still("16-four-banners", "banners"),
+  gate: clip("09-gate-night", "gate"),
 
   // ── the houses ─────────────────────────────────────────────────────────
-  kharjiani: clip("17-house-kharjiani", "ხარჯიანის დროშა — ცეცხლი და მოძრაობა"),
-  anabaridze: still("18-house-anabaridze", "ანაბარიძის საცავი — დალუქული კარი"),
-  dovlatia: clip("19-house-dovlatia", "დოვლათიას იღბლის ბორბალი"),
-  baratishvili: clip("20-house-baratishvili", "ბარათიშვილის ძველი ბეჭედი"),
+  kharjiani: clip("17-house-kharjiani", "kharjiani"),
+  anabaridze: still("18-house-anabaridze", "anabaridze"),
+  dovlatia: clip("19-house-dovlatia", "dovlatia"),
+  baratishvili: clip("20-house-baratishvili", "baratishvili"),
 
   // ── the gesture, two layers ────────────────────────────────────────────
   // Drawn separately on bare paper so they can move independently. Unlike the
   // rest of the set these carry a real alpha channel rather than relying on a
   // multiply blend — see scripts/unmix-layer.py for why that trick does not
   // survive here.
-  hand: { label: "ხელი იწვდება", image: "/media/10-hand-reaching.webp" },
-  seal: { label: "დნობილი ოქროს ბეჭედი — იხევს", image: "/media/11-seal-liquid.webp" },
+  hand: { label: "hand", image: "/media/10-hand-reaching.webp" },
+  seal: { label: "seal", image: "/media/11-seal-liquid.webp" },
 
   // ── the road: beats 21 to 29 of STORY-V2.md ────────────────────────────
-  messenger: still("21-messenger", "წერილი კარის ქვეშ, ცვილის ბეჭდით"),
-  verdict: still("22-verdict", "ოთხი ბეჭედი საბჭოს მაგიდაზე"),
+  messenger: still("21-messenger", "messenger"),
+  verdict: still("22-verdict", "verdict"),
   // A layer like the hand and seal — drawn on bare paper, carries real alpha.
   firstCoin: {
-    label: "პირველი მონეტა გზის მტვერში",
+    label: "firstCoin",
     image: "/media/23-first-coin.webp",
   },
-  bridge: still("24-bridge", "ქვის ხიდი და ბაჟის ჯიხური"),
-  market: still("25-market", "ბაზრის მაგიდა, გაშლილი რუკა"),
-  winter: still("26-winter", "თოვლიანი გზა, შორეული შუქი"),
-  purse: still("27-purse", "მიტოვებული ქისა ბილიკზე"),
-  well: clip("28-well", "ჭის პირი — ოთხი ანარეკლი წყალში"),
-  ret: still("29-return", "ცარიელი საჭურჭლე, მონეტების გროვა"),
+  bridge: still("24-bridge", "bridge"),
+  market: still("25-market", "market"),
+  winter: still("26-winter", "winter"),
+  purse: still("27-purse", "purse"),
+  well: clip("28-well", "well"),
+  ret: still("29-return", "ret"),
 
   // ── the doubt, three insets ────────────────────────────────────────────
-  accident: still("13-inset-accident", "გატეხილი რკინის ღერო"),
-  betrayal: still("14-inset-betrayal", "ჩრდილი დახურულ კარზე"),
-  prophecy: still("15-inset-prophecy", "ძველი ხელნაწერი"),
+  accident: still("13-inset-accident", "accident"),
+  betrayal: still("14-inset-betrayal", "betrayal"),
+  prophecy: still("15-inset-prophecy", "prophecy"),
 } satisfies Record<string, Plate>;
